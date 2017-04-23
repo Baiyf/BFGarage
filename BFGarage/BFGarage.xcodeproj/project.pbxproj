@@ -50,6 +50,7 @@
 		27E34B3B1EAC6B9E0030099A /* AppConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
 		27E34B3C1EAC726F0030099A /* BlueToothConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueToothConnect.h; sourceTree = "<group>"; };
 		27E34B3D1EAC726F0030099A /* BlueToothConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueToothConnect.m; sourceTree = "<group>"; };
+		27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BFGarage-Prefix.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +67,7 @@
 		27229AE41EA8B0A9002B242B = {
 			isa = PBXGroup;
 			children = (
+				27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */,
 				27229AEF1EA8B0A9002B242B /* BFGarage */,
 				27229AEE1EA8B0A9002B242B /* Products */,
 			);
@@ -376,6 +378,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = "BFGarage-Prefix.h";
 				INFOPLIST_FILE = BFGarage/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.autohome.BFGarage;
@@ -387,6 +390,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREFIX_HEADER = "BFGarage-Prefix.h";
 				INFOPLIST_FILE = BFGarage/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.autohome.BFGarage;

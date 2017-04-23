@@ -8,6 +8,7 @@
 
 #import "SecondViewController.h"
 #import "DeviceTableViewCell.h"
+#import "ScanViewController.h"
 
 @interface SecondViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -28,14 +29,28 @@
     // Do any additional setup after loading the view.
     
     UINib *UserCenterLeftContentCellNib = [UINib nibWithNibName:@"DeviceTableViewCell" bundle:nil];
-    [self.rootTableView registerNib:UserCenterLeftContentCellNib forCellReuseIdentifier:@"DeviceTableViewCell"];
+    [self.rootTableView registerNib:UserCenterLeftContentCellNib forCellReuseIdentifier:@"DeviceTableViewCellIdentifier"];
     
     self.navigationItem.title = @"Setting";
+    
+    
+    self.rootTableArray = [[NSMutableArray alloc] initWithObjects:@"111",@"222",@"333",@"444", nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - button actions
+
+- (IBAction)activityConnect:(id)sender {
+    
+}
+
+- (IBAction)scanQRCode:(id)sender {
+    ScanViewController *scanVC = [[ScanViewController alloc] init];
+    [self.navigationController pushViewController:scanVC animated:YES];
 }
 
 #pragma mark - UITableViewDelegate & UITableViewDatasource
@@ -52,7 +67,7 @@
 {
     static NSString *cellIndentifierStr = @"DeviceTableViewCellIdentifier";
     DeviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndentifierStr forIndexPath:indexPath];
-    
+    cell.textLabel.text = self.rootTableArray[indexPath.row];
     return cell;
 }
 

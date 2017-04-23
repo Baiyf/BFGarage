@@ -82,6 +82,7 @@
 		27229AEF1EA8B0A9002B242B /* BFGarage */ = {
 			isa = PBXGroup;
 			children = (
+				27E34B3F1EAC834A0030099A /* Framework */,
 				27E34B371EAC68040030099A /* AppContext */,
 				27E34B211EAC5BBC0030099A /* Bussiness */,
 				27229AF31EA8B0A9002B242B /* AppDelegate.h */,
@@ -165,6 +166,13 @@
 				27E34B3D1EAC726F0030099A /* BlueToothConnect.m */,
 			);
 			path = AppContext;
+			sourceTree = "<group>";
+		};
+		27E34B3F1EAC834A0030099A /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Framework;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

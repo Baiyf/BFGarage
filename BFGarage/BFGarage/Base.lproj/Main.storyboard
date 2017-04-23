@@ -4,7 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
+        <deployment version="2048" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,16 +22,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="cCw-nR-aLV">
-                                <rect key="frame" x="0.0" y="134" width="375" height="484"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Kq-dm-957">
                                 <rect key="frame" x="44" y="94" width="31" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="Lkj-qC-Wfh"/>
                                 </constraints>
                                 <state key="normal" title="连接"/>
+                                <connections>
+                                    <action selector="activityConnect:" destination="FZ8-db-eJY" eventType="touchUpInside" id="v9h-UO-y97"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JdL-yr-ATA">
                                 <rect key="frame" x="254" y="94" width="77" height="30"/>
@@ -39,24 +38,35 @@
                                     <constraint firstAttribute="height" constant="30" id="NmN-DF-wHE"/>
                                 </constraints>
                                 <state key="normal" title="扫描二维码"/>
+                                <connections>
+                                    <action selector="scanQRCode:" destination="FZ8-db-eJY" eventType="touchUpInside" id="Y95-7c-5EE"/>
+                                </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="b3O-si-ZnZ">
+                                <rect key="frame" x="0.0" y="134" width="375" height="484"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="FZ8-db-eJY" id="ilm-Aa-mTp"/>
+                                    <outlet property="delegate" destination="FZ8-db-eJY" id="ewA-gF-LDg"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="BdT-Gk-Ev3" firstAttribute="top" secondItem="b3O-si-ZnZ" secondAttribute="bottom" id="6F8-mm-g7z"/>
+                            <constraint firstAttribute="trailing" secondItem="b3O-si-ZnZ" secondAttribute="trailing" id="FSG-pL-OZd"/>
+                            <constraint firstItem="b3O-si-ZnZ" firstAttribute="top" secondItem="JdL-yr-ATA" secondAttribute="bottom" constant="10" id="Gsh-2D-lS1"/>
                             <constraint firstItem="2Kq-dm-957" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leadingMargin" constant="28" id="NOe-W9-nUc"/>
-                            <constraint firstAttribute="trailing" secondItem="cCw-nR-aLV" secondAttribute="trailing" id="WPU-qm-nOe"/>
-                            <constraint firstItem="cCw-nR-aLV" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="gUD-nN-Tmp"/>
                             <constraint firstAttribute="trailingMargin" secondItem="JdL-yr-ATA" secondAttribute="trailing" constant="28" id="l3W-zj-41m"/>
                             <constraint firstItem="2Kq-dm-957" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="30" id="pcN-Cn-Q2T"/>
-                            <constraint firstItem="cCw-nR-aLV" firstAttribute="top" secondItem="JdL-yr-ATA" secondAttribute="bottom" constant="10" id="vDX-Rj-m42"/>
-                            <constraint firstItem="BdT-Gk-Ev3" firstAttribute="top" secondItem="cCw-nR-aLV" secondAttribute="bottom" id="wmY-Zk-Rhp"/>
+                            <constraint firstItem="b3O-si-ZnZ" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="wUB-Im-NEQ"/>
                             <constraint firstItem="JdL-yr-ATA" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="30" id="zVf-tE-HPM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="kL6-6s-NxU"/>
                     <connections>
                         <outlet property="linkButton" destination="2Kq-dm-957" id="jOe-Y9-xu2"/>
-                        <outlet property="rootTableView" destination="cCw-nR-aLV" id="eWR-en-xPW"/>
+                        <outlet property="rootTableView" destination="b3O-si-ZnZ" id="fL7-xt-1nN"/>
                         <outlet property="scanButton" destination="JdL-yr-ATA" id="VZY-QY-4X1"/>
                     </connections>
                 </viewController>

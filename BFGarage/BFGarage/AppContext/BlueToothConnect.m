@@ -152,7 +152,6 @@
     [theName appendFormat:@"UUID: %@ ",peripheral.identifier];
     if ([peripheral.name isEqual:@"SD"]) {
         if ([centralManager isEqual:central]) {
-            NSLog(@"扫瞄到正确设备");
             picoocPeripheral = peripheral;
             picoocPeripheral.delegate = self;
             

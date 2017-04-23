@@ -21,6 +21,8 @@
 		27E34B361EAC668D0030099A /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B351EAC668D0030099A /* ScanViewController.m */; };
 		27E34B3A1EAC69C40030099A /* AppContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B391EAC69C40030099A /* AppContext.m */; };
 		27E34B3E1EAC726F0030099A /* BlueToothConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B3D1EAC726F0030099A /* BlueToothConnect.m */; };
+		27E34D261EACCDBC0030099A /* Sony_TV_Login_Line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27E34D241EACCDBC0030099A /* Sony_TV_Login_Line@2x.png */; };
+		27E34D271EACCDBC0030099A /* Sony_TVLogin_bound@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +53,8 @@
 		27E34B3C1EAC726F0030099A /* BlueToothConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueToothConnect.h; sourceTree = "<group>"; };
 		27E34B3D1EAC726F0030099A /* BlueToothConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueToothConnect.m; sourceTree = "<group>"; };
 		27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BFGarage-Prefix.h"; sourceTree = "<group>"; };
+		27E34D241EACCDBC0030099A /* Sony_TV_Login_Line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sony_TV_Login_Line@2x.png"; sourceTree = "<group>"; };
+		27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sony_TVLogin_bound@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +88,7 @@
 		27229AEF1EA8B0A9002B242B /* BFGarage */ = {
 			isa = PBXGroup;
 			children = (
+				27E34D221EACCDBC0030099A /* Resource */,
 				27E34B3F1EAC834A0030099A /* Framework */,
 				27E34B371EAC68040030099A /* AppContext */,
 				27E34B211EAC5BBC0030099A /* Bussiness */,
@@ -177,6 +182,23 @@
 			path = Framework;
 			sourceTree = "<group>";
 		};
+		27E34D221EACCDBC0030099A /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				27E34D231EACCDBC0030099A /* Setting */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		27E34D231EACCDBC0030099A /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				27E34D241EACCDBC0030099A /* Sony_TV_Login_Line@2x.png */,
+				27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -235,8 +257,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27E34D271EACCDBC0030099A /* Sony_TVLogin_bound@2x.png in Resources */,
 				27229B001EA8B0A9002B242B /* LaunchScreen.storyboard in Resources */,
 				27229AFD1EA8B0A9002B242B /* Assets.xcassets in Resources */,
+				27E34D261EACCDBC0030099A /* Sony_TV_Login_Line@2x.png in Resources */,
 				27229AFB1EA8B0A9002B242B /* Main.storyboard in Resources */,
 				27E34B2E1EAC5F1F0030099A /* DeviceTableViewCell.xib in Resources */,
 			);

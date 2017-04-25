@@ -8,28 +8,25 @@
 
 #import "BlueToothConnect.h"
 
-#define UUID_TX  @"0XFFA9"
+#define UUID_TX  @"0XFFA9"//UUID
 
-#define UUID_ACTIVITY   @"0XFFAA"   //激活
-#define UUID_OPEN       @"0XFFAB"   //开锁
-#define UUID_AFFIRM     @"0XFFAC"   //设备确认
+#define UUID_ACTIVITY   @"0XFFAA"   //激活app设定
+#define UUID_OPEN       @"0XFFAB"   //开锁app设定
+#define UUID_AFFIRM     @"0XFFAC"   //app接收
 
 #define KEY1 @""
 
 @interface BlueToothConnect()
 {
-    NSTimer * connectTimer;
-    NSTimer * noWeightTimer;// 超过15s未上秤，则表示没有称重则不算称重，连接超时
+    NSTimer * connectTimer;//连接超时监听
     
     BlueConnectResult blueConnectResult;
-    CBPeripheral * picoocPeripheral;
+    CBPeripheral * scPeripheral;
     CBCentralManager * centralManager;
-    
     NSString * macStr; //蓝牙mac地址
     
     BOOL isJustJudge; //判断是否是只判断蓝牙是否打开
     BOOL isJustJudgeConnect; //判断是否蓝牙连接上
-    
     BOOL isActivity; //判断是否激活
     
     BlueToothConnectionState connectionState;
@@ -40,7 +37,7 @@
 @implementation BlueToothConnect
 
 
-///启动蓝牙
+///启动蓝牙管理
 - (void)startBlueToothWithSucceedBlueBlock:(SucceedBlueBlock)succeed fail:(FailBlueBlock)fail updateBlueToothState:(BlueToothConnectionStateBlock)blueState
 {
     //初始化CBCentralManager，管理中心设备
@@ -49,13 +46,10 @@
     self.failBlueBlock = fail;
     self.blueToothConnectionStateBlock = blueState;
     
-    centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+    centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];//调用检测蓝牙代理方法
     
     isJustJudge = NO;
     isJustJudgeConnect = NO;
-    hasSmartMatchData = NO;
-    self.isDidFinishWeight = NO;
-    singleData = 0;
 }
 
 ///判断蓝牙的状态
@@ -76,7 +70,6 @@
     self.failBlueBlock = fail;
     isJustJudgeConnect = YES;
     centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
-    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -86,53 +79,40 @@
 {
     if (centralManager == central) {
         switch ([central state]) {
-            case CBCentralManagerStateUnknown:
+            case CBManagerStateUnknown:
                 NSLog(@"状态未知,即将更新");
                 break;
-            case CBCentralManagerStatePoweredOff:
+            case CBManagerStatePoweredOff:
                 NSLog(@"未打开蓝牙");
                 if (self.blueToothConnectionStateBlock) {
                     connectionState = BlueToothConnectionStatePoweredOff;
                     self.blueToothConnectionStateBlock(BlueToothConnectionStatePoweredOff,NO);
                 }
                 break;
-            case CBCentralManagerStatePoweredOn:
+            case CBManagerStatePoweredOn:
                 NSLog(@"蓝牙运行正常");
                 BOOL isStartScann = YES;
-                if ([LTViewControllerManager shared].enterBackgroundByBlue == YES) {
-                    [LTViewControllerManager shared].enterBackgroundByBlue = NO;
-                    UILocalNotification *notification = [[UILocalNotification alloc] init];
-                    if (notification!=nil) {
-                        isStartScann = false;
-                        NSDate *now=[NSDate new];
-                        notification.fireDate=[now dateByAddingTimeInterval:0.1];
-                        notification.timeZone=[NSTimeZone defaultTimeZone];
-                        notification.alertBody=@"您的蓝牙已经打开，快来看看吧！";
-                        [[UIApplication sharedApplication]  scheduleLocalNotification:notification];
-                    }
-                }
                 if (isStartScann) {
-                    if (isJustJudge == NO || isJustJudgeConnect == YES) {
+                    if (isJustJudge == YES || isJustJudgeConnect == NO) {
                         [self startScanning];
                     }
                 }
-                
                 break;
-            case CBCentralManagerStateResetting:
+            case CBManagerStateResetting:
                 NSLog(@"蓝牙正在复位");
                 break;
-            case CBCentralManagerStateUnauthorized:
+            case CBManagerStateUnauthorized:
                 NSLog(@"未授权低功耗蓝牙");
                 break;
-            case CBCentralManagerStateUnsupported:
-                NSLog(@"此设备不支 持蓝牙");
+            case CBManagerStateUnsupported:
+                NSLog(@"此设备不支持蓝牙");
                 break;
             default:
                 break;
         }
         //判断蓝牙的状态
         if (isJustJudge == YES) {
-            if ([central state] == CBCentralManagerStatePoweredOn) {
+            if ([central state] == CBManagerStatePoweredOn) {
                 isJustJudge = NO;    //判断蓝牙是否开启的标识，判断成功需要变为NO
                 centralManager.delegate = nil;
                 centralManager = nil;
@@ -142,7 +122,7 @@
     }
 }
 
-//扫描成功发现设备时的回调，是scanForPeripheralsWithServices
+//扫描成功发现设备广播时的回调，是scanForPeripheralsWithServices的回调代理
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
     NSLog(@"whatlong-6-centralManager");
@@ -152,8 +132,8 @@
     [theName appendFormat:@"UUID: %@ ",peripheral.identifier];
     if ([peripheral.name isEqual:@"SD"]) {
         if ([centralManager isEqual:central]) {
-            picoocPeripheral = peripheral;
-            picoocPeripheral.delegate = self;
+            scPeripheral = peripheral;
+            scPeripheral.delegate = self;
             
             //获取Mac地址
             NSData * macData = [advertisementData objectForKey:@"kCBAdvDataManufacturerData"];
@@ -161,15 +141,18 @@
             //获取激活状态
             NSString *activity = [self transformDataToStr:macData withRange:NSMakeRange(12, 2)];
             if ([activity isEqualToString:@"01"]) {
-                isActivity = YES;
+                isActivity = YES;//已激活
+                //已激活的需要判断Mac地址
+                
             }else {
-                isActivity = NO;
+                isActivity = NO;//未激活
+                isJustJudgeConnect = NO;
+                [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
+                //存储Mac地址和固定密钥1
             }
             
-            NSLog(@"name:%@----:%@",theName,macStr);
-            
             [centralManager stopScan];
-            [centralManager connectPeripheral:peripheral options:nil];
+            NSLog(@"name:%@----:%@----:%@",theName,macStr,activity);
         }
     }
 }
@@ -178,24 +161,21 @@
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
     NSLog(@"whatlong-8-centralManager");
-    NSLog(@"连接蓝牙");
+    NSLog(@"连接设备");
     [connectTimer invalidate];
-    //    [centralManager stopScan];
     
     if (isJustJudgeConnect == YES) {
         [self disconnectPeripheral];
-        self.succeedBlueBlock(0,blueToothType);
         return;
     }
     peripheral.delegate = self;
-    //扫描服务
-    [peripheral discoverServices:nil];
+    //扫描所有服务
+    [peripheral discoverServices:nil];//调用扫描服务代理方法
 
     if (self.blueToothConnectionStateBlock) {
         if ([peripheral.name isEqual:@"SD"]) {
-            connectionState = BlueToothConnectionStateConnectionSucceedLatins;
+            connectionState = BlueToothConnectionStateConnectionSucceed;
         }
-        
         self.blueToothConnectionStateBlock(connectionState,NO);
     }
 }
@@ -242,8 +222,8 @@
             }
         }
     }
-    //特征扫瞄完连接成功，让主界面动画开始旋转
-    NSLog(@"\n\n\n");
+    //特征扫瞄完连接成功
+    NSLog(@"\%@\%@\%@",[CBUUID UUIDWithString:UUID_AFFIRM],[CBUUID UUIDWithString:UUID_ACTIVITY],[CBUUID UUIDWithString:UUID_OPEN]);
 }
 
 //
@@ -261,7 +241,7 @@
             [self sendValueWithKey:KEY1 characteristic:sendActivityCharateristic];
         }
     }//开锁
-    else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_OPEN]]){
+    else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_OPEN]]){        
         //发送开锁数据
         NSData *data;
         [self sendValueWithKey:data characteristic:sendOpenCharateristic];
@@ -292,20 +272,18 @@
     NSLog(@"whatlong-5-startScanning");
     NSLog(@"开始扫瞄");
     NSDictionary * options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
-    [centralManager scanForPeripheralsWithServices:nil options:options];
+    [centralManager scanForPeripheralsWithServices:nil options:options];//扫描到广播调用代理方法
+    
     if (self.blueToothConnectionStateBlock) {
         connectionState = BlueToothConnectionStateConnectioning;
         self.blueToothConnectionStateBlock(BlueToothConnectionStateConnectioning,NO);
     }
-    
-    if (isJustJudgeConnect == NO) {
-        
-    }
+
     //开一个定时器监控连接超时的情况
     connectTimer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(connectTimeout:) userInfo:nil repeats:NO];
 }
 
-- (NSString *)transformDataToStr:(NSData *)macData withRange:(NSRange *)range
+- (NSString *)transformDataToStr:(NSData *)macData withRange:(NSRange)range
 {
     NSLog(@"whatlong-7-transformMacDataToStr");
     NSString * str = [NSString stringWithFormat:@"%@",macData];
@@ -333,7 +311,7 @@
         if (!(characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse))
             actualType = CBCharacteristicWriteWithResponse;
     }
-    [picoocPeripheral writeValue:data forCharacteristic:characteristic type:actualType];
+    [scPeripheral writeValue:data forCharacteristic:characteristic type:actualType];
     return actualType;
 }
 
@@ -341,15 +319,12 @@
 - (void)connectTimeout:(NSTimer *)time
 {
     NSLog(@"whatlong-21-connectTimeout");
-    [noWeightTimer invalidate];
     
     if (self.blueToothConnectionStateBlock) {
         connectionState = BlueToothConnectionStateConnectionTimeOut;
         self.blueToothConnectionStateBlock(BlueToothConnectionStateConnectionTimeOut,NO);
     }
     [self disconnectPeripheral];
-    shake_to_failed_diff_time = [DateUtils getCurrentTimeStamp] - shake_to_failed_diff_time;
-    [self uploadFailedDiffTime];
 }
 
 //断开蓝牙
@@ -357,9 +332,9 @@
 {
     NSLog(@"whatlong-22-disconnectPeripheral");
     NSLog(@"蓝牙断开");
-    if (picoocPeripheral != nil) {//如果扫描到设备，self.picoocPeripheral不为空
+    if (scPeripheral != nil) {//如果扫描到设备，self.scPeripheral不为空
         [self performBlock:^{
-            [centralManager cancelPeripheralConnection:picoocPeripheral];
+            [centralManager cancelPeripheralConnection:scPeripheral];
         } afterDelay:0.5];
     }else
     {
@@ -370,20 +345,29 @@
     }
 }
 
+- (void)performBlock:(void (^)(void))block afterDelay:(NSTimeInterval)delay
+{
+    NSLog(@"whatlong-23-performBlock");
+    [self performSelector:@selector(fireBlockAfterDelay:)
+     
+               withObject:block
+     
+               afterDelay:delay];
+    
+}
+- (void)fireBlockAfterDelay:(void (^)(void))block {
+    block();
+}
 //立即停止蓝牙 --- 在页面退出或者释放的时候调用，同时把所有的block赋空
 - (void)stopBlueTooth {
     NSLog(@"whatlong-24-stopBlueTooth");
-    if (centralManager != nil) {//如果扫描到设备，self.picoocPeripheral不为空
+    if (centralManager != nil) {//如果扫描到设备，self.scPeripheral不为空
         [centralManager stopScan];
-        [centralManager cancelPeripheralConnection:picoocPeripheral];
+        [centralManager cancelPeripheralConnection:scPeripheral];
     }
     
     if (connectTimer) {
         [connectTimer invalidate];
-    }
-    
-    if (noWeightTimer) {
-        [noWeightTimer invalidate];
     }
     
     if (self.failBlueBlock) {
@@ -408,23 +392,16 @@
     NSLog(@"whatlong-25-centralManager");
     
     NSLog(@"蓝牙已经断开");
-    NSLog(@"centraManager = %@  self.picoocPeripheral = %@",centralManager,picoocPeripheral);
+    NSLog(@"centraManager = %@  self.scPeripheral = %@",centralManager,scPeripheral);
     NSLog(@"aaaerror = %@ peripheral = %@ central = %@",error,peripheral,central);
     //如果非正常断开，把蓝牙释放掉，重新扫瞄
-    if (self.isDidFinishWeight == NO) {
-        if (error != nil) {
-            NSLog(@"蓝牙意外断开");
-            self.failBlueBlock(blueConnectResult);
-            connect_to_failed_diff_time = [DateUtils getCurrentTimeStamp] - connect_to_failed_diff_time;
-            
-            if (self.blueToothConnectionStateBlock) {
-                connectionState = BlueToothConnectionStateConnectionOff;
-                [noWeightTimer invalidate];
-                self.blueToothConnectionStateBlock(BlueToothConnectionStateConnectionOff,hasSmartMatchData);
-            }
-        }
+    if (error != nil) {
+        NSLog(@"蓝牙意外断开");
+        self.failBlueBlock(blueConnectResult);
         
-        [self uploadFailedDiffTime];
+        if (self.blueToothConnectionStateBlock) {
+            connectionState = BlueToothConnectionStateConnectionOff;
+        }
     }else
     {
         NSLog(@"蓝牙正常断开");
@@ -434,14 +411,12 @@
         
         if (self.blueToothConnectionStateBlock) {
             connectionState = BlueToothConnectionStateConnectionOff;
-            [noWeightTimer invalidate];
-            self.blueToothConnectionStateBlock(BlueToothConnectionStateConnectionOff,hasSmartMatchData);
         }
     }
     
 }
 
-//发送命令 14位随机数作头部加上6位MAC组成20bytes，使用秘钥加密
+//发送命令 14位随机数作头部加上6位MAC组成20bytes，使用密钥加密
 - (void)sendValueWithKey:(NSString *)key characteristic:(CBCharacteristic *)characteristic
 {
     NSLog(@"whatlong-27-sendStepOneValue");

@@ -7,9 +7,10 @@
 //
 
 #import "BlueToothConnect.h"
+#import "GarageModel.h"
+
 
 #define UUID_TX  @"0XFFA9"//UUID
-
 #define UUID_ACTIVITY   @"0XFFAA"   //激活app设定
 #define UUID_OPEN       @"0XFFAB"   //开锁app设定
 #define UUID_AFFIRM     @"0XFFAC"   //app接收
@@ -18,20 +19,22 @@
 
 @interface BlueToothConnect()
 {
-    NSTimer * connectTimer;//连接超时监听
+    NSTimer * connectTimer;             //连接超时监听
     
-    BlueConnectResult blueConnectResult;
     CBPeripheral * scPeripheral;
     CBCentralManager * centralManager;
-    NSString * macStr; //蓝牙mac地址
+    NSString * macStr;                  //蓝牙mac地址
     
-    BOOL isJustJudge; //判断是否是只判断蓝牙是否打开
-    BOOL isJustJudgeConnect; //判断是否蓝牙连接上
-    BOOL isActivity; //判断是否激活
+    BOOL isJustJudge;                   //判断是否是只判断蓝牙是否打开
+    BOOL isJustJudgeConnect;            //判断是否蓝牙连接上
+    BOOL isActivity;                    //判断是否激活
     
+    BlueConnectResult blueConnectResult;
     BlueToothConnectionState connectionState;
 }
+
 @property (nonatomic, strong) BlueToothConnectionStateBlock blueToothConnectionStateBlock;
+
 @end
 
 @implementation BlueToothConnect
@@ -55,7 +58,7 @@
 ///判断蓝牙的状态
 - (void)judgeBlueToothState:(BlueStateBlock)blueState
 {
-    NSLog(@"whatlong-2-judgeBlueToothState");
+    PLog(@"whatlong-2-judgeBlueToothState");
     self.blueStateBlock = blueState;
     isJustJudge = YES;
     centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
@@ -64,7 +67,7 @@
 ///判断蓝牙已经连接上了设备
 - (void)judgeBlueToothConnect:(SucceedBlueBlock)succeed fail:(FailBlueBlock)fail
 {
-    NSLog(@"whatlong-3-judgeBlueToothConnect");
+    PLog(@"whatlong-3-judgeBlueToothConnect");
     self.isStartBlueTooth = YES;
     self.succeedBlueBlock = succeed;
     self.failBlueBlock = fail;
@@ -80,17 +83,17 @@
     if (centralManager == central) {
         switch ([central state]) {
             case CBManagerStateUnknown:
-                NSLog(@"状态未知,即将更新");
+                PLog(@"状态未知,即将更新");
                 break;
             case CBManagerStatePoweredOff:
-                NSLog(@"未打开蓝牙");
+                PLog(@"未打开蓝牙");
                 if (self.blueToothConnectionStateBlock) {
                     connectionState = BlueToothConnectionStatePoweredOff;
                     self.blueToothConnectionStateBlock(BlueToothConnectionStatePoweredOff,NO);
                 }
                 break;
             case CBManagerStatePoweredOn:
-                NSLog(@"蓝牙运行正常");
+                PLog(@"蓝牙运行正常");
                 BOOL isStartScann = YES;
                 if (isStartScann) {
                     if (isJustJudge == YES || isJustJudgeConnect == NO) {
@@ -99,13 +102,13 @@
                 }
                 break;
             case CBManagerStateResetting:
-                NSLog(@"蓝牙正在复位");
+                PLog(@"蓝牙正在复位");
                 break;
             case CBManagerStateUnauthorized:
-                NSLog(@"未授权低功耗蓝牙");
+                PLog(@"未授权低功耗蓝牙");
                 break;
             case CBManagerStateUnsupported:
-                NSLog(@"此设备不支持蓝牙");
+                PLog(@"此设备不支持蓝牙");
                 break;
             default:
                 break;
@@ -125,7 +128,7 @@
 //扫描成功发现设备广播时的回调，是scanForPeripheralsWithServices的回调代理
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-    NSLog(@"whatlong-6-centralManager");
+    PLog(@"whatlong-6-centralManager");
     NSMutableString * theName = [NSMutableString stringWithFormat:@"Peripheral Info:"];
     [theName appendFormat:@"Name: %@ ",peripheral.name];
     [theName appendFormat:@"RSSI: %@ ",RSSI];
@@ -152,7 +155,7 @@
             }
             
             [centralManager stopScan];
-            NSLog(@"name:%@----:%@----:%@",theName,macStr,activity);
+            PLog(@"name:%@----:%@----:%@",theName,macStr,activity);
         }
     }
 }
@@ -160,8 +163,8 @@
 //连接指定设备成功
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    NSLog(@"whatlong-8-centralManager");
-    NSLog(@"连接设备");
+    PLog(@"whatlong-8-centralManager");
+    PLog(@"连接设备");
     [connectTimer invalidate];
     
     if (isJustJudgeConnect == YES) {
@@ -183,8 +186,7 @@
 //连接指定设备失败
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    NSLog(@"whatlong-9-centralManager");
-    NSLog(@"链接失败");
+    PLog(@"whatlong-9-centralManager");
     [connectTimer invalidate];
     [self disconnectPeripheral];
 }
@@ -192,7 +194,7 @@
 //对设备扫描服务，扫瞄到服务后
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
-    NSLog(@"whatlong-10-peripheral");
+    PLog(@"whatlong-10-peripheral");
     for (CBService *aService in peripheral.services)
     {
         //扫描特征
@@ -203,7 +205,7 @@
 //扫描到特征后
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
-    NSLog(@"whatlong-11-peripheral");
+    PLog(@"whatlong-11-peripheral");
     if (peripheral.identifier == NULL) {
         return;
     }
@@ -223,13 +225,12 @@
         }
     }
     //特征扫瞄完连接成功
-    NSLog(@"\%@\%@\%@",[CBUUID UUIDWithString:UUID_AFFIRM],[CBUUID UUIDWithString:UUID_ACTIVITY],[CBUUID UUIDWithString:UUID_OPEN]);
+    PLog(@"\%@\%@\%@",[CBUUID UUIDWithString:UUID_AFFIRM],[CBUUID UUIDWithString:UUID_ACTIVITY],[CBUUID UUIDWithString:UUID_OPEN]);
 }
 
 //
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
-    NSLog(@"whatlong-12-peripheral");
-    NSLog(@"～～～～～%@",characteristic.value);
+    PLog(@"whatlong-12-peripheral");
     
     //激活
     if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_ACTIVITY]]) {
@@ -260,6 +261,12 @@
         }//第二步验证成功
         else if (!isActivity && characteristic.value.length==2){
             isActivity = YES;
+            
+            //加入本地缓存列表
+            GarageModel *model = [[GarageModel alloc] init];
+            model.isOwner = YES;
+            model.macStr = macStr;
+            [[AppContext sharedAppContext] addNewGarage:model];
         }
     }
 }
@@ -269,8 +276,7 @@
 //开始扫描
 - (void)startScanning
 {
-    NSLog(@"whatlong-5-startScanning");
-    NSLog(@"开始扫瞄");
+    PLog(@"whatlong-5-startScanning");
     NSDictionary * options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
     [centralManager scanForPeripheralsWithServices:nil options:options];//扫描到广播调用代理方法
     
@@ -285,7 +291,7 @@
 
 - (NSString *)transformDataToStr:(NSData *)macData withRange:(NSRange)range
 {
-    NSLog(@"whatlong-7-transformMacDataToStr");
+    PLog(@"whatlong-7-transformMacDataToStr");
     NSString * str = [NSString stringWithFormat:@"%@",macData];
     NSMutableString * macString = nil;
     macString = [NSMutableString stringWithFormat:@"%@",[str substringWithRange:range]];
@@ -297,8 +303,7 @@
 - (CBCharacteristicWriteType)sendTransparentData:(NSData *)data
                                             type:(CBCharacteristicWriteType)type
                                   characteristic:(CBCharacteristic *)characteristic{
-    NSLog(@"whatlong-19-sendTransparentData");
-    NSLog(@"[MyPeripheral] sendTransparentData:%@", data);
+    PLog(@"[MyPeripheral] sendTransparentData:%@", data);
     if (characteristic == nil) {
         return CBCharacteristicWriteWithResponse;
     }
@@ -318,7 +323,7 @@
 //链接超时
 - (void)connectTimeout:(NSTimer *)time
 {
-    NSLog(@"whatlong-21-connectTimeout");
+    PLog(@"whatlong-21-connectTimeout");
     
     if (self.blueToothConnectionStateBlock) {
         connectionState = BlueToothConnectionStateConnectionTimeOut;
@@ -330,8 +335,8 @@
 //断开蓝牙
 - (void)disconnectPeripheral
 {
-    NSLog(@"whatlong-22-disconnectPeripheral");
-    NSLog(@"蓝牙断开");
+    PLog(@"whatlong-22-disconnectPeripheral");
+    PLog(@"蓝牙断开");
     if (scPeripheral != nil) {//如果扫描到设备，self.scPeripheral不为空
         [self performBlock:^{
             [centralManager cancelPeripheralConnection:scPeripheral];
@@ -347,11 +352,9 @@
 
 - (void)performBlock:(void (^)(void))block afterDelay:(NSTimeInterval)delay
 {
-    NSLog(@"whatlong-23-performBlock");
+    PLog(@"whatlong-23-performBlock");
     [self performSelector:@selector(fireBlockAfterDelay:)
-     
                withObject:block
-     
                afterDelay:delay];
     
 }
@@ -360,7 +363,7 @@
 }
 //立即停止蓝牙 --- 在页面退出或者释放的时候调用，同时把所有的block赋空
 - (void)stopBlueTooth {
-    NSLog(@"whatlong-24-stopBlueTooth");
+    PLog(@"whatlong-24-stopBlueTooth");
     if (centralManager != nil) {//如果扫描到设备，self.scPeripheral不为空
         [centralManager stopScan];
         [centralManager cancelPeripheralConnection:scPeripheral];
@@ -389,14 +392,9 @@
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    NSLog(@"whatlong-25-centralManager");
-    
-    NSLog(@"蓝牙已经断开");
-    NSLog(@"centraManager = %@  self.scPeripheral = %@",centralManager,scPeripheral);
-    NSLog(@"aaaerror = %@ peripheral = %@ central = %@",error,peripheral,central);
     //如果非正常断开，把蓝牙释放掉，重新扫瞄
     if (error != nil) {
-        NSLog(@"蓝牙意外断开");
+        PLog(@"蓝牙意外断开");
         self.failBlueBlock(blueConnectResult);
         
         if (self.blueToothConnectionStateBlock) {
@@ -404,7 +402,7 @@
         }
     }else
     {
-        NSLog(@"蓝牙正常断开");
+        PLog(@"蓝牙正常断开");
         if (blueConnectResult == BlueConnectTimeOut) {
             self.failBlueBlock(blueConnectResult);
         }
@@ -419,7 +417,7 @@
 //发送命令 14位随机数作头部加上6位MAC组成20bytes，使用密钥加密
 - (void)sendValueWithKey:(NSString *)key characteristic:(CBCharacteristic *)characteristic
 {
-    NSLog(@"whatlong-27-sendStepOneValue");
+    PLog(@"whatlong-27-sendStepOneValue");
     Byte byteArray[3] = {0xF1,0x03,0x30};
     NSData * theData = [[NSData alloc] initWithBytes:byteArray length:20];
     
@@ -432,92 +430,94 @@
 //加密
 - (NSData *)AES128Encrypt:(NSData *)plainData key:(NSString *)key
 {
-    char keyPtr[kCCKeySizeAES128+1];
-    memset(keyPtr, 0, sizeof(keyPtr));
-    [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
-    
-    char ivPtr[kCCBlockSizeAES128+1];
-    memset(ivPtr, 0, sizeof(ivPtr));
-    [key getCString:ivPtr maxLength:sizeof(ivPtr) encoding:NSUTF8StringEncoding];
-    
-    NSUInteger dataLength = [plainData length];
-    
-    int diff = kCCKeySizeAES128 - (dataLength % kCCKeySizeAES128);
-    int newSize = 0;
-    
-    if(diff > 0)
-    {
-        newSize = dataLength + diff;
-    }
-    
-    char dataPtr[newSize];
-    memcpy(dataPtr, [plainData bytes], [plainData length]);
-    for(int i = 0; i < diff; i++)
-    {
-        dataPtr[i + dataLength] = 0x00;
-    }
-    
-    size_t bufferSize = newSize + kCCBlockSizeAES128;
-    void *buffer = malloc(bufferSize);
-    memset(buffer, 0, bufferSize);
-    
-    size_t numBytesCrypted = 0;
-    
-    CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt,
-                                          kCCAlgorithmAES128,
-                                          0x0000,   //这里用的 NoPadding的填充方式
-                                          //除此以外还有 kCCOptionPKCS7Padding 和 kCCOptionECBMode
-                                          keyPtr,
-                                          kCCKeySizeAES128,
-                                          ivPtr,
-                                          dataPtr,
-                                          sizeof(dataPtr),
-                                          buffer,
-                                          bufferSize,
-                                          &numBytesCrypted);
-    
-    if (cryptStatus == kCCSuccess) {
-        NSData *resultData = [NSData dataWithBytesNoCopy:buffer length:numBytesCrypted];
-        return resultData;
-    }
-    free(buffer);
-    return nil;
+    return plainData;
+//    char keyPtr[kCCKeySizeAES128+1];
+//    memset(keyPtr, 0, sizeof(keyPtr));
+//    [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
+//    
+//    char ivPtr[kCCBlockSizeAES128+1];
+//    memset(ivPtr, 0, sizeof(ivPtr));
+//    [key getCString:ivPtr maxLength:sizeof(ivPtr) encoding:NSUTF8StringEncoding];
+//    
+//    NSUInteger dataLength = [plainData length];
+//    
+//    int diff = kCCKeySizeAES128 - (dataLength % kCCKeySizeAES128);
+//    int newSize = 0;
+//    
+//    if(diff > 0)
+//    {
+//        newSize = dataLength + diff;
+//    }
+//    
+//    char dataPtr[newSize];
+//    memcpy(dataPtr, [plainData bytes], [plainData length]);
+//    for(int i = 0; i < diff; i++)
+//    {
+//        dataPtr[i + dataLength] = 0x00;
+//    }
+//    
+//    size_t bufferSize = newSize + kCCBlockSizeAES128;
+//    void *buffer = malloc(bufferSize);
+//    memset(buffer, 0, bufferSize);
+//    
+//    size_t numBytesCrypted = 0;
+//    
+//    CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt,
+//                                          kCCAlgorithmAES128,
+//                                          0x0000,   //这里用的 NoPadding的填充方式
+//                                          //除此以外还有 kCCOptionPKCS7Padding 和 kCCOptionECBMode
+//                                          keyPtr,
+//                                          kCCKeySizeAES128,
+//                                          ivPtr,
+//                                          dataPtr,
+//                                          sizeof(dataPtr),
+//                                          buffer,
+//                                          bufferSize,
+//                                          &numBytesCrypted);
+//    
+//    if (cryptStatus == kCCSuccess) {
+//        NSData *resultData = [NSData dataWithBytesNoCopy:buffer length:numBytesCrypted];
+//        return resultData;
+//    }
+//    free(buffer);
+//    return nil;
 }
 
 //解密
 + (NSData *)AES128Decrypt:(NSData *)plainData key:(NSString *)key
 {
-    char keyPtr[kCCKeySizeAES128 + 1];
-    memset(keyPtr, 0, sizeof(keyPtr));
-    [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
-    
-    char ivPtr[kCCBlockSizeAES128 + 1];
-    memset(ivPtr, 0, sizeof(ivPtr));
-    [AESIV getCString:ivPtr maxLength:sizeof(ivPtr) encoding:NSUTF8StringEncoding];
-    
-    NSData *data = plainData;
-    NSUInteger dataLength = [data length];
-    size_t bufferSize = dataLength + kCCBlockSizeAES128;
-    void *buffer = malloc(bufferSize);
-    
-    size_t numBytesCrypted = 0;
-    CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt,
-                                          kCCAlgorithmAES128,
-                                          0x0000,
-                                          keyPtr,
-                                          kCCBlockSizeAES128,
-                                          ivPtr,
-                                          [data bytes],
-                                          dataLength,
-                                          buffer,
-                                          bufferSize,
-                                          &numBytesCrypted);
-    if (cryptStatus == kCCSuccess) {
-        NSData *resultData = [NSData dataWithBytesNoCopy:buffer length:numBytesCrypted];
-        return resultData;
-    }
-    free(buffer);
-    return nil;
+    return plainData;
+//    char keyPtr[kCCKeySizeAES128 + 1];
+//    memset(keyPtr, 0, sizeof(keyPtr));
+//    [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
+//    
+//    char ivPtr[kCCBlockSizeAES128 + 1];
+//    memset(ivPtr, 0, sizeof(ivPtr));
+//    [AESIV getCString:ivPtr maxLength:sizeof(ivPtr) encoding:NSUTF8StringEncoding];
+//    
+//    NSData *data = plainData;
+//    NSUInteger dataLength = [data length];
+//    size_t bufferSize = dataLength + kCCBlockSizeAES128;
+//    void *buffer = malloc(bufferSize);
+//    
+//    size_t numBytesCrypted = 0;
+//    CCCryptorStatus cryptStatus = CCCrypt(kCCDecrypt,
+//                                          kCCAlgorithmAES128,
+//                                          0x0000,
+//                                          keyPtr,
+//                                          kCCBlockSizeAES128,
+//                                          ivPtr,
+//                                          [data bytes],
+//                                          dataLength,
+//                                          buffer,
+//                                          bufferSize,
+//                                          &numBytesCrypted);
+//    if (cryptStatus == kCCSuccess) {
+//        NSData *resultData = [NSData dataWithBytesNoCopy:buffer length:numBytesCrypted];
+//        return resultData;
+//    }
+//    free(buffer);
+//    return nil;
 }
 
 @end

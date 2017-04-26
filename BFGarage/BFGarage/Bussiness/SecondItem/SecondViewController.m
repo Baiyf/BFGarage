@@ -17,9 +17,6 @@
 
 @property(nonatomic, weak) IBOutlet UITableView *rootTableView;
 
-//列表数据
-@property (nonatomic, strong) NSMutableArray *rootTableArray;
-
 @end
 
 @implementation SecondViewController
@@ -32,9 +29,6 @@
     [self.rootTableView registerNib:UserCenterLeftContentCellNib forCellReuseIdentifier:@"DeviceTableViewCellIdentifier"];
     
     self.navigationItem.title = @"Setting";
-    
-    
-    self.rootTableArray = [[NSMutableArray alloc] initWithObjects:@"111",@"222",@"333",@"444", nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -60,15 +54,24 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.rootTableArray.count;
+    return [AppContext sharedAppContext].garageArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *cellIndentifierStr = @"DeviceTableViewCellIdentifier";
     DeviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndentifierStr forIndexPath:indexPath];
-    cell.textLabel.text = self.rootTableArray[indexPath.row];
+    cell.textLabel.text = [AppContext sharedAppContext].garageArray[indexPath.row];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle==UITableViewCellEditingStyleDelete)
+    {
+        // 删除数据的操作
+        [[AppContext sharedAppContext] deleteGarage:indexPath.row];
+    }
 }
 
 /*

@@ -13,6 +13,7 @@
 		27229AFB1EA8B0A9002B242B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27229AF91EA8B0A9002B242B /* Main.storyboard */; };
 		27229AFD1EA8B0A9002B242B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27229AFC1EA8B0A9002B242B /* Assets.xcassets */; };
 		27229B001EA8B0A9002B242B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27229AFE1EA8B0A9002B242B /* LaunchScreen.storyboard */; };
+		2725ED3D1EAF62A600641362 /* GarageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2725ED3C1EAF62A600641362 /* GarageModel.m */; };
 		27E34B261EAC5BE20030099A /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B251EAC5BE20030099A /* FirstViewController.m */; };
 		27E34B291EAC5C6B0030099A /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B281EAC5C6B0030099A /* SecondViewController.m */; };
 		27E34B2D1EAC5F1F0030099A /* DeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B2B1EAC5F1F0030099A /* DeviceTableViewCell.m */; };
@@ -36,6 +37,8 @@
 		27229AFC1EA8B0A9002B242B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		27229AFF1EA8B0A9002B242B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		27229B011EA8B0A9002B242B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2725ED3B1EAF62A600641362 /* GarageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GarageModel.h; sourceTree = "<group>"; };
+		2725ED3C1EAF62A600641362 /* GarageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GarageModel.m; sourceTree = "<group>"; };
 		27E34B241EAC5BE20030099A /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
 		27E34B251EAC5BE20030099A /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		27E34B271EAC5C6B0030099A /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
@@ -52,7 +55,7 @@
 		27E34B3B1EAC6B9E0030099A /* AppConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
 		27E34B3C1EAC726F0030099A /* BlueToothConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueToothConnect.h; sourceTree = "<group>"; };
 		27E34B3D1EAC726F0030099A /* BlueToothConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueToothConnect.m; sourceTree = "<group>"; };
-		27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BFGarage-Prefix.h"; sourceTree = "<group>"; };
+		27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BFGarage-Prefix.h"; sourceTree = SOURCE_ROOT; };
 		27E34D241EACCDBC0030099A /* Sony_TV_Login_Line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sony_TV_Login_Line@2x.png"; sourceTree = "<group>"; };
 		27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sony_TVLogin_bound@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,7 +74,6 @@
 		27229AE41EA8B0A9002B242B = {
 			isa = PBXGroup;
 			children = (
-				27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */,
 				27229AEF1EA8B0A9002B242B /* BFGarage */,
 				27229AEE1EA8B0A9002B242B /* Products */,
 			);
@@ -109,9 +111,19 @@
 		27229AF01EA8B0A9002B242B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */,
 				27229AF11EA8B0A9002B242B /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2725ED3A1EAF628900641362 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2725ED3B1EAF62A600641362 /* GarageModel.h */,
+				2725ED3C1EAF62A600641362 /* GarageModel.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		27E34B211EAC5BBC0030099A /* Bussiness */ = {
@@ -136,6 +148,7 @@
 		27E34B231EAC5BBC0030099A /* SecondItem */ = {
 			isa = PBXGroup;
 			children = (
+				2725ED3A1EAF628900641362 /* Model */,
 				27E34B331EAC66130030099A /* Detail */,
 				27E34B271EAC5C6B0030099A /* SecondViewController.h */,
 				27E34B281EAC5C6B0030099A /* SecondViewController.m */,
@@ -281,6 +294,7 @@
 				27E34B3E1EAC726F0030099A /* BlueToothConnect.m in Sources */,
 				27229AF21EA8B0A9002B242B /* main.m in Sources */,
 				27E34B261EAC5BE20030099A /* FirstViewController.m in Sources */,
+				2725ED3D1EAF62A600641362 /* GarageModel.m in Sources */,
 				27E34B2D1EAC5F1F0030099A /* DeviceTableViewCell.m in Sources */,
 				27E34B321EAC64CC0030099A /* ThirdViewController.m in Sources */,
 			);

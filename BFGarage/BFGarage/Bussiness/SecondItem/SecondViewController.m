@@ -61,7 +61,8 @@
 {
     static NSString *cellIndentifierStr = @"DeviceTableViewCellIdentifier";
     DeviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndentifierStr forIndexPath:indexPath];
-    cell.textLabel.text = [AppContext sharedAppContext].garageArray[indexPath.row];
+    GarageModel *model = [AppContext sharedAppContext].garageArray[indexPath.row];
+    cell.textLabel.text = model.macStr;
     return cell;
 }
 
@@ -71,6 +72,7 @@
     {
         // 删除数据的操作
         [[AppContext sharedAppContext] deleteGarage:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     }
 }
 

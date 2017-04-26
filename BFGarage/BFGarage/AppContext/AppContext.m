@@ -35,6 +35,15 @@ static AppContext *shareAppContext = nil;
                 [self.garageArray addObjectsFromArray:cacheList];
             }
         }
+        
+        //线下环境，无数据时显示假数据
+        if (ALL_SWITCH) {
+            
+        }else {
+            if (self.garageArray.count == 0) {
+                [self preloadData];
+            }
+        }
     }
     return self;
 }
@@ -59,6 +68,22 @@ static AppContext *shareAppContext = nil;
     else{
         [[NSFileManager defaultManager] removeItemAtPath:CACHEPATH error:nil];
     }
+}
+
+#pragma mark - 假数据
+- (void)preloadData{
+    GarageModel *model1 = [[GarageModel alloc] init];
+    model1.isOwner = YES;
+    model1.secretKey1 = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    model1.macStr = @"设备1";
+    
+    GarageModel *model2 = [[GarageModel alloc] init];
+    model2.isOwner = YES;
+    model2.secretKey1 = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    model2.macStr = @"设备2";
+    
+    [self.garageArray addObject:model1];
+    [self.garageArray addObject:model2];
 }
 
 @end

@@ -18,4 +18,6 @@
 - (void)addNewGarage:(GarageModel *)model;
 
 - (void)deleteGarage:(NSInteger)index;
+
+- (void)connectGarage:(GarageModel *)model;
 @end

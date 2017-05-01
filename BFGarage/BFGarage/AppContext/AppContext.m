@@ -70,16 +70,19 @@ static AppContext *shareAppContext = nil;
     }
 }
 
+- (void)connectGarage:(GarageModel *)model
+{
+    
+}
+
 #pragma mark - 假数据
 - (void)preloadData{
     GarageModel *model1 = [[GarageModel alloc] init];
     model1.isOwner = YES;
-    model1.secretKey1 = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     model1.macStr = @"设备1";
     
     GarageModel *model2 = [[GarageModel alloc] init];
     model2.isOwner = YES;
-    model2.secretKey1 = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     model2.macStr = @"设备2";
     
     [self.garageArray addObject:model1];

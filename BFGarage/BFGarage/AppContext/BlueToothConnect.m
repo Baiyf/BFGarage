@@ -433,10 +433,16 @@ didFailToConnectPeripheral:(CBPeripheral *)peripheral
 //发送命令 14位随机数作头部加上6位MAC组成20bytes，使用密钥加密
 - (void)sendValueWithKey:(NSData *)key characteristic:(CBCharacteristic *)characteristic
 {
-    PLog(@"whatlong-27-sendStepOneValue");
-    
-    Byte byteArray[3] = {0xF1,0x03,0x30};
-    NSData * theData = [[NSData alloc] initWithBytes:byteArray length:20];
+    NSString *randomStr = @"";
+    for (int i=0; i<14; i++) {
+        int x = arc4random() % 10;
+        randomStr = [randomStr stringByAppendingFormat:@"%d",x];
+    }
+    if (macStr.length==12) {
+        randomStr = [randomStr stringByAppendingFormat:@"%@",[macStr substringWithRange:NSMakeRange(6, 6)]];
+    }
+
+    NSData * theData = [randomStr dataUsingEncoding:NSUTF8StringEncoding];
     //加密后的数据
     NSData * encryptData = [theData AES128EncryptedDataUsingKey:key error:nil];
     [self sendTransparentData:encryptData

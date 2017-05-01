@@ -15,7 +15,6 @@
 {
     [coder encodeObject:@(self.isOwner) forKey:@"isOwner"];
     [coder encodeObject:self.macStr forKey:@"macStr"];
-    [coder encodeObject:self.secretKey1 forKey:@"secretKey1"];
     [coder encodeObject:self.secretKey2 forKey:@"secretKey2"];
     //... ... other instance variables
 }
@@ -27,7 +26,6 @@
     {
         self.isOwner = [[coder decodeObjectForKey:@"isOwner"] boolValue];
         self.macStr = [coder decodeObjectForKey:@"macStr"];
-        self.secretKey1 = [coder decodeObjectForKey:@"secretKey1"];
         self.secretKey2 = [coder decodeObjectForKey:@"secretKey2"];
     }
     

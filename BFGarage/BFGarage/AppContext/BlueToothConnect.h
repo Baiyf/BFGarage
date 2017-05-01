@@ -41,9 +41,9 @@ typedef void (^BlueStateBlock)(CBManagerState state); //判断蓝牙的状态
 
 @interface BlueToothConnect : NSObject<CBCentralManagerDelegate,CBPeripheralDelegate>
 {
-    CBCharacteristic * sendActivityCharateristic;
-    CBCharacteristic * sendOpenCharateristic;
-    CBCharacteristic * receiveCharateristic;
+    CBCharacteristic * sendActivityCharateristic;   //激活特征
+    CBCharacteristic * sendOpenCharateristic;       //开启特征
+    CBCharacteristic * receiveCharateristic;        //接手设备回调特征
 }
 @property (nonatomic, assign) BOOL isStartBlueTooth;//判断是否启动蓝牙，如果启动，则无法重复启动
 

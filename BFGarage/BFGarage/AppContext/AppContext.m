@@ -7,8 +7,13 @@
 //
 
 #import "AppContext.h"
+#import "BlueToothConnect.h"
 
 #define CACHEPATH [GET_CACHE_DIR stringByAppendingPathComponent:@"CACHE"]
+
+@interface AppContext ()
+@property (nonatomic, strong) BlueToothConnect *blueConnet;
+@end
 
 @implementation AppContext
 
@@ -27,6 +32,7 @@ static AppContext *shareAppContext = nil;
     if (self)
     {
         self.garageArray = [[NSMutableArray alloc] init];
+        self.blueConnet = [[BlueToothConnect alloc] init];
         
         NSFileManager *filemanager = [NSFileManager defaultManager];
         if ([filemanager fileExistsAtPath:CACHEPATH]) {

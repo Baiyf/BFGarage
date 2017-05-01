@@ -24,10 +24,14 @@ static unsigned char HandShakeKey[16] = {
 {
     NSTimer * connectTimer;             //连接超时监听
     
-    CBPeripheral       * scPeripheral;
+    CBPeripheral       * scPeripheral;  //连接的设备
     CBCentralManager   * centralManager;
     NSString           * macStr;        //蓝牙mac地址
     NSData             * handShakeKey2; //握手密钥2
+    
+    CBCharacteristic * sendActivityCharateristic;   //激活特征
+    CBCharacteristic * sendOpenCharateristic;       //开启特征
+    CBCharacteristic * receiveCharateristic;        //接手设备回调特征
     
     BOOL isJustJudge;                   //判断是否是只判断蓝牙是否打开
     BOOL isJustJudgeConnect;            //判断是否蓝牙连接上
@@ -37,7 +41,7 @@ static unsigned char HandShakeKey[16] = {
     BlueToothConnectionState connectionState;
 }
 
-@property (nonatomic, strong) BlueToothConnectionStateBlock blueToothConnectionStateBlock;
+@property (nonatomic, strong) BlueToothConnectionStateBlock connectionStateBlock;
 
 @end
 
@@ -53,7 +57,7 @@ static unsigned char HandShakeKey[16] = {
     self.isStartBlueTooth = YES;
     self.succeedBlueBlock = succeed;
     self.failBlueBlock = fail;
-    self.blueToothConnectionStateBlock = blueState;
+    self.connectionStateBlock = blueState;
     
     isJustJudge = NO;
     isJustJudgeConnect = NO;
@@ -94,18 +98,15 @@ static unsigned char HandShakeKey[16] = {
                 break;
             case CBManagerStatePoweredOff:
                 PLog(@"未打开蓝牙");
-                if (self.blueToothConnectionStateBlock) {
+                if (self.connectionStateBlock) {
                     connectionState = BlueToothConnectionStatePoweredOff;
-                    self.blueToothConnectionStateBlock(BlueToothConnectionStatePoweredOff,NO);
+                    self.connectionStateBlock(BlueToothConnectionStatePoweredOff,NO);
                 }
                 break;
             case CBManagerStatePoweredOn:
                 PLog(@"蓝牙运行正常");
-                BOOL isStartScann = YES;
-                if (isStartScann) {
-                    if (isJustJudge == YES || isJustJudgeConnect == NO) {
-                        [self startScanning];
-                    }
+                if (isJustJudge == YES || isJustJudgeConnect == NO) {
+                    [self startScanning];
                 }
                 break;
             case CBManagerStateResetting:
@@ -189,11 +190,11 @@ static unsigned char HandShakeKey[16] = {
     //扫描所有服务
     [peripheral discoverServices:nil];//调用扫描服务代理方法
 
-    if (self.blueToothConnectionStateBlock) {
+    if (self.connectionStateBlock) {
         if ([peripheral.name isEqual:@"SD"]) {
             connectionState = BlueToothConnectionStateConnectionSucceed;
         }
-        self.blueToothConnectionStateBlock(connectionState,NO);
+        self.connectionStateBlock(connectionState,NO);
     }
 }
 
@@ -297,9 +298,9 @@ didFailToConnectPeripheral:(CBPeripheral *)peripheral
     NSDictionary * options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
     [centralManager scanForPeripheralsWithServices:nil options:options];//扫描到广播调用代理方法
     
-    if (self.blueToothConnectionStateBlock) {
+    if (self.connectionStateBlock) {
         connectionState = BlueToothConnectionStateConnectioning;
-        self.blueToothConnectionStateBlock(BlueToothConnectionStateConnectioning,NO);
+        self.connectionStateBlock(BlueToothConnectionStateConnectioning,NO);
     }
 
     //开一个定时器监控连接超时的情况
@@ -341,9 +342,9 @@ didFailToConnectPeripheral:(CBPeripheral *)peripheral
 {
     PLog(@"whatlong-21-connectTimeout");
     
-    if (self.blueToothConnectionStateBlock) {
+    if (self.connectionStateBlock) {
         connectionState = BlueToothConnectionStateConnectionTimeOut;
-        self.blueToothConnectionStateBlock(BlueToothConnectionStateConnectionTimeOut,NO);
+        self.connectionStateBlock(BlueToothConnectionStateConnectionTimeOut,NO);
     }
     [self disconnectPeripheral];
 }
@@ -394,8 +395,8 @@ didFailToConnectPeripheral:(CBPeripheral *)peripheral
         self.failBlueBlock = nil;
     }
     
-    if (self.blueToothConnectionStateBlock) {
-        self.blueToothConnectionStateBlock = nil;
+    if (self.connectionStateBlock) {
+        self.connectionStateBlock = nil;
     }
     
     if (self.succeedBlueBlock) {
@@ -414,7 +415,7 @@ didFailToConnectPeripheral:(CBPeripheral *)peripheral
         PLog(@"蓝牙意外断开");
         self.failBlueBlock(blueConnectResult);
         
-        if (self.blueToothConnectionStateBlock) {
+        if (self.connectionStateBlock) {
             connectionState = BlueToothConnectionStateConnectionOff;
         }
     }else
@@ -424,7 +425,7 @@ didFailToConnectPeripheral:(CBPeripheral *)peripheral
             self.failBlueBlock(blueConnectResult);
         }
         
-        if (self.blueToothConnectionStateBlock) {
+        if (self.connectionStateBlock) {
             connectionState = BlueToothConnectionStateConnectionOff;
         }
     }

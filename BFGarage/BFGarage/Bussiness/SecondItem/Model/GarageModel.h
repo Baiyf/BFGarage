@@ -12,7 +12,6 @@
 
 @property (nonatomic, assign) BOOL isOwner;
 @property (nonatomic, strong) NSString *macStr;
-@property (nonatomic, strong) NSString *secretKey1;
-@property (nonatomic, strong) NSString *secretKey2;
+@property (nonatomic, strong) NSData *secretKey2;
 
 @end

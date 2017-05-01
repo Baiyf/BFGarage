@@ -14,6 +14,7 @@
 		27229AFD1EA8B0A9002B242B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27229AFC1EA8B0A9002B242B /* Assets.xcassets */; };
 		27229B001EA8B0A9002B242B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27229AFE1EA8B0A9002B242B /* LaunchScreen.storyboard */; };
 		2725ED3D1EAF62A600641362 /* GarageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2725ED3C1EAF62A600641362 /* GarageModel.m */; };
+		27D345061EB6F795006C1E95 /* NSData+BFCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D345051EB6F795006C1E95 /* NSData+BFCrypto.m */; };
 		27E34B261EAC5BE20030099A /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B251EAC5BE20030099A /* FirstViewController.m */; };
 		27E34B291EAC5C6B0030099A /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B281EAC5C6B0030099A /* SecondViewController.m */; };
 		27E34B2D1EAC5F1F0030099A /* DeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B2B1EAC5F1F0030099A /* DeviceTableViewCell.m */; };
@@ -39,6 +40,8 @@
 		27229B011EA8B0A9002B242B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2725ED3B1EAF62A600641362 /* GarageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GarageModel.h; sourceTree = "<group>"; };
 		2725ED3C1EAF62A600641362 /* GarageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GarageModel.m; sourceTree = "<group>"; };
+		27D345041EB6F795006C1E95 /* NSData+BFCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+BFCrypto.h"; sourceTree = "<group>"; };
+		27D345051EB6F795006C1E95 /* NSData+BFCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+BFCrypto.m"; sourceTree = "<group>"; };
 		27E34B241EAC5BE20030099A /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
 		27E34B251EAC5BE20030099A /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		27E34B271EAC5C6B0030099A /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
@@ -191,6 +194,8 @@
 		27E34B3F1EAC834A0030099A /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				27D345041EB6F795006C1E95 /* NSData+BFCrypto.h */,
+				27D345051EB6F795006C1E95 /* NSData+BFCrypto.m */,
 			);
 			path = Framework;
 			sourceTree = "<group>";
@@ -239,7 +244,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0820;
-				ORGANIZATIONNAME = com.autohome;
+				ORGANIZATIONNAME = com.company;
 				TargetAttributes = {
 					27229AEC1EA8B0A9002B242B = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -293,6 +298,7 @@
 				27E34B361EAC668D0030099A /* ScanViewController.m in Sources */,
 				27E34B3E1EAC726F0030099A /* BlueToothConnect.m in Sources */,
 				27229AF21EA8B0A9002B242B /* main.m in Sources */,
+				27D345061EB6F795006C1E95 /* NSData+BFCrypto.m in Sources */,
 				27E34B261EAC5BE20030099A /* FirstViewController.m in Sources */,
 				2725ED3D1EAF62A600641362 /* GarageModel.m in Sources */,
 				27E34B2D1EAC5F1F0030099A /* DeviceTableViewCell.m in Sources */,

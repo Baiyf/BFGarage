@@ -33,6 +33,18 @@ static AppContext *shareAppContext = nil;
     {
         self.garageArray = [[NSMutableArray alloc] init];
         self.blueConnet = [[BlueToothConnect alloc] init];
+        [self.blueConnet startBlueToothWithBlueToothState:^(BlueToothConnectionState state) {
+            PLog(@"\n*********\n    蓝牙状态:%ld\n*********",(long)state);
+            
+            switch (state) {
+                case BlueToothConnectionStatePoweredOff:
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+        }];
         
         NSFileManager *filemanager = [NSFileManager defaultManager];
         if ([filemanager fileExistsAtPath:CACHEPATH]) {
@@ -76,6 +88,7 @@ static AppContext *shareAppContext = nil;
     }
 }
 
+//连接某个设备
 - (void)connectGarage:(GarageModel *)model
 {
     

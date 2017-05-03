@@ -38,9 +38,15 @@ static AppContext *shareAppContext = nil;
             
             switch (state) {
                 case BlueToothConnectionStatePoweredOff:
-                    
+                {
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"错误,无法访问!"
+                                                                       message:@"蓝牙未开启"
+                                                                      delegate:self
+                                                             cancelButtonTitle:@"确定"
+                                                             otherButtonTitles:nil];
+                    [alertView show];
+                }
                     break;
-                    
                 default:
                     break;
             }
@@ -91,7 +97,7 @@ static AppContext *shareAppContext = nil;
 //连接某个设备
 - (void)connectGarage:(GarageModel *)model
 {
-    
+    [self.blueConnet connectPeripheralWith:model.macStr];
 }
 
 #pragma mark - 假数据

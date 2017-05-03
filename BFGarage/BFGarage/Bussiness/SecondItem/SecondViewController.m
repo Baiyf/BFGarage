@@ -37,11 +37,12 @@
 }
 
 #pragma mark - button actions
-
+//激活操作
 - (IBAction)activityConnect:(id)sender {
     
 }
 
+//二维码扫描
 - (IBAction)scanQRCode:(id)sender {
     ScanViewController *scanVC = [[ScanViewController alloc] init];
     [self.navigationController pushViewController:scanVC animated:YES];

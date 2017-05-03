@@ -7,9 +7,11 @@
 //
 
 #import "FirstViewController.h"
+#import "DeviceTableViewCell.h"
 
-@interface FirstViewController ()
+@interface FirstViewController ()<UITableViewDelegate,UITableViewDataSource>
 
+@property(nonatomic, weak) IBOutlet UITableView *rootTableView;
 @end
 
 @implementation FirstViewController
@@ -17,6 +19,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    UINib *UserCenterLeftContentCellNib = [UINib nibWithNibName:@"DeviceTableViewCell" bundle:nil];
+    [self.rootTableView registerNib:UserCenterLeftContentCellNib forCellReuseIdentifier:@"DeviceTableViewCellIdentifier"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -24,14 +29,29 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - UITableViewDelegate & UITableViewDatasource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
 }
-*/
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [AppContext sharedAppContext].garageArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIndentifierStr = @"DeviceTableViewCellIdentifier";
+    DeviceTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndentifierStr forIndexPath:indexPath];
+    GarageModel *model = [AppContext sharedAppContext].garageArray[indexPath.row];
+    cell.textLabel.text = model.macStr;
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    GarageModel *model = [AppContext sharedAppContext].garageArray[indexPath.row];
+    [[AppContext sharedAppContext] connectGarage:model];
+}
 
 @end

@@ -63,6 +63,13 @@ static unsigned char HandShakeKey[16] = {
         [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
         
         [centralManager stopScan];
+    }else {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@""
+                                                           message:@"未搜索到此设备"
+                                                          delegate:nil
+                                                 cancelButtonTitle:@"确定"
+                                                 otherButtonTitles:nil];
+        [alertView show];
     }
 }
 
@@ -120,6 +127,7 @@ static unsigned char HandShakeKey[16] = {
             
             //是否只是扫描
             if (isJustScan) {
+                //将扫描到的加入字典
                 [deviceDic setObject:peripheral forKey:macString];
             }
             //不是扫描，直接需要连接的

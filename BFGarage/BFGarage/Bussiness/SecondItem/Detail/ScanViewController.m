@@ -65,7 +65,7 @@
     self.captureVideoPreviewLayer.frame = self.view.layer.bounds;
     self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     [self.view.layer addSublayer:self.captureVideoPreviewLayer];
-    NSLog(@"222");
+    PLog(@"222");
 }
 
 
@@ -111,7 +111,7 @@
 -(void)startScan{
     [self.captureSession startRunning];
     [self loopDrawLine];
-    NSLog(@"333");
+    PLog(@"333");
 }
 
 //扫码条停止循环
@@ -134,7 +134,7 @@
         [self stopScan];
         AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndex:0];
         stringValue = metadataObject.stringValue;//扫描出信息
-        NSLog(@"%@",stringValue);
+        PLog(@"%@",stringValue);
     }
 }
 

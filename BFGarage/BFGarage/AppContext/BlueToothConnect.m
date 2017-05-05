@@ -58,18 +58,45 @@ static unsigned char HandShakeKey[16] = {
 //连接指定设备
 - (void)connectPeripheralWith:(NSString *)macstring
 {
+    //1 如果之前有连接，取消掉，连接默认
+    if (scPeripheral) {
+        [scPeripheral setNotifyValue:NO forCharacteristic:receiveCharateristic];
+        receiveCharateristic = nil;
+        sendOpenCharateristic = nil;
+        sendActivityCharateristic = nil;
+        
+        [centralManager cancelPeripheralConnection:scPeripheral];
+        scPeripheral = nil;
+    }
+    
+    
+    //2.如果传入的 mac 地址为空，说明走的是激活方式
+    if (!macstring) {
+        //2.1 判断蓝牙是否开启
+        if (centralManager.state == CBManagerStatePoweredOn) {
+            //2.2 判断是否开启扫描
+            if (!centralManager.isScanning) {
+                isJustScan = NO;
+                [self startScanning];
+            }else{
+                isJustScan = NO;
+            }
+        }else {
+            BFALERT(@"蓝牙状态异常");
+        }
+        
+        return;
+    }
+    
+    //3.如果传入mac 地址不为空，说明走的是直接连接
     if ([deviceDic.allKeys containsObject:macstring]) {
         CBPeripheral *peripheral = deviceDic[macstring];
-        [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
-        
+
+        //3.1 调用连接设备代理方法
+        [centralManager connectPeripheral:peripheral options:nil];
         [centralManager stopScan];
     }else {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@""
-                                                           message:@"未搜索到此设备"
-                                                          delegate:nil
-                                                 cancelButtonTitle:@"确定"
-                                                 otherButtonTitles:nil];
-        [alertView show];
+        BFALERT(@"未搜索到此设备");
     }
 }
 
@@ -125,39 +152,41 @@ static unsigned char HandShakeKey[16] = {
             NSData * macData = [advertisementData objectForKey:@"kCBAdvDataManufacturerData"];
             NSString * macString = [[self transformDataToStr:macData withRange:NSMakeRange(0, 11)] mutableCopy];
             
+            //将扫描到的加入字典
+            [deviceDic setObject:peripheral forKey:macString];
+            
             //是否只是扫描
             if (isJustScan) {
-                //将扫描到的加入字典
-                [deviceDic setObject:peripheral forKey:macString];
+                
             }
             //不是扫描，直接需要连接的
             else{
-                
-                //需要连接的设备
-                scPeripheral = peripheral;
-                scPeripheral.delegate = self;
-                
-                macStr = macString;
-                
-                //获取激活状态
-                NSString *activity = [self transformDataToStr:macData withRange:NSMakeRange(12, 2)];
-                if ([activity isEqualToString:@"01"]) {
-                    isActivity = YES;//已激活
-                    //已激活的需要判断Mac地址
+                if (![self isExist:macString]) {
+                    //需要连接的设备
+                    scPeripheral = peripheral;
+                    scPeripheral.delegate = self;
                     
-                }else {
-                    isActivity = NO;//未激活
-                    [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
-                    //存储Mac地址和固定密钥1
+                    macStr = macString;
+                    
+                    //获取激活状态
+                    NSString *activity = [self transformDataToStr:macData withRange:NSMakeRange(12, 2)];
+                    if ([activity isEqualToString:@"01"]) {
+                        isActivity = YES;//已激活
+                        //已激活的需要判断Mac地址
+                        
+                    }else {
+                        isActivity = NO;//未激活
+                        [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
+                    }
+                    
+                    [centralManager stopScan];
+                    
+                    NSMutableString * theName = [NSMutableString stringWithFormat:@"Peripheral Info:"];
+                    [theName appendFormat:@"Name: %@ ",peripheral.name];
+                    [theName appendFormat:@"RSSI: %@ ",RSSI];
+                    [theName appendFormat:@"UUID: %@ ",peripheral.identifier];
+                    PLog(@"name:%@----:%@----:%@",theName,macStr,activity);
                 }
-                
-                [centralManager stopScan];
-                
-                NSMutableString * theName = [NSMutableString stringWithFormat:@"Peripheral Info:"];
-                [theName appendFormat:@"Name: %@ ",peripheral.name];
-                [theName appendFormat:@"RSSI: %@ ",RSSI];
-                [theName appendFormat:@"UUID: %@ ",peripheral.identifier];
-                PLog(@"name:%@----:%@----:%@",theName,macStr,activity);
             }
         }
     }
@@ -383,6 +412,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
                afterDelay:delay];
     
 }
+
 - (void)fireBlockAfterDelay:(void (^)(void))block {
     block();
 }
@@ -422,6 +452,20 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     [self sendTransparentData:encryptData
                          type:CBCharacteristicWriteWithoutResponse
                characteristic:characteristic];
+}
+
+//判断是否是已添加设备
+- (BOOL)isExist:(NSString *)macString
+{
+    BOOL exist = NO;
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.macStr=%@",macString];
+    NSArray *predicateArray = [[AppContext sharedAppContext].garageArray filteredArrayUsingPredicate:predicate];
+    if (predicateArray.count!=0) {
+        exist = YES;
+    }
+    
+    return exist;
 }
 
 @end

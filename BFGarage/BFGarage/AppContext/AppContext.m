@@ -39,12 +39,7 @@ static AppContext *shareAppContext = nil;
             switch (state) {
                 case BlueToothConnectionStatePoweredOff:
                 {
-                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"错误,无法访问!"
-                                                                       message:@"蓝牙未开启"
-                                                                      delegate:self
-                                                             cancelButtonTitle:@"确定"
-                                                             otherButtonTitles:nil];
-                    [alertView show];
+                    BFALERT(@"蓝牙未开启");
                 }
                     break;
                 default:

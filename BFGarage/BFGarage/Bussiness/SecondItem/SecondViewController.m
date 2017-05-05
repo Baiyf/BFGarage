@@ -39,7 +39,7 @@
 #pragma mark - button actions
 //激活操作
 - (IBAction)activityConnect:(id)sender {
-    
+    [[AppContext sharedAppContext] connectGarage:nil];
 }
 
 //二维码扫描

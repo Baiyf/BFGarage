@@ -123,7 +123,8 @@
     [readLineView removeFromSuperview];
     [coverImage removeFromSuperview];
     [self.captureVideoPreviewLayer removeFromSuperlayer];
-
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - AVCaptureMetadataOutputObjectsDelegate

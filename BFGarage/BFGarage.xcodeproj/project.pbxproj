@@ -26,6 +26,7 @@
 		27E34B3E1EAC726F0030099A /* BlueToothConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B3D1EAC726F0030099A /* BlueToothConnect.m */; };
 		27E34D261EACCDBC0030099A /* Sony_TV_Login_Line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27E34D241EACCDBC0030099A /* Sony_TV_Login_Line@2x.png */; };
 		27E34D271EACCDBC0030099A /* Sony_TVLogin_bound@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */; };
+		27F88E171EC7641D00180D9D /* BFLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F88E161EC7641D00180D9D /* BFLogView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,9 @@
 		27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BFGarage-Prefix.h"; sourceTree = SOURCE_ROOT; };
 		27E34D241EACCDBC0030099A /* Sony_TV_Login_Line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sony_TV_Login_Line@2x.png"; sourceTree = "<group>"; };
 		27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sony_TVLogin_bound@2x.png"; sourceTree = "<group>"; };
+		27F88E001EC70CCE00180D9D /* AESCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESCrypto.h; sourceTree = "<group>"; };
+		27F88E151EC7641D00180D9D /* BFLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFLogView.h; sourceTree = "<group>"; };
+		27F88E161EC7641D00180D9D /* BFLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFLogView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,7 @@
 		27229AEF1EA8B0A9002B242B /* BFGarage */ = {
 			isa = PBXGroup;
 			children = (
+				27F88E141EC763EE00180D9D /* Tool */,
 				27E34D221EACCDBC0030099A /* Resource */,
 				27E34B3F1EAC834A0030099A /* Framework */,
 				27E34B371EAC68040030099A /* AppContext */,
@@ -206,6 +211,7 @@
 		27E34B3F1EAC834A0030099A /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				27F88E001EC70CCE00180D9D /* AESCrypto.h */,
 				27D345041EB6F795006C1E95 /* NSData+BFCrypto.h */,
 				27D345051EB6F795006C1E95 /* NSData+BFCrypto.m */,
 			);
@@ -227,6 +233,15 @@
 				27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */,
 			);
 			path = Setting;
+			sourceTree = "<group>";
+		};
+		27F88E141EC763EE00180D9D /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				27F88E151EC7641D00180D9D /* BFLogView.h */,
+				27F88E161EC7641D00180D9D /* BFLogView.m */,
+			);
+			path = Tool;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,6 +325,7 @@
 				27229AF51EA8B0A9002B242B /* AppDelegate.m in Sources */,
 				27E34B361EAC668D0030099A /* ScanViewController.m in Sources */,
 				27E34B3E1EAC726F0030099A /* BlueToothConnect.m in Sources */,
+				27F88E171EC7641D00180D9D /* BFLogView.m in Sources */,
 				27229AF21EA8B0A9002B242B /* main.m in Sources */,
 				27D345061EB6F795006C1E95 /* NSData+BFCrypto.m in Sources */,
 				27E34B261EAC5BE20030099A /* FirstViewController.m in Sources */,
@@ -443,8 +459,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhouqinghua;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "106fb8c7-393a-4722-9458-0d25816e37ca";
-				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaProvide;
+				PROVISIONING_PROFILE = "3441ee98-7422-4920-bca4-0bce611b8409";
+				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaDistributionProvide;
 			};
 			name = Debug;
 		};
@@ -452,6 +468,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PICOOC Technologies Co., Ltd.";
 				DEVELOPMENT_TEAM = 4JPU9286A5;
 				GCC_PREFIX_HEADER = "BFGarage-Prefix.h";
 				INFOPLIST_FILE = BFGarage/Info.plist;
@@ -459,8 +476,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhouqinghua;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "106fb8c7-393a-4722-9458-0d25816e37ca";
-				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaProvide;
+				PROVISIONING_PROFILE = "3441ee98-7422-4920-bca4-0bce611b8409";
+				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaDistributionProvide;
 			};
 			name = Release;
 		};

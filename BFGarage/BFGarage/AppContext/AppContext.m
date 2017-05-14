@@ -8,11 +8,13 @@
 
 #import "AppContext.h"
 #import "BlueToothConnect.h"
+#import "BFLogView.h"
 
 #define CACHEPATH [GET_CACHE_DIR stringByAppendingPathComponent:@"CACHE"]
 
 @interface AppContext ()
 @property (nonatomic, strong) BlueToothConnect *blueConnet;
+@property (nonatomic, strong) BFLogView *logView;
 @end
 
 @implementation AppContext
@@ -31,6 +33,9 @@ static AppContext *shareAppContext = nil;
     self = [super init];
     if (self)
     {
+        self.logView = [[BFLogView alloc] init];
+        
+        
         self.garageArray = [[NSMutableArray alloc] init];
         self.blueConnet = [[BlueToothConnect alloc] init];
         [self.blueConnet startBlueToothWithBlueToothState:^(BlueToothConnectionState state) {
@@ -45,6 +50,11 @@ static AppContext *shareAppContext = nil;
                 default:
                     break;
             }
+        }];
+        
+        __weak typeof(self) weakSelf = self;
+        [self.blueConnet setLogBlock:^(NSString *logString) {
+            [weakSelf.logView setLog:logString];
         }];
         
         NSFileManager *filemanager = [NSFileManager defaultManager];

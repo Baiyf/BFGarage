@@ -78,7 +78,7 @@ NSString * const kCommonCryptoErrorDomain = @"CommonCryptoErrorDomain";
 - (NSData *) AES128EncryptedDataUsingKey: (id) key error: (NSError **) error
 {
     CCCryptorStatus status = kCCSuccess;
-    NSData * result = [self dataEncryptedUsingAlgorithm: kCCAlgorithmAES
+    NSData * result = [self dataEncryptedUsingAlgorithm: kCCAlgorithmAES128
                                                     key: key
                                                 options: kCCOptionPKCS7Padding
                                                   error: &status];
@@ -95,7 +95,7 @@ NSString * const kCommonCryptoErrorDomain = @"CommonCryptoErrorDomain";
 - (NSData *) decryptedAES128DataUsingKey: (id) key error: (NSError **) error
 {
     CCCryptorStatus status = kCCSuccess;
-    NSData * result = [self decryptedDataUsingAlgorithm: kCCAlgorithmAES
+    NSData * result = [self decryptedDataUsingAlgorithm: kCCAlgorithmAES128
                                                     key: key
                                                 options: kCCOptionPKCS7Padding
                                                   error: &status];

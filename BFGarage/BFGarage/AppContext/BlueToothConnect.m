@@ -239,11 +239,11 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 {
     //如果非正常断开，把蓝牙释放掉，重新扫瞄
     if (error != nil) {
-        self.logBlock(@"蓝牙意外断开");
+        self.logBlock(@"-----------:蓝牙意外断开");
         connectionState = BlueToothConnectionStateConnectionOff;
     }else
     {
-        self.logBlock(@"蓝牙正常断开");
+        self.logBlock(@"-----------:蓝牙正常断开");
         connectionState = BlueToothConnectionStateConnectionOff;
     }
 
@@ -344,6 +344,16 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     }
 }
 
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    if (error) {
+        NSString *errorString = [NSString stringWithFormat:@"特征%@写入出错:%@",[characteristic UUID],[error localizedDescription]];
+        self.logBlock(errorString);
+    }else {
+        NSString *errorString = [NSString stringWithFormat:@"特征%@写入成功",[characteristic UUID]];
+        self.logBlock(errorString);
+    }
+}
+
 #pragma mark - 辅助方法
 
 //开始扫描
@@ -383,18 +393,19 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 - (CBCharacteristicWriteType)sendTransparentData:(NSData *)data
                                             type:(CBCharacteristicWriteType)type
                                   characteristic:(CBCharacteristic *)characteristic{
-    self.logBlock([NSString stringWithFormat:@"-----------:发送数据 %@",data]);
+    self.logBlock([NSString stringWithFormat:@"加密后:%@",data]);
+    
     if (characteristic == nil) {
         return CBCharacteristicWriteWithResponse;
     }
     CBCharacteristicWriteType actualType = type;
     if (type == CBCharacteristicWriteWithResponse) {
         if (!(characteristic.properties & CBCharacteristicPropertyWrite))
-            actualType = CBCharacteristicWriteWithoutResponse;
+            actualType = CBCharacteristicWriteWithResponse;
     }
     else {
         if (!(characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse))
-            actualType = CBCharacteristicWriteWithResponse;
+            actualType = CBCharacteristicWriteWithoutResponse;
     }
     [scPeripheral writeValue:data forCharacteristic:characteristic type:actualType];
     return actualType;
@@ -460,28 +471,77 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 //发送命令 14位随机数作头部加上6位MAC组成20bytes，使用密钥加密
 - (void)sendValueWithKey:(NSData *)key characteristic:(CBCharacteristic *)characteristic
 {
-    NSMutableData *sendData=[NSMutableData data];
-    for (int i=0; i<14; i++) {
-        int x = arc4random() % 10;
-        NSString *hexString = [self ToHex:x];
-        NSData *hexData = [self hexToBytes:hexString];
-        [sendData appendData:hexData];
-    }
-    if (macStr.length==12) {
-        [sendData appendData:[self hexToBytes:@"74BB565163FA"]];
+//    NSMutableData *sendData=[NSMutableData data];
+//    for (int i=0; i<10; i++) {
+//        int x = arc4random() % 16;
+//        NSString *hexString = [self ToHex:x];
+//        NSData *hexData = [self hexToBytes:hexString];
+//        [sendData appendData:hexData];
+//    }
+//    if (macStr.length==12) {
+//        [sendData appendData:[self hexToBytes:macStr]];
+//    }
+//    
+//    unsigned char dat[16];
+//    memcpy(dat, [sendData bytes], 16);
+//    
+//    unsigned char chainCipherBlock[16];
+//    unsigned char *shakeKey = (unsigned char *)[key bytes];    unsigned char i;
+//    for(i=0;i<16;i++)
+//    {
+//        AES_Key_Table[i]= shakeKey[i];
+//    }
+//    memset(chainCipherBlock,0x00,sizeof(chainCipherBlock));
+//    
+//    //加密后的数据
+//    aesEncInit();
+//    aesEncrypt(dat, chainCipherBlock); //AES加密，数组dat里面的新内容就是加密后的数据。
+    
+//    Byte bytes[20] = {0x00,0x00,0x00,0x00,
+//        0x00,0x00,0x00,0x00,
+//        0x00,0x00,0x00,0x00,
+//        0x00,0x00,0xfa,0x63,
+//        0x51,0x56,0xbb,0x74};
+    
+    
+    Byte bytes[20];
+    //10位随机数作头部 + 6位十六进制MAC + 4位0 共20位
+    {
+        int bytesLenght = 0;
+        //10位随机数
+        for (bytesLenght = 0; bytesLenght < 10; bytesLenght ++) {
+            int x = arc4random() % 256;
+            NSString *hexString = [self ToHex:x];
+            const char *s = [hexString UTF8String];
+            Byte byte = (Byte)strtol(s, NULL, 16);
+            bytes[bytesLenght] = byte;
+        }
+        //6位Mac地址
+        for (int idx = 0; idx+2 <= macStr.length; idx+=2) {
+            NSRange range = NSMakeRange(idx, 2);
+            NSString* hexStr = [macStr substringWithRange:range];
+            const char *s = [hexStr UTF8String];
+            Byte byte = (Byte)strtol(s, NULL, 16);
+            bytes[bytesLenght] = byte;
+            bytesLenght ++;
+        }
+        //4位0
+        bytes[16] = 0x00;
+        bytes[17] = 0x00;
+        bytes[18] = 0x00;
+        bytes[19] = 0x00;
     }
     
-    unsigned char dat[32];
-    memcpy(dat, [sendData bytes], 32);
+    
+    unsigned char dat[20];
+    memcpy(dat, bytes, 20);
     
     unsigned char chainCipherBlock[16];
-//    unsigned char *shakeKey = (unsigned char *)[key bytes];
-//    unsigned char shakeKey[16] = HandShakeKey;
+    unsigned char *shakeKey = (unsigned char *)[key bytes];
     unsigned char i;
     for(i=0;i<16;i++)
     {
-//        AES_Key_Table[i]= shakeKey[i];
-        AES_Key_Table[i] = HandShakeKey[i];
+        AES_Key_Table[i]= shakeKey[i];
     }
     memset(chainCipherBlock,0x00,sizeof(chainCipherBlock));
     
@@ -489,21 +549,12 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     aesEncInit();
     aesEncrypt(dat, chainCipherBlock);
     aesEncrypt(dat+16, chainCipherBlock);
-    [self sendTransparentData:[NSData dataWithBytes:dat length:32]
-                         type:CBCharacteristicWriteWithoutResponse
+    
+    self.logBlock([NSString stringWithFormat:@"特征:%@",characteristic]);
+    self.logBlock([NSString stringWithFormat:@"加密前:%@",[NSData dataWithBytes:bytes length:20]]);
+    [self sendTransparentData:[NSData dataWithBytes:dat length:20]
+                         type:CBCharacteristicWriteWithResponse
                characteristic:characteristic];
-    
-    
-//    memset(chainCipherBlock,0x00,sizeof(chainCipherBlock));//ÕâÀïÒªÖØÐÂ³õÊ¼»¯Çå¿Õ
-//    aesDecInit();//ÔÚÖ´ÐÐ½âÃÜ³õÊ¼»¯Ö®Ç°¿ÉÒÔÎªAES_Key_Table¸³ÖµÓÐÐ§µÄÃÜÂëÊý¾Ý
-//    aesDecrypt(dat, chainCipherBlock);//AES½âÃÜ£¬ÃÜÎÄÊý¾Ý´æ·ÅÔÚdatÀïÃæ£¬¾­½âÃÜ¾ÍÄÜµÃµ½Ö®Ç°µÄÃ÷ÎÄ¡£
-//    aesDecrypt(dat+16, chainCipherBlock);
-    
-    
-//    NSData * encryptData = [theData AES128EncryptedDataUsingKey:key error:nil];
-//    [self sendTransparentData:encryptData
-//                         type:CBCharacteristicWriteWithoutResponse
-//               characteristic:characteristic];
 }
 
 - (NSData *)decryptData:(NSData *)data withKey:(NSData *)key{

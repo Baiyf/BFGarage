@@ -459,8 +459,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhouqinghua;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3441ee98-7422-4920-bca4-0bce611b8409";
-				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaDistributionProvide;
+				PROVISIONING_PROFILE = "106fb8c7-393a-4722-9458-0d25816e37ca";
+				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaProvide;
 			};
 			name = Debug;
 		};

@@ -254,6 +254,7 @@
 				27229AE91EA8B0A9002B242B /* Sources */,
 				27229AEA1EA8B0A9002B242B /* Frameworks */,
 				27229AEB1EA8B0A9002B242B /* Resources */,
+				27841B8D1ECAD4BF00162933 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -313,6 +314,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		27841B8D1ECAD4BF00162933 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 8cb69bee280af92d4bf158d194a8d4d505fb66c3 dfe725e2c3ac424294909e9e8c34c731150c5b56773dca756d7971857360adc1";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		27229AE91EA8B0A9002B242B /* Sources */ = {
@@ -451,16 +468,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Chen Shen (YSKQB75KU5)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: PICOOC Technologies Co., Ltd.";
 				DEVELOPMENT_TEAM = 4JPU9286A5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PREFIX_HEADER = "BFGarage-Prefix.h";
 				INFOPLIST_FILE = BFGarage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhouqinghua;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "106fb8c7-393a-4722-9458-0d25816e37ca";
-				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaProvide;
+				PROVISIONING_PROFILE = "3441ee98-7422-4920-bca4-0bce611b8409";
+				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaDistributionProvide;
 			};
 			name = Debug;
 		};
@@ -470,6 +491,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PICOOC Technologies Co., Ltd.";
 				DEVELOPMENT_TEAM = 4JPU9286A5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PREFIX_HEADER = "BFGarage-Prefix.h";
 				INFOPLIST_FILE = BFGarage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

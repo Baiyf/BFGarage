@@ -317,17 +317,15 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_AFFIRM]]){
         //如果未激活，说明收到的是验证步骤，取 前16位为密钥二，
         if (!isActivity) {
-            //使用密钥一对返回的数据解密
-            NSData *decryptData = [self decryptData:characteristic.value withKey:[NSData dataWithBytes:HandShakeKey length:16]];
-            
-            self.logBlock([NSString stringWithFormat:@"接收密钥二成功，解密数据:%@",decryptData]);
-            
             //判断Mac地址是否匹配
-            NSData *dataMac = [decryptData subdataWithRange:NSMakeRange(15, 4)];
-            NSData *localData;
-            if ([dataMac isEqualToData:localData]) {
-                //密钥二
-                handShakeKey2 = [characteristic.value subdataWithRange:NSMakeRange(0, 16)];
+            NSString *checkMac = [self transformDataToStr:characteristic.value withRange:NSMakeRange(32, 8)];
+            
+            self.logBlock([NSString stringWithFormat:@"接收密钥二成功，解密前:%@ \nMac地址:%@",characteristic.value,checkMac]);
+            if ([macStr hasSuffix:checkMac]) {
+                //使用密钥一对返回的数据解密,取到密钥二
+                handShakeKey2 = [self decryptData:[characteristic.value subdataWithRange:NSMakeRange(0, 16)] withKey:[NSData dataWithBytes:HandShakeKey length:16]];
+                self.logBlock([NSString stringWithFormat:@"接收密钥二成功，解密后:%@",handShakeKey2]);
+                //使用密钥二
                 [self sendValueWithKey:handShakeKey2 characteristic:sendActivityCharateristic];
             }
         }//第二步验证成功
@@ -471,65 +469,23 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 //发送命令 14位随机数作头部加上6位MAC组成20bytes，使用密钥加密
 - (void)sendValueWithKey:(NSData *)key characteristic:(CBCharacteristic *)characteristic
 {
-//    NSMutableData *sendData=[NSMutableData data];
-//    for (int i=0; i<10; i++) {
-//        int x = arc4random() % 16;
-//        NSString *hexString = [self ToHex:x];
-//        NSData *hexData = [self hexToBytes:hexString];
-//        [sendData appendData:hexData];
-//    }
-//    if (macStr.length==12) {
-//        [sendData appendData:[self hexToBytes:macStr]];
-//    }
-//    
-//    unsigned char dat[16];
-//    memcpy(dat, [sendData bytes], 16);
-//    
-//    unsigned char chainCipherBlock[16];
-//    unsigned char *shakeKey = (unsigned char *)[key bytes];    unsigned char i;
-//    for(i=0;i<16;i++)
-//    {
-//        AES_Key_Table[i]= shakeKey[i];
-//    }
-//    memset(chainCipherBlock,0x00,sizeof(chainCipherBlock));
-//    
-//    //加密后的数据
-//    aesEncInit();
-//    aesEncrypt(dat, chainCipherBlock); //AES加密，数组dat里面的新内容就是加密后的数据。
-    
-//    Byte bytes[20] = {0x00,0x00,0x00,0x00,
-//        0x00,0x00,0x00,0x00,
-//        0x00,0x00,0x00,0x00,
-//        0x00,0x00,0xfa,0x63,
-//        0x51,0x56,0xbb,0x74};
-    
-    
+    NSMutableData *sendData=[NSMutableData data];
+    for (int i=0; i<10; i++) {
+        int x = arc4random() % 16;
+        NSString *hexString = [self ToHex:x];
+        NSData *hexData = [self hexToBytes:hexString];
+        [sendData appendData:hexData];
+    }
+    if (macStr.length==12) {
+        [sendData appendData:[self hexToBytes:macStr]];
+    }
+    NSData *hexData2 = [self hexToBytes:@"00000000"];
+    [sendData appendData:hexData2];
     Byte bytes[20];
-    //10位随机数作头部 + 6位十六进制MAC + 4位0 共20位
-    {
-        int bytesLenght = 0;
-        //10位随机数
-        for (bytesLenght = 0; bytesLenght < 10; bytesLenght ++) {
-            int x = arc4random() % 256;
-            NSString *hexString = [self ToHex:x];
-            const char *s = [hexString UTF8String];
-            Byte byte = (Byte)strtol(s, NULL, 16);
-            bytes[bytesLenght] = byte;
-        }
-        //6位Mac地址
-        for (int idx = 0; idx+2 <= macStr.length; idx+=2) {
-            NSRange range = NSMakeRange(idx, 2);
-            NSString* hexStr = [macStr substringWithRange:range];
-            const char *s = [hexStr UTF8String];
-            Byte byte = (Byte)strtol(s, NULL, 16);
-            bytes[bytesLenght] = byte;
-            bytesLenght ++;
-        }
-        //4位0
-        bytes[16] = 0x00;
-        bytes[17] = 0x00;
-        bytes[18] = 0x00;
-        bytes[19] = 0x00;
+    for (int i = 0; i<[sendData length]; i++) {
+        Byte buffer;
+        [sendData getBytes:&buffer range:NSMakeRange(i, 1)];
+        bytes[i] = buffer;
     }
     
     
@@ -557,25 +513,24 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
                characteristic:characteristic];
 }
 
+//解密
 - (NSData *)decryptData:(NSData *)data withKey:(NSData *)key{
-    unsigned char dat[32];
-    memcpy(dat, [data bytes], 32);
+    NSUInteger lenght = data.length;
+    unsigned char dat[lenght];
+    memcpy(dat, [data bytes], lenght);
     
     unsigned char chainCipherBlock[16];
-    //    unsigned char *shakeKey = (unsigned char *)[key bytes];
-    //    unsigned char shakeKey[16] = HandShakeKey;
+    unsigned char *shakeKey = (unsigned char *)[key bytes];
     unsigned char i;
     for(i=0;i<16;i++)
     {
-        //        AES_Key_Table[i]= shakeKey[i];
-        AES_Key_Table[i] = HandShakeKey[i];
+        AES_Key_Table[i]= shakeKey[i];
     }
 
-    memset(chainCipherBlock,0x00,sizeof(chainCipherBlock));//ÕâÀïÒªÖØÐÂ³õÊ¼»¯Çå¿Õ
-    aesDecInit();//ÔÚÖ´ÐÐ½âÃÜ³õÊ¼»¯Ö®Ç°¿ÉÒÔÎªAES_Key_Table¸³ÖµÓÐÐ§µÄÃÜÂëÊý¾Ý
-    aesDecrypt(dat, chainCipherBlock);//AES½âÃÜ£¬ÃÜÎÄÊý¾Ý´æ·ÅÔÚdatÀïÃæ£¬¾­½âÃÜ¾ÍÄÜµÃµ½Ö®Ç°µÄÃ÷ÎÄ¡£
-    aesDecrypt(dat+16, chainCipherBlock);
-    NSData *decryptData = [NSData dataWithBytes:dat length:32];
+    memset(chainCipherBlock,0x00,sizeof(chainCipherBlock));
+    aesDecInit();
+    aesDecrypt(dat, chainCipherBlock);
+    NSData *decryptData = [NSData dataWithBytes:dat length:lenght];
     return decryptData;
 }
 

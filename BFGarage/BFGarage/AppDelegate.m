@@ -8,6 +8,9 @@
 
 #import "AppDelegate.h"
 
+//#import <Fabric/Fabric.h>
+//#import <Crashlytics/Crashlytics.h>
+
 @interface AppDelegate ()
 
 @end
@@ -17,9 +20,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+//    [Fabric with:@[[Crashlytics class]]];
+    [self logUser];
     
     [AppContext sharedAppContext];
     return YES;
+}
+
+- (void) logUser {
+    // TODO: Use the current user's information
+    // You can call any combination of these three methods
+//    [CrashlyticsKit setUserIdentifier:@"com.zhouqinghua"];
+//    [CrashlyticsKit setUserEmail:@"feier068@sohu.com"];
+//    [CrashlyticsKit setUserName:@"feier068@sohu.com"];
 }
 
 

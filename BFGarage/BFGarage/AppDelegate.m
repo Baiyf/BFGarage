@@ -8,8 +8,8 @@
 
 #import "AppDelegate.h"
 
-//#import <Fabric/Fabric.h>
-//#import <Crashlytics/Crashlytics.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface AppDelegate ()
 
@@ -20,21 +20,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-//    [Fabric with:@[[Crashlytics class]]];
-    [self logUser];
+    [Fabric with:@[[Crashlytics class]]];
     
     [AppContext sharedAppContext];
     return YES;
 }
-
-- (void) logUser {
-    // TODO: Use the current user's information
-    // You can call any combination of these three methods
-//    [CrashlyticsKit setUserIdentifier:@"com.zhouqinghua"];
-//    [CrashlyticsKit setUserEmail:@"feier068@sohu.com"];
-//    [CrashlyticsKit setUserName:@"feier068@sohu.com"];
-}
-
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

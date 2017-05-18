@@ -166,11 +166,11 @@ static unsigned char HandShakeKey[16] = {
             [deviceDic setObject:peripheral forKey:macString];
             
             //是否只是扫描
-//            if (isJustScan) {
-//                
-//            }
-//            //不是扫描，直接需要连接的
-//            else{
+            if (isJustScan) {
+                
+            }
+            //不是扫描，直接需要连接的
+            else{
                 if (![self isExist:macString]) {
                     //需要连接的设备
                     scPeripheral = peripheral;
@@ -197,7 +197,7 @@ static unsigned char HandShakeKey[16] = {
                     [theName appendFormat:@"UUID: %@ ",peripheral.identifier];
                     self.logBlock([NSString stringWithFormat:@"蓝牙信息:%@----:\nMac地址:%@----:\n激活状态%@",theName,macStr,activity]);
                 }
-//            }
+            }
         }
     }
 }
@@ -316,7 +316,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     }//确认
     else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_AFFIRM]]){
         //如果未激活，说明收到的是验证步骤，取 前16位为密钥二，
-        if (!isActivity) {
+        if (!isActivity && characteristic.value.length==20) {
             //判断Mac地址是否匹配
             NSString *checkMac = [self transformDataToStr:characteristic.value withRange:NSMakeRange(32, 8)];
             

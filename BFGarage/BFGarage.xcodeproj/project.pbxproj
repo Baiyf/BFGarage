@@ -16,6 +16,8 @@
 		27229B001EA8B0A9002B242B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27229AFE1EA8B0A9002B242B /* LaunchScreen.storyboard */; };
 		2725ED3D1EAF62A600641362 /* GarageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2725ED3C1EAF62A600641362 /* GarageModel.m */; };
 		27D345061EB6F795006C1E95 /* NSData+BFCrypto.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D345051EB6F795006C1E95 /* NSData+BFCrypto.m */; };
+		27E0EEF61ECD3F240077D008 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E0EEF41ECD3F240077D008 /* Crashlytics.framework */; };
+		27E0EEF71ECD3F240077D008 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E0EEF51ECD3F240077D008 /* Fabric.framework */; };
 		27E34B261EAC5BE20030099A /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B251EAC5BE20030099A /* FirstViewController.m */; };
 		27E34B291EAC5C6B0030099A /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B281EAC5C6B0030099A /* SecondViewController.m */; };
 		27E34B2D1EAC5F1F0030099A /* DeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B2B1EAC5F1F0030099A /* DeviceTableViewCell.m */; };
@@ -45,6 +47,8 @@
 		2725ED3C1EAF62A600641362 /* GarageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GarageModel.m; sourceTree = "<group>"; };
 		27D345041EB6F795006C1E95 /* NSData+BFCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+BFCrypto.h"; sourceTree = "<group>"; };
 		27D345051EB6F795006C1E95 /* NSData+BFCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+BFCrypto.m"; sourceTree = "<group>"; };
+		27E0EEF41ECD3F240077D008 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		27E0EEF51ECD3F240077D008 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		27E34B241EAC5BE20030099A /* FirstViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
 		27E34B251EAC5BE20030099A /* FirstViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		27E34B271EAC5C6B0030099A /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
@@ -74,7 +78,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27E0EEF61ECD3F240077D008 /* Crashlytics.framework in Frameworks */,
 				2713C77B1EB9E1B60013AEB4 /* UIKit.framework in Frameworks */,
+				27E0EEF71ECD3F240077D008 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +90,8 @@
 		2713C7791EB9E1B60013AEB4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				27E0EEF41ECD3F240077D008 /* Crashlytics.framework */,
+				27E0EEF51ECD3F240077D008 /* Fabric.framework */,
 				2713C77A1EB9E1B60013AEB4 /* UIKit.framework */,
 			);
 			name = Frameworks;
@@ -468,7 +476,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: PICOOC Technologies Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Chen Shen (YSKQB75KU5)";
 				DEVELOPMENT_TEAM = 4JPU9286A5;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -480,8 +488,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhouqinghua;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3441ee98-7422-4920-bca4-0bce611b8409";
-				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaDistributionProvide;
+				PROVISIONING_PROFILE = "106fb8c7-393a-4722-9458-0d25816e37ca";
+				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaProvide;
 			};
 			name = Debug;
 		};

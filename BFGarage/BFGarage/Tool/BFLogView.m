@@ -11,6 +11,7 @@
 @interface BFLogView () {
     UIButton *_expand;
     UIButton *_cancel;
+    UIButton *_clear;
     UITextView *_textView;
 }
 
@@ -31,6 +32,12 @@
         [_cancel setTitle:@"返回" forState:UIControlStateNormal];
         [_cancel addTarget:self action:@selector(closeList:) forControlEvents:UIControlEventTouchUpInside];
         
+        _clear=[UIButton buttonWithType:UIButtonTypeSystem];
+        [_clear setFrame:CGRectMake(screenRect.size.width-60, 0, 60, 64)];
+        _clear.titleEdgeInsets = UIEdgeInsetsMake(15, 0, 0, 0);
+        [_clear setTitle:@"清空" forState:UIControlStateNormal];
+        [_clear addTarget:self action:@selector(clearList:) forControlEvents:UIControlEventTouchUpInside];
+        
         
         [self performSelector:@selector(loadRequestAnalysis) withObject:self afterDelay:5];
     }
@@ -39,8 +46,9 @@
 
 -(void)loadRequestAnalysis
 {
+    CGRect screenRect = [UIScreen mainScreen].bounds;
     _expand=[UIButton buttonWithType:UIButtonTypeSystem];
-    [_expand setFrame:CGRectMake(27, 44, 27, 44)];
+    [_expand setFrame:CGRectMake(screenRect.size.width - 27, screenRect.size.height - 44, 27, 44)];
     [_expand setTitle:@">" forState:UIControlStateNormal];
     [_expand addTarget:self action:@selector(expandList:) forControlEvents:UIControlEventTouchUpInside];
     [[[UIApplication sharedApplication]windows][0] addSubview:_expand];
@@ -63,14 +71,16 @@ static UIView *instance = nil;
     _textView.text = [_textView.text stringByAppendingFormat:@"\n%@ %@",[NSDate date],string];
 }
 
--(void)closeList:(UIButton *)btn
-{
+-(void)closeList:(UIButton *)btn {
     [btn.superview removeFromSuperview];
     [[[UIApplication sharedApplication]windows][0] addSubview:_expand];
 }
 
-- (void)expandList:(UIButton *)btn
-{
+-(void)clearList:(UIButton *)btn {
+    _textView.text = @"";
+}
+
+- (void)expandList:(UIButton *)btn {
     [btn removeFromSuperview];
     [BFLogView getInstance];
     [instance addSubview:_textView];

@@ -60,11 +60,13 @@ static unsigned char HandShakeKey[16] = {
 {
     //1 如果之前有连接，取消掉，连接默认
     if (scPeripheral) {
-        [scPeripheral setNotifyValue:NO forCharacteristic:receiveCharateristic];
+        if (receiveCharateristic) {
+            [scPeripheral setNotifyValue:NO forCharacteristic:receiveCharateristic];
+        }
         receiveCharateristic = nil;
         sendOpenCharateristic = nil;
         sendActivityCharateristic = nil;
-        
+        scPeripheral.delegate = nil;
         [centralManager cancelPeripheralConnection:scPeripheral];
         scPeripheral = nil;
     }
@@ -289,8 +291,14 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
                     [self sendValueWithKey:dataKey characteristic:sendActivityCharateristic];
                 }else {
                     //发送开锁数据
-                    NSData *dataKey = connectModel.secretKey2;
-                    [self sendValueWithKey:dataKey characteristic:sendOpenCharateristic];
+                    if (connectModel) {
+                        NSData *dataKey = connectModel.secretKey2;
+                        [self sendValueWithKey:dataKey characteristic:sendOpenCharateristic];
+                    }else {
+                        self.logBlock(@"连接设备已被激活");
+                        // 发送通知，激活失败
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+                    }
                 }
             }
             else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_ACTIVITY]])
@@ -336,6 +344,9 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
                 self.logBlock([NSString stringWithFormat:@"接收密钥二成功，解密后:%@",handShakeKey2]);
                 //使用密钥二
                 [self sendValueWithKey:handShakeKey2 characteristic:sendActivityCharateristic];
+            }else {
+                // 发送通知，激活失败
+                [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
             }
         }//第二步验证成功
         else if (![self isActivity:macStr] && characteristic.value.length==2){
@@ -352,7 +363,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             model.secretKey2 = handShakeKey2;
             [[AppContext sharedAppContext] addNewGarage:model];
             // 发送通知，刷新列表
-            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTSUCCESS object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
         }
         else if ([self isActivity:macStr] && characteristic.value.length==2){
             self.logBlock([NSString stringWithFormat:@"设备:%@ 开锁成功",macStr]);

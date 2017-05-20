@@ -31,8 +31,11 @@
 
 #endif
 
+//设备开锁成功通知
+#define NSNOTIFICATION_CONNECTSUCCESS @"notification.connect.connectsuccess"
 //激活设备成功通知
-#define NSNOTIFICATION_CONNECTSUCCESS @"notification.connect.activitySuccess"
-
+#define NSNOTIFICATION_ACTIVITYSUCCESS @"notification.connect.activitysuccess"
+//设备开锁失败通知
+#define NSNOTIFICATION_CONNECTFAILED @"notification.connect.connectfailed"
 
 

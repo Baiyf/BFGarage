@@ -32,7 +32,12 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(reloadDevicelist)
-                                                 name:NSNOTIFICATION_CONNECTSUCCESS
+                                                 name:NSNOTIFICATION_ACTIVITYSUCCESS
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(connectFailed)
+                                                 name:NSNOTIFICATION_CONNECTFAILED
                                                object:nil];
 }
 
@@ -44,6 +49,12 @@
 //刷新设备列表
 - (void)reloadDevicelist{
     [self.rootTableView reloadData];
+}
+
+//激活失败
+- (void)connectFailed {
+//    [_animationView stopAnimating];//开始播放动画
+//    _animationView.hidden = YES;
 }
 
 #pragma mark - button actions
@@ -83,8 +94,8 @@
     {
         // 删除数据的操作
         [[AppContext sharedAppContext] deleteGarage:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTSUCCESS object:nil];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
     }
 }
 

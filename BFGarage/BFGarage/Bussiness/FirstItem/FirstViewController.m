@@ -22,11 +22,21 @@
     
     UINib *UserCenterLeftContentCellNib = [UINib nibWithNibName:@"DeviceTableViewCell" bundle:nil];
     [self.rootTableView registerNib:UserCenterLeftContentCellNib forCellReuseIdentifier:@"DeviceTableViewCellIdentifier"];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadDevicelist)
+                                                 name:NSNOTIFICATION_CONNECTSUCCESS
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+//刷新设备列表
+- (void)reloadDevicelist{
+    [self.rootTableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate & UITableViewDatasource
@@ -52,6 +62,10 @@
 {
     GarageModel *model = [AppContext sharedAppContext].garageArray[indexPath.row];
     [[AppContext sharedAppContext] connectGarage:model];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

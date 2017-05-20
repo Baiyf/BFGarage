@@ -44,7 +44,7 @@ static AppContext *shareAppContext = nil;
             switch (state) {
                 case BlueToothConnectionStatePoweredOff:
                 {
-                    BFALERT(@"蓝牙未开启");
+//                    BFALERT(@"蓝牙未开启");
                 }
                     break;
                 default:
@@ -70,7 +70,7 @@ static AppContext *shareAppContext = nil;
             
         }else {
             if (self.garageArray.count == 0) {
-                [self preloadData];
+//                [self preloadData];
             }
         }
     }
@@ -102,7 +102,7 @@ static AppContext *shareAppContext = nil;
 //连接某个设备
 - (void)connectGarage:(GarageModel *)model
 {
-    [self.blueConnet connectPeripheralWith:model.macStr];
+    [self.blueConnet connectPeripheralWith:model];
 }
 
 #pragma mark - 假数据

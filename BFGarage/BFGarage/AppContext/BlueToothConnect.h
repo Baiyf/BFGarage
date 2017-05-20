@@ -43,8 +43,7 @@ typedef void (^BlueLogBlock) (NSString *log); //蓝牙的连接状态
 - (void)stopBlueTooth;
 
 //连接指定设备
-- (void)connectPeripheralWith:(NSString *)macstring;
-
+- (void)connectPeripheralWith:(GarageModel *)model;
 
 //断开蓝牙
 - (void)disconnectPeripheral;

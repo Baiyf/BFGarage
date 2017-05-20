@@ -7,7 +7,6 @@
 //
 
 #import "BlueToothConnect.h"
-#import "GarageModel.h"
 #import "NSData+BFCrypto.h"
 #import "AESCrypto.h"
 
@@ -36,10 +35,10 @@ static unsigned char HandShakeKey[16] = {
     CBCharacteristic * receiveCharateristic;        //接手设备回调特征
     
     BOOL isJustScan;                    //只是判断扫描
-    BOOL isActivity;                    //判断是否激活
-    BOOL isStartBlueTooth;              //判断是否启动蓝牙，如果启动，则无法重复启动
     
     BlueToothConnectionState connectionState;
+    
+    GarageModel * connectModel;         //连接设备，非激活使用
 }
 
 @end
@@ -50,7 +49,6 @@ static unsigned char HandShakeKey[16] = {
 - (void)startBlueToothWithBlueToothState:(BlueToothConnectionStateBlock)blueState
 {
     //初始化CBCentralManager，管理中心设备
-    isStartBlueTooth = YES;
     self.connectionStateBlock = blueState;
     isJustScan = YES;
     
@@ -58,7 +56,7 @@ static unsigned char HandShakeKey[16] = {
 }
 
 //连接指定设备
-- (void)connectPeripheralWith:(NSString *)macstring
+- (void)connectPeripheralWith:(GarageModel *)model
 {
     //1 如果之前有连接，取消掉，连接默认
     if (scPeripheral) {
@@ -73,7 +71,7 @@ static unsigned char HandShakeKey[16] = {
     
     
     //2.如果传入的 mac 地址为空，说明走的是激活方式
-    if (!macstring) {
+    if (!model) {
         //2.1 判断蓝牙是否开启
         if (centralManager.state == CBManagerStatePoweredOn) {
             //2.2 判断是否开启扫描
@@ -84,7 +82,10 @@ static unsigned char HandShakeKey[16] = {
                 isJustScan = NO;
                 for (NSString *mac in deviceDic.allKeys) {
                     if (![self isExist:mac]) {
-                        CBPeripheral *peripheral = deviceDic[mac];
+                        macStr = mac;
+                        CBPeripheral *peripheral = deviceDic[mac][0];
+                        scPeripheral = peripheral;
+                        scPeripheral.delegate = self;
                         [centralManager connectPeripheral:peripheral options:nil];
                         [centralManager stopScan];
                         return;
@@ -98,10 +99,13 @@ static unsigned char HandShakeKey[16] = {
         return;
     }
     
+    connectModel = model;
     //3.如果传入mac 地址不为空，说明走的是直接连接
-    if ([deviceDic.allKeys containsObject:macstring]) {
-        CBPeripheral *peripheral = deviceDic[macstring];
-
+    if ([deviceDic.allKeys containsObject:model.macStr]) {
+        CBPeripheral *peripheral = deviceDic[model.macStr][0];
+        macStr = model.macStr;
+        scPeripheral = peripheral;
+        scPeripheral.delegate = self;
         //3.1 调用连接设备代理方法
         [centralManager connectPeripheral:peripheral options:nil];
         [centralManager stopScan];
@@ -161,9 +165,17 @@ static unsigned char HandShakeKey[16] = {
             //获取Mac地址
             NSData * macData = [advertisementData objectForKey:@"kCBAdvDataManufacturerData"];
             NSString * macString = [[self transformDataToStr:macData withRange:NSMakeRange(0, 12)] mutableCopy];
-            
+            //获取激活状态
+            NSString *activity = [self transformDataToStr:macData withRange:NSMakeRange(12, 2)];
+            NSArray *deviceInfo = [NSArray arrayWithObjects:peripheral,activity, nil];
             //将扫描到的加入字典
-            [deviceDic setObject:peripheral forKey:macString];
+            [deviceDic setObject:deviceInfo forKey:macString];
+            
+            NSMutableString * theName = [NSMutableString stringWithFormat:@"Peripheral Info:"];
+            [theName appendFormat:@"Name: %@ ",peripheral.name];
+            [theName appendFormat:@"RSSI: %@ ",RSSI];
+            [theName appendFormat:@"UUID: %@ ",peripheral.identifier];
+            self.logBlock([NSString stringWithFormat:@"蓝牙信息:%@\nMac地址:%@\n激活状态:%@",theName,macString,activity]);
             
             //是否只是扫描
             if (isJustScan) {
@@ -177,25 +189,16 @@ static unsigned char HandShakeKey[16] = {
                     scPeripheral.delegate = self;
                     
                     macStr = macString;
-                    
-                    //获取激活状态
-                    NSString *activity = [self transformDataToStr:macData withRange:NSMakeRange(12, 2)];
+                    BOOL isActivity;
                     if ([activity isEqualToString:@"01"]) {
                         isActivity = YES;//已激活
                         //已激活的需要判断Mac地址
                         
                     }else {
-                        isActivity = NO;//未激活
                         [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
                     }
                     
                     [centralManager stopScan];
-                    
-                    NSMutableString * theName = [NSMutableString stringWithFormat:@"Peripheral Info:"];
-                    [theName appendFormat:@"Name: %@ ",peripheral.name];
-                    [theName appendFormat:@"RSSI: %@ ",RSSI];
-                    [theName appendFormat:@"UUID: %@ ",peripheral.identifier];
-                    self.logBlock([NSString stringWithFormat:@"蓝牙信息:%@----:\nMac地址:%@----:\n激活状态%@",theName,macStr,activity]);
                 }
             }
         }
@@ -277,11 +280,17 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_AFFIRM]]) {
                 receiveCharateristic = characteristic;
                 [peripheral setNotifyValue:YES forCharacteristic:characteristic];
-                if (!isActivity) {
+                
+                //未激活
+                if (![self isActivity:macStr]) {
                     //密钥一
                     NSData *dataKey = [NSData dataWithBytes:HandShakeKey length:16];
                     //发送激活
                     [self sendValueWithKey:dataKey characteristic:sendActivityCharateristic];
+                }else {
+                    //发送开锁数据
+                    NSData *dataKey = connectModel.secretKey2;
+                    [self sendValueWithKey:dataKey characteristic:sendOpenCharateristic];
                 }
             }
             else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_ACTIVITY]])
@@ -302,7 +311,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     //激活
     if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_ACTIVITY]]) {
         //如果未激活
-        if (!isActivity) {
+        if (![self isActivity:macStr]) {
             //密钥一
             NSData *dataKey = [NSData dataWithBytes:HandShakeKey length:16];
             //发送激活
@@ -316,7 +325,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     }//确认
     else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_AFFIRM]]){
         //如果未激活，说明收到的是验证步骤，取 前16位为密钥二，
-        if (!isActivity && characteristic.value.length==20) {
+        if (![self isActivity:macStr] && characteristic.value.length==20) {
             //判断Mac地址是否匹配
             NSString *checkMac = [self transformDataToStr:characteristic.value withRange:NSMakeRange(32, 8)];
             
@@ -329,8 +338,12 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
                 [self sendValueWithKey:handShakeKey2 characteristic:sendActivityCharateristic];
             }
         }//第二步验证成功
-        else if (!isActivity && characteristic.value.length==2){
-            isActivity = YES;
+        else if (![self isActivity:macStr] && characteristic.value.length==2){
+            NSArray *deviceinfo = deviceDic[macStr];
+            NSArray *newInfo = [NSArray arrayWithObjects:deviceinfo[0],@"01", nil];
+            [deviceDic setObject:newInfo forKey:macStr];
+            
+            self.logBlock([NSString stringWithFormat:@"设备:%@ 激活成功",macStr]);
             
             //加入本地缓存列表
             GarageModel *model = [[GarageModel alloc] init];
@@ -338,6 +351,11 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             model.macStr = macStr;
             model.secretKey2 = handShakeKey2;
             [[AppContext sharedAppContext] addNewGarage:model];
+            // 发送通知，刷新列表
+            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTSUCCESS object:nil];
+        }
+        else if ([self isActivity:macStr] && characteristic.value.length==2){
+            self.logBlock([NSString stringWithFormat:@"设备:%@ 开锁成功",macStr]);
         }
     }
 }
@@ -463,6 +481,16 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     
     if (self.connectionStateBlock) {
         self.connectionStateBlock = nil;
+    }
+}
+
+//判断设备是否被激活
+- (BOOL)isActivity:(NSString *)macString {
+    NSString *activity = deviceDic[macStr][1];
+    if ([activity isEqualToString:@"01"]) {
+        return YES;
+    }else {
+        return NO;
     }
 }
 

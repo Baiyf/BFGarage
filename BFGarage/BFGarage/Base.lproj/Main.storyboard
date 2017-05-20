@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -140,7 +140,7 @@
                             <constraint firstItem="I0S-Uz-03I" firstAttribute="top" secondItem="XcO-QR-paW" secondAttribute="bottom" constant="200" id="l6B-bS-2Vh"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Smart" id="XXP-6S-eqx" userLabel="Smart"/>
+                    <tabBarItem key="tabBarItem" systemItem="more" id="XXP-6S-eqx" userLabel="Smart"/>
                     <connections>
                         <outlet property="rootTableView" destination="I0S-Uz-03I" id="G5Y-pZ-8Zr"/>
                     </connections>

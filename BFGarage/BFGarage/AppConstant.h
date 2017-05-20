@@ -30,3 +30,9 @@
 #define PLog(format, ...)
 
 #endif
+
+//激活设备成功通知
+#define NSNOTIFICATION_CONNECTSUCCESS @"notification.connect.activitySuccess"
+
+
+

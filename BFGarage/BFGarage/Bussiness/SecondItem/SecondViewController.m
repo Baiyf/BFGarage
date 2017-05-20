@@ -29,11 +29,21 @@
     [self.rootTableView registerNib:UserCenterLeftContentCellNib forCellReuseIdentifier:@"DeviceTableViewCellIdentifier"];
     
     self.navigationItem.title = @"Setting";
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadDevicelist)
+                                                 name:NSNOTIFICATION_CONNECTSUCCESS
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+//刷新设备列表
+- (void)reloadDevicelist{
+    [self.rootTableView reloadData];
 }
 
 #pragma mark - button actions
@@ -74,17 +84,12 @@
         // 删除数据的操作
         [[AppContext sharedAppContext] deleteGarage:indexPath.row];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTSUCCESS object:nil];
     }
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-*/
 
 @end

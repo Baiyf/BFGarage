@@ -10,4 +10,6 @@
 
 @interface HomeTableCell : UITableViewCell
 
+@property (nonatomic, weak) IBOutlet UILabel *titleLabel;
+
 @end

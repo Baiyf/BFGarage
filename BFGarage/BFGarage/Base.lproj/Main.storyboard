@@ -87,7 +87,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Store" id="7SY-Mg-egU" userLabel="Store"/>
+                    <tabBarItem key="tabBarItem" title="Store" image="shopping_normal.png" selectedImage="shopping_pressed.png" id="7SY-Mg-egU" userLabel="Store"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0gx-yt-0f6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -98,7 +98,7 @@
         <scene sceneID="p6T-kl-Q2c">
             <objects>
                 <navigationController id="CAF-TM-acy" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Setting" id="OEs-30-ujZ"/>
+                    <tabBarItem key="tabBarItem" title="Setting" image="setting_normal.png" selectedImage="setting_pressed.png" id="OEs-30-ujZ"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6JU-y3-iZE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -132,7 +132,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="I0S-Uz-03I">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="130" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="I0S-Uz-03I">
                                 <rect key="frame" x="0.0" y="20" width="375" height="598"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -159,7 +159,7 @@
                             <constraint firstItem="wlj-tO-rhj" firstAttribute="top" secondItem="XcO-QR-paW" secondAttribute="bottom" constant="9" id="tUa-rw-vln"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="more" id="XXP-6S-eqx" userLabel="Smart"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="home_normal.png" selectedImage="home_pressed.png" id="XXP-6S-eqx" userLabel="Smart"/>
                     <connections>
                         <outlet property="animationView" destination="wlj-tO-rhj" id="QR3-Hi-8Zi"/>
                         <outlet property="rootTableView" destination="I0S-Uz-03I" id="G5Y-pZ-8Zr"/>
@@ -207,4 +207,12 @@
             <point key="canvasLocation" x="-3177" y="255"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="home_normal.png" width="30" height="30"/>
+        <image name="home_pressed.png" width="30" height="30"/>
+        <image name="setting_normal.png" width="30" height="30"/>
+        <image name="setting_pressed.png" width="30" height="30"/>
+        <image name="shopping_normal.png" width="30" height="30"/>
+        <image name="shopping_pressed.png" width="30" height="30"/>
+    </resources>
 </document>

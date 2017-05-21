@@ -505,7 +505,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     }
 }
 
-//发送命令 14位随机数作头部加上6位MAC组成20bytes，使用密钥加密
+//发送命令 10位随机数作头部加上6位MAC组成20bytes，使用密钥加密
 - (void)sendValueWithKey:(NSData *)key characteristic:(CBCharacteristic *)characteristic
 {
     NSMutableData *sendData=[NSMutableData data];

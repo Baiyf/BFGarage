@@ -70,7 +70,7 @@ static AppContext *shareAppContext = nil;
             
         }else {
             if (self.garageArray.count == 0) {
-//                [self preloadData];
+                [self preloadData];
             }
         }
     }

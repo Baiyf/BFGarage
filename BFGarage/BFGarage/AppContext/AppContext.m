@@ -80,7 +80,9 @@ static AppContext *shareAppContext = nil;
 //添加数据
 - (void)addNewGarage:(GarageModel *)model
 {
-    [self.garageArray addObject:model];
+    if (model) {
+        [self.garageArray addObject:model];
+    }
     //数据持久化到本地
     [NSKeyedArchiver archiveRootObject:self.garageArray toFile:CACHEPATH];
 }
@@ -88,7 +90,9 @@ static AppContext *shareAppContext = nil;
 //删除数据
 - (void)deleteGarage:(NSInteger)index
 {
-    [self.garageArray removeObjectAtIndex:index];
+    if (self.garageArray.count>index) {
+        [self.garageArray removeObjectAtIndex:index];
+    }
     
     //还有数据，持久化到本地
     if (self.garageArray.count>0) {

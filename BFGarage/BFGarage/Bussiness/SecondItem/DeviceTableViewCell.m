@@ -21,4 +21,10 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)displayQrcode:(id)sender {
+    if (self.qrBlock) {
+        self.qrBlock(self.cellIndex);
+    }
+}
+
 @end

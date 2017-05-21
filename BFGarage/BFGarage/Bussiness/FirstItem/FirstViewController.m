@@ -113,7 +113,7 @@
     static NSString *cellIndentifierStr = @"HomeTableCellIdentifier";
     HomeTableCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndentifierStr forIndexPath:indexPath];
     GarageModel *model = [AppContext sharedAppContext].garageArray[indexPath.row];
-    cell.titleLabel.text = model.macStr;
+    cell.titleLabel.text = model.name ? model.name : model.macStr;
     return cell;
 }
 

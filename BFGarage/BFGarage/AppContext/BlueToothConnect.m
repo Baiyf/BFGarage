@@ -113,6 +113,8 @@ static unsigned char HandShakeKey[16] = {
         [centralManager stopScan];
     }else {
         BFALERT(@"未搜索到此设备");
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
     }
 }
 

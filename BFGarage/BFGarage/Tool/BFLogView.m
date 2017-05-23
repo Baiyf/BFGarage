@@ -85,6 +85,7 @@ static UIView *instance = nil;
     [BFLogView getInstance];
     [instance addSubview:_textView];
     [instance addSubview:_cancel];
+    [instance addSubview:_clear];
     [[[UIApplication sharedApplication]windows][0] addSubview:instance];
     if(instance.superview&&![[[instance.superview subviews] objectAtIndex:[instance.superview subviews].count-1] isEqual:instance])
     {

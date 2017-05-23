@@ -144,10 +144,11 @@
     [filter setDefaults];
     
     // 2. 给滤镜添加数据
+    NSString *string = [[NSString alloc] initWithData:model.secretKey2 encoding:NSUTF8StringEncoding];
     NSDictionary *infoDic = [NSDictionary dictionaryWithObjectsAndKeys:
                              model.name, @"name",
                              model.macStr, @"macStr",
-                             model.secretKey2, @"secretKey2", nil];
+                             string, @"secretKey2", nil];
     NSData *data =    [NSJSONSerialization dataWithJSONObject:infoDic options:NSJSONWritingPrettyPrinted error:nil];
     // 使用KVC的方式给filter赋值
     [filter setValue:data forKeyPath:@"inputMessage"];

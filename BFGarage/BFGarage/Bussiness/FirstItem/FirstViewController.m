@@ -119,11 +119,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GarageModel *model = [AppContext sharedAppContext].garageArray[indexPath.row];
-    [[AppContext sharedAppContext] connectGarage:model];
-    
     _animationView.hidden = NO;
     [_animationView startAnimating];//开始播放动画
+    
+    GarageModel *model = [AppContext sharedAppContext].garageArray[indexPath.row];
+    [[AppContext sharedAppContext] connectGarage:model];
 }
 
 - (void)dealloc {

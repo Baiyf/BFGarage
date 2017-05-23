@@ -23,7 +23,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
@@ -65,7 +64,6 @@
     self.captureVideoPreviewLayer.frame = self.view.layer.bounds;
     self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     [self.view.layer addSublayer:self.captureVideoPreviewLayer];
-    NSLog(@"222");
 }
 
 
@@ -75,7 +73,7 @@
     [self startScan];
     
     self.title = @"Scanning";
-    coverImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)-88)];
+    coverImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 44, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)-44)];
     coverImage.image = [UIImage imageNamed:@"Sony_TVLogin_bound.png"];
        
     UILabel *alertLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, CGRectGetHeight(coverImage.frame)-160, 300, 40)];
@@ -113,7 +111,6 @@
 -(void)startScan{
     [self.captureSession startRunning];
     [self loopDrawLine];
-    NSLog(@"333");
 }
 
 //扫码条停止循环
@@ -137,14 +134,30 @@
         [self stopScan];
         AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndex:0];
         stringValue = metadataObject.stringValue;//扫描出信息
-        NSLog(@"%@",stringValue);
+        BFLog(stringValue);
         
         //判断扫描出的信息是否正确
         if(![stringValue isEqualToString:@""])
         {
-            [self.navigationController popToRootViewControllerAnimated:YES];
+            NSData *jsonResultData = [stringValue dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *resultDic = [NSJSONSerialization JSONObjectWithData:jsonResultData options:NSJSONReadingMutableContainers error:nil];
+            if (resultDic[@"macStr"] && resultDic[@"secretKey2"]) {
+                //加入本地缓存列表
+                GarageModel *model = [[GarageModel alloc] init];
+                model.isOwner = YES;
+                model.macStr = resultDic[@"macStr"];
+                model.name = resultDic[@"name"]?resultDic[@"name"]:resultDic[@"macStr"];
+                model.secretKey2 = resultDic[@"secretKey2"];
+                [[AppContext sharedAppContext] addNewGarage:model];
+                //发送通知，刷新列表
+                [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
+                
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }else {
+                BFALERT(@"设备信息错误");
+            }
         }else{
-        
+            BFALERT(@"设备信息错误");
         }
     }
 }

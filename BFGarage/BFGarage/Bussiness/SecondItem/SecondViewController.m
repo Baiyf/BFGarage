@@ -9,13 +9,18 @@
 #import "SecondViewController.h"
 #import "DeviceTableViewCell.h"
 #import "ScanViewController.h"
+#import <CoreImage/CoreImage.h>
 
 @interface SecondViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property(nonatomic, weak) IBOutlet UIButton *linkButton;
-@property(nonatomic, weak) IBOutlet UIButton *scanButton;
+@property (nonatomic, weak) IBOutlet UIButton *linkButton;
+@property (nonatomic, weak) IBOutlet UIButton *scanButton;
 
-@property(nonatomic, weak) IBOutlet UITableView *rootTableView;
+@property (nonatomic, weak) IBOutlet UITableView *rootTableView;
+
+@property (nonatomic, weak) IBOutlet UIView *tipsView;
+@property (nonatomic, weak) IBOutlet UIImageView *qrImageView;
+
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 
 @end
@@ -42,11 +47,6 @@
                                                object:nil];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 //刷新设备列表
 - (void)reloadDevicelist{
     [self.rootTableView reloadData];
@@ -67,7 +67,13 @@
 //二维码扫描
 - (IBAction)scanQRCode:(id)sender {
     ScanViewController *scanVC = [[ScanViewController alloc] init];
+    scanVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:scanVC animated:YES];
+}
+
+//点击取消QR页面
+- (IBAction)dismissQRView:(id)sender {
+    self.tipsView.hidden = YES;
 }
 
 #pragma mark - UITableViewDelegate & UITableViewDatasource
@@ -130,7 +136,68 @@
 
 //显示二维码生成页面
 - (void)showQRView {
-    BFALERT(@"显示二维码页面");
+    GarageModel *model = [AppContext sharedAppContext].garageArray[self.selectIndex.row];
+    
+    // 1. 创建一个二维码滤镜实例(CIFilter)
+    CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+    // 滤镜恢复默认设置
+    [filter setDefaults];
+    
+    // 2. 给滤镜添加数据
+    NSDictionary *infoDic = [NSDictionary dictionaryWithObjectsAndKeys:
+                             model.name, @"name",
+                             model.macStr, @"macStr",
+                             model.secretKey2, @"secretKey2", nil];
+    NSData *data =    [NSJSONSerialization dataWithJSONObject:infoDic options:NSJSONWritingPrettyPrinted error:nil];
+    // 使用KVC的方式给filter赋值
+    [filter setValue:data forKeyPath:@"inputMessage"];
+    
+    // 3. 生成二维码
+    CIImage *image = [filter outputImage];
+    
+    // 4. 显示二维码
+    self.qrImageView.image = [self excludeFuzzyImageFromCIImage:image size:200];
+    
+    self.tipsView.hidden = NO;
+}
+
+#pragma mark -- 对图像进行清晰处理，很关键！
+- (UIImage *)excludeFuzzyImageFromCIImage:(CIImage *)image size:(CGFloat)size
+
+{
+    CGRect extent = CGRectIntegral(image.extent);
+    
+    //通过比例计算，让最终的图像大小合理（正方形是我们想要的）
+    CGFloat scale = MIN(size / CGRectGetWidth(extent), size / CGRectGetHeight(extent));
+    
+    size_t width = CGRectGetWidth(extent) * scale;
+    
+    size_t height = CGRectGetHeight(extent) * scale;
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    
+    CGContextRef bitmapRef = CGBitmapContextCreate(nil, width, height, 8, 0, colorSpace, (CGBitmapInfo)kCGImageAlphaNone);
+    
+    CIContext * context = [CIContext contextWithOptions: nil];
+    
+    CGImageRef bitmapImage = [context createCGImage: image fromRect: extent];
+    
+    CGContextSetInterpolationQuality(bitmapRef, kCGInterpolationNone);
+    
+    CGContextScaleCTM(bitmapRef, scale, scale);
+    
+    CGContextDrawImage(bitmapRef, extent, bitmapImage);
+    
+    CGImageRef scaledImage = CGBitmapContextCreateImage(bitmapRef);
+    
+    //切记ARC模式下是不会对CoreFoundation框架的对象进行自动释放的，所以要我们手动释放
+    CGContextRelease(bitmapRef);
+    
+    CGImageRelease(bitmapImage);
+    
+    CGColorSpaceRelease(colorSpace);
+    
+    return [UIImage imageWithCGImage: scaledImage];
 }
 
 - (void)dealloc {
@@ -138,3 +205,5 @@
 }
 
 @end
+
+

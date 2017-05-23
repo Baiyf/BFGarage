@@ -1,11 +1,3 @@
-//
-//  AppConstant.h
-//  BFGarage
-
-
-
-
-
 
 //本地文件存储路径
 #define  GET_CACHE_DIR NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]
@@ -22,13 +14,9 @@
 #define LOG_SWITCH       1          //PLog 和 AHPLog开关 0为关闭 1为开启
 #endif
 
-//Log重定义
+//在LogView中输入Log
 #if LOG_SWITCH
-#define PLog(format, ...) NSLog(format, ## __VA_ARGS__)
-
-#else
-#define PLog(format, ...)
-
+#define BFLog(format, ...) [[AppContext sharedAppContext].logView setLog:format]
 #endif
 
 //设备开锁成功通知

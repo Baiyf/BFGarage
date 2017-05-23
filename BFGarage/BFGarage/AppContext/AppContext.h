@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "GarageModel.h"
+#import "BFLogView.h"
 
 @interface AppContext : NSObject
 
-@property(nonatomic, strong) NSMutableArray *garageArray;
+@property (nonatomic, strong) BFLogView *logView;
+@property (nonatomic, strong) NSMutableArray *garageArray;
 
 + (AppContext *)sharedAppContext;
 

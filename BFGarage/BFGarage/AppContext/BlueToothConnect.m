@@ -360,6 +360,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             GarageModel *model = [[GarageModel alloc] init];
             model.isOwner = YES;
             model.macStr = macStr;
+            model.name = macStr;
             model.secretKey2 = handShakeKey2;
             [[AppContext sharedAppContext] addNewGarage:model];
             // 发送通知，刷新列表

@@ -8,13 +8,12 @@
 
 #import "AppContext.h"
 #import "BlueToothConnect.h"
-#import "BFLogView.h"
 
 #define CACHEPATH [GET_CACHE_DIR stringByAppendingPathComponent:@"CACHE"]
 
 @interface AppContext ()
 @property (nonatomic, strong) BlueToothConnect *blueConnet;
-@property (nonatomic, strong) BFLogView *logView;
+
 @end
 
 @implementation AppContext
@@ -39,7 +38,7 @@ static AppContext *shareAppContext = nil;
         self.garageArray = [[NSMutableArray alloc] init];
         self.blueConnet = [[BlueToothConnect alloc] init];
         [self.blueConnet startBlueToothWithBlueToothState:^(BlueToothConnectionState state) {
-            PLog(@"\n*********\n    蓝牙状态:%ld\n*********",(long)state);
+            BFLog(@"\n*********\n    蓝牙状态:%ld\n*********",(long)state);
             
             switch (state) {
                 case BlueToothConnectionStatePoweredOff:
@@ -113,11 +112,15 @@ static AppContext *shareAppContext = nil;
 - (void)preloadData{
     GarageModel *model1 = [[GarageModel alloc] init];
     model1.isOwner = YES;
-    model1.macStr = @"设备1";
+    model1.macStr = @"AABBCCDDEEFF";
+    model1.name = @"设备1";
+    model1.secretKey2 = [@"123456789" dataUsingEncoding:NSUTF8StringEncoding];
     
     GarageModel *model2 = [[GarageModel alloc] init];
     model2.isOwner = YES;
-    model2.macStr = @"设备2";
+    model2.macStr = @"AABBCCDD00FF";
+    model2.name = @"设备2";
+    model2.secretKey2 = [@"123456789" dataUsingEncoding:NSUTF8StringEncoding];
     
     [self.garageArray addObject:model1];
     [self.garageArray addObject:model2];

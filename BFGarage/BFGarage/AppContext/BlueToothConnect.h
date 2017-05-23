@@ -26,15 +26,10 @@ typedef NS_ENUM(NSInteger, BlueToothConnectionState) {
 
 typedef void (^BlueToothConnectionStateBlock) (BlueToothConnectionState state); //蓝牙的连接状态
 
-typedef void (^BlueLogBlock) (NSString *log); //蓝牙的连接状态
-
 @interface BlueToothConnect : NSObject<CBCentralManagerDelegate,CBPeripheralDelegate>
-
 
 //蓝牙状态块
 @property (nonatomic, strong) BlueToothConnectionStateBlock connectionStateBlock;
-
-@property (nonatomic, strong) BlueLogBlock logBlock;
 
 //启动蓝牙
 - (void)startBlueToothWithBlueToothState:(BlueToothConnectionStateBlock)blueState;

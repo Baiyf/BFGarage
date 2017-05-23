@@ -34,7 +34,6 @@ static AppContext *shareAppContext = nil;
     {
         self.logView = [[BFLogView alloc] init];
         
-        
         self.garageArray = [[NSMutableArray alloc] init];
         self.blueConnet = [[BlueToothConnect alloc] init];
         [self.blueConnet startBlueToothWithBlueToothState:^(BlueToothConnectionState state) {
@@ -49,11 +48,6 @@ static AppContext *shareAppContext = nil;
                 default:
                     break;
             }
-        }];
-        
-        __weak typeof(self) weakSelf = self;
-        [self.blueConnet setLogBlock:^(NSString *logString) {
-            [weakSelf.logView setLog:logString];
         }];
         
         NSFileManager *filemanager = [NSFileManager defaultManager];

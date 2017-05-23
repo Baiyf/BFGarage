@@ -124,28 +124,28 @@ static unsigned char HandShakeKey[16] = {
     if (centralManager == central) {
         switch ([central state]) {
             case CBManagerStateUnknown:
-                self.logBlock(@"状态未知,即将更新");
+                BFLog(@"状态未知,即将更新");
                 break;
             case CBManagerStatePoweredOff:
-                self.logBlock(@"未打开蓝牙");
+                BFLog(@"未打开蓝牙");
                 if (self.connectionStateBlock) {
                     connectionState = BlueToothConnectionStatePoweredOff;
                     self.connectionStateBlock(BlueToothConnectionStatePoweredOff);
                 }
                 break;
             case CBManagerStatePoweredOn:
-                self.logBlock(@"蓝牙运行正常");
+                BFLog(@"蓝牙运行正常");
                 //蓝牙运行正常，开始扫描设备
                 [self startScanning];
                 break;
             case CBManagerStateResetting:
-                self.logBlock(@"蓝牙正在复位");
+                BFLog(@"蓝牙正在复位");
                 break;
             case CBManagerStateUnauthorized:
-                self.logBlock(@"未授权低功耗蓝牙");
+                BFLog(@"未授权低功耗蓝牙");
                 break;
             case CBManagerStateUnsupported:
-                self.logBlock(@"此设备不支持蓝牙");
+                BFLog(@"此设备不支持蓝牙");
                 break;
             default:
                 break;
@@ -159,7 +159,7 @@ static unsigned char HandShakeKey[16] = {
      advertisementData:(NSDictionary *)advertisementData
                   RSSI:(NSNumber *)RSSI
 {
-    self.logBlock(@"-----------: 扫描设备中.....");
+    BFLog(@"-----------: 扫描设备中.....");
 
     if ([peripheral.name isEqual:@"SC"]) {
         if ([centralManager isEqual:central]) {
@@ -177,7 +177,7 @@ static unsigned char HandShakeKey[16] = {
             [theName appendFormat:@"Name: %@ ",peripheral.name];
             [theName appendFormat:@"RSSI: %@ ",RSSI];
             [theName appendFormat:@"UUID: %@ ",peripheral.identifier];
-            self.logBlock([NSString stringWithFormat:@"蓝牙信息:%@\nMac地址:%@\n激活状态:%@",theName,macString,activity]);
+            BFLog(@"蓝牙信息:%@\nMac地址:%@\n激活状态:%@",theName,macString,activity);
             
             //是否只是扫描
             if (isJustScan) {
@@ -211,7 +211,7 @@ static unsigned char HandShakeKey[16] = {
 - (void)centralManager:(CBCentralManager *)central
   didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    self.logBlock(@"-----------: 连接设备成功");
+    BFLog(@"-----------: 连接设备成功");
     [connectTimer invalidate];
     
     
@@ -232,7 +232,7 @@ static unsigned char HandShakeKey[16] = {
 didFailToConnectPeripheral:(CBPeripheral *)peripheral
                  error:(NSError *)error
 {
-    self.logBlock(@"-----------: 连接设备失败");
+    BFLog(@"-----------: 连接设备失败");
     [connectTimer invalidate];
     [self disconnectPeripheral];
 }
@@ -244,11 +244,11 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 {
     //如果非正常断开，把蓝牙释放掉，重新扫瞄
     if (error != nil) {
-        self.logBlock(@"-----------:蓝牙意外断开");
+        BFLog(@"-----------:蓝牙意外断开");
         connectionState = BlueToothConnectionStateConnectionOff;
     }else
     {
-        self.logBlock(@"-----------:蓝牙正常断开");
+        BFLog(@"-----------:蓝牙正常断开");
         connectionState = BlueToothConnectionStateConnectionOff;
     }
 
@@ -261,7 +261,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 //对设备扫描服务，扫瞄到服务后
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
-    self.logBlock(@"-----------: 扫描服务");
+    BFLog(@"-----------: 扫描服务");
     for (CBService *aService in peripheral.services)
     {
         //扫描特征
@@ -273,7 +273,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service
              error:(NSError *)error
 {
-    self.logBlock(@"-----------: 服务特征");
+    BFLog(@"-----------: 服务特征");
     if (peripheral.identifier == NULL) {
         return;
     }
@@ -295,7 +295,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
                         NSData *dataKey = connectModel.secretKey2;
                         [self sendValueWithKey:dataKey characteristic:sendOpenCharateristic];
                     }else {
-                        self.logBlock(@"连接设备已被激活");
+                        BFLog(@"连接设备已被激活");
                         // 发送通知，激活失败
                         [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
                     }
@@ -314,7 +314,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 
 //
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
-    self.logBlock(@"-----------: 对应特征操作");
+    BFLog(@"-----------: 对应特征操作");
     
     //激活
     if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_ACTIVITY]]) {
@@ -337,11 +337,11 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             //判断Mac地址是否匹配
             NSString *checkMac = [self transformDataToStr:characteristic.value withRange:NSMakeRange(32, 8)];
             
-            self.logBlock([NSString stringWithFormat:@"接收密钥二成功，解密前:%@ \nMac地址:%@",characteristic.value,checkMac]);
+            BFLog(@"接收密钥二成功，解密前:%@ \nMac地址:%@",characteristic.value,checkMac);
             if ([macStr hasSuffix:checkMac]) {
                 //使用密钥一对返回的数据解密,取到密钥二
                 handShakeKey2 = [self decryptData:[characteristic.value subdataWithRange:NSMakeRange(0, 16)] withKey:[NSData dataWithBytes:HandShakeKey length:16]];
-                self.logBlock([NSString stringWithFormat:@"接收密钥二成功，解密后:%@",handShakeKey2]);
+                BFLog(@"接收密钥二成功，解密后:%@",handShakeKey2);
                 //使用密钥二
                 [self sendValueWithKey:handShakeKey2 characteristic:sendActivityCharateristic];
             }else {
@@ -354,7 +354,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             NSArray *newInfo = [NSArray arrayWithObjects:deviceinfo[0],@"01", nil];
             [deviceDic setObject:newInfo forKey:macStr];
             
-            self.logBlock([NSString stringWithFormat:@"设备:%@ 激活成功",macStr]);
+            BFLog(@"设备:%@ 激活成功",macStr);
             
             //加入本地缓存列表
             GarageModel *model = [[GarageModel alloc] init];
@@ -367,7 +367,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
         }
         else if ([self isActivity:macStr] && characteristic.value.length==2){
-            self.logBlock([NSString stringWithFormat:@"设备:%@ 开锁成功",macStr]);
+            BFLog(@"设备:%@ 开锁成功",macStr);
         }
     }
 }
@@ -375,10 +375,10 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
         NSString *errorString = [NSString stringWithFormat:@"特征%@写入出错:%@",[characteristic UUID],[error localizedDescription]];
-        self.logBlock(errorString);
+        BFLog(errorString);
     }else {
         NSString *errorString = [NSString stringWithFormat:@"特征%@写入成功",[characteristic UUID]];
-        self.logBlock(errorString);
+        BFLog(errorString);
     }
 }
 
@@ -387,7 +387,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 //开始扫描
 - (void)startScanning
 {
-    self.logBlock(@"-----------: 开始扫描蓝牙设备");
+    BFLog(@"-----------: 开始扫描蓝牙设备");
     if (!deviceDic) {
         deviceDic = [NSMutableDictionary dictionaryWithCapacity:10];
     }
@@ -421,7 +421,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 - (CBCharacteristicWriteType)sendTransparentData:(NSData *)data
                                             type:(CBCharacteristicWriteType)type
                                   characteristic:(CBCharacteristic *)characteristic{
-    self.logBlock([NSString stringWithFormat:@"加密后:%@",data]);
+    BFLog(@"加密后:%@",data);
     
     if (characteristic == nil) {
         return CBCharacteristicWriteWithResponse;
@@ -442,7 +442,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 //链接超时
 - (void)connectTimeout:(NSTimer *)time
 {
-    self.logBlock(@"-------------------: 扫描计时器显示连接超时");
+    BFLog(@"-------------------: 扫描计时器显示连接超时");
     
     if (self.connectionStateBlock) {
         connectionState = BlueToothConnectionStateConnectionTimeOut;
@@ -454,7 +454,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 //断开蓝牙
 - (void)disconnectPeripheral
 {
-    self.logBlock(@"-------------------: 断开与设备的蓝牙连接");
+    BFLog(@"-------------------: 断开与设备的蓝牙连接");
     if (scPeripheral != nil) {//如果扫描到设备，self.scPeripheral不为空
         [self performBlock:^{
             [centralManager cancelPeripheralConnection:scPeripheral];
@@ -481,7 +481,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 
 //立即停止蓝牙 --- 在页面退出或者释放的时候调用，同时把所有的block赋空
 - (void)stopBlueTooth {
-    self.logBlock(@"-------------------: 退出页面时停止蓝牙");
+    BFLog(@"-------------------: 退出页面时停止蓝牙");
     if (centralManager != nil) {//如果扫描到设备，self.scPeripheral不为空
         [centralManager stopScan];
         [centralManager cancelPeripheralConnection:scPeripheral];
@@ -546,8 +546,8 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     aesEncrypt(dat, chainCipherBlock);
     aesEncrypt(dat+16, chainCipherBlock);
     
-    self.logBlock([NSString stringWithFormat:@"特征:%@",characteristic]);
-    self.logBlock([NSString stringWithFormat:@"加密前:%@",[NSData dataWithBytes:bytes length:20]]);
+    BFLog(@"特征:%@",characteristic);
+    BFLog(@"加密前:%@",[NSData dataWithBytes:bytes length:20]);
     [self sendTransparentData:[NSData dataWithBytes:dat length:20]
                          type:CBCharacteristicWriteWithResponse
                characteristic:characteristic];

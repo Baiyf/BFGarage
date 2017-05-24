@@ -370,6 +370,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
         }
         else if ([self isActivity:macStr] && characteristic.value.length==2){
             BFLog(@"设备:%@ 开锁成功",macStr);
+            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTSUCCESS object:nil];
         }
     }
 }

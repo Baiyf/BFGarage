@@ -7,17 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2713919A1ED03ED00031885C /* open_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 2713918F1ED03ED00031885C /* open_0.png */; };
-		2713919B1ED03ED00031885C /* open_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391901ED03ED00031885C /* open_1.png */; };
-		2713919C1ED03ED00031885C /* open_10.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391911ED03ED00031885C /* open_10.png */; };
-		2713919D1ED03ED00031885C /* open_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391921ED03ED00031885C /* open_2.png */; };
-		2713919E1ED03ED00031885C /* open_3.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391931ED03ED00031885C /* open_3.png */; };
-		2713919F1ED03ED00031885C /* open_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391941ED03ED00031885C /* open_4.png */; };
-		271391A01ED03ED00031885C /* open_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391951ED03ED00031885C /* open_5.png */; };
-		271391A11ED03ED00031885C /* open_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391961ED03ED00031885C /* open_6.png */; };
-		271391A21ED03ED00031885C /* open_7.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391971ED03ED00031885C /* open_7.png */; };
-		271391A31ED03ED00031885C /* open_8.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391981ED03ED00031885C /* open_8.png */; };
-		271391A41ED03ED00031885C /* open_9.png in Resources */ = {isa = PBXBuildFile; fileRef = 271391991ED03ED00031885C /* open_9.png */; };
 		271391A81ED03F030031885C /* HomeTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 271391A61ED03F030031885C /* HomeTableCell.m */; };
 		271391A91ED03F030031885C /* HomeTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 271391A71ED03F030031885C /* HomeTableCell.xib */; };
 		2713C77B1EB9E1B60013AEB4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2713C77A1EB9E1B60013AEB4 /* UIKit.framework */; };
@@ -39,24 +28,10 @@
 		27E34B361EAC668D0030099A /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B351EAC668D0030099A /* ScanViewController.m */; };
 		27E34B3A1EAC69C40030099A /* AppContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B391EAC69C40030099A /* AppContext.m */; };
 		27E34B3E1EAC726F0030099A /* BlueToothConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B3D1EAC726F0030099A /* BlueToothConnect.m */; };
-		27E34D261EACCDBC0030099A /* Sony_TV_Login_Line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27E34D241EACCDBC0030099A /* Sony_TV_Login_Line@2x.png */; };
-		27E34D271EACCDBC0030099A /* Sony_TVLogin_bound@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */; };
-		27F6115E1ED1D290008D9E9F /* home_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 27F6115D1ED1D290008D9E9F /* home_button.png */; };
 		27F88E171EC7641D00180D9D /* BFLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F88E161EC7641D00180D9D /* BFLogView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2713918F1ED03ED00031885C /* open_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_0.png; sourceTree = "<group>"; };
-		271391901ED03ED00031885C /* open_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_1.png; sourceTree = "<group>"; };
-		271391911ED03ED00031885C /* open_10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_10.png; sourceTree = "<group>"; };
-		271391921ED03ED00031885C /* open_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_2.png; sourceTree = "<group>"; };
-		271391931ED03ED00031885C /* open_3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_3.png; sourceTree = "<group>"; };
-		271391941ED03ED00031885C /* open_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_4.png; sourceTree = "<group>"; };
-		271391951ED03ED00031885C /* open_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_5.png; sourceTree = "<group>"; };
-		271391961ED03ED00031885C /* open_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_6.png; sourceTree = "<group>"; };
-		271391971ED03ED00031885C /* open_7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_7.png; sourceTree = "<group>"; };
-		271391981ED03ED00031885C /* open_8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_8.png; sourceTree = "<group>"; };
-		271391991ED03ED00031885C /* open_9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = open_9.png; sourceTree = "<group>"; };
 		271391A51ED03F030031885C /* HomeTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeTableCell.h; sourceTree = "<group>"; };
 		271391A61ED03F030031885C /* HomeTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeTableCell.m; sourceTree = "<group>"; };
 		271391A71ED03F030031885C /* HomeTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeTableCell.xib; sourceTree = "<group>"; };
@@ -94,9 +69,6 @@
 		27E34B3C1EAC726F0030099A /* BlueToothConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueToothConnect.h; sourceTree = "<group>"; };
 		27E34B3D1EAC726F0030099A /* BlueToothConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueToothConnect.m; sourceTree = "<group>"; };
 		27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BFGarage-Prefix.h"; sourceTree = SOURCE_ROOT; };
-		27E34D241EACCDBC0030099A /* Sony_TV_Login_Line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sony_TV_Login_Line@2x.png"; sourceTree = "<group>"; };
-		27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Sony_TVLogin_bound@2x.png"; sourceTree = "<group>"; };
-		27F6115D1ED1D290008D9E9F /* home_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_button.png; sourceTree = "<group>"; };
 		27F88E001EC70CCE00180D9D /* AESCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESCrypto.h; sourceTree = "<group>"; };
 		27F88E151EC7641D00180D9D /* BFLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFLogView.h; sourceTree = "<group>"; };
 		27F88E161EC7641D00180D9D /* BFLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFLogView.m; sourceTree = "<group>"; };
@@ -119,18 +91,6 @@
 		2713918E1ED03ED00031885C /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				27F6115D1ED1D290008D9E9F /* home_button.png */,
-				2713918F1ED03ED00031885C /* open_0.png */,
-				271391901ED03ED00031885C /* open_1.png */,
-				271391911ED03ED00031885C /* open_10.png */,
-				271391921ED03ED00031885C /* open_2.png */,
-				271391931ED03ED00031885C /* open_3.png */,
-				271391941ED03ED00031885C /* open_4.png */,
-				271391951ED03ED00031885C /* open_5.png */,
-				271391961ED03ED00031885C /* open_6.png */,
-				271391971ED03ED00031885C /* open_7.png */,
-				271391981ED03ED00031885C /* open_8.png */,
-				271391991ED03ED00031885C /* open_9.png */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -290,8 +250,6 @@
 		27E34D231EACCDBC0030099A /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				27E34D241EACCDBC0030099A /* Sony_TV_Login_Line@2x.png */,
-				27E34D251EACCDBC0030099A /* Sony_TVLogin_bound@2x.png */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -372,25 +330,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				271391A21ED03ED00031885C /* open_7.png in Resources */,
-				2713919D1ED03ED00031885C /* open_2.png in Resources */,
-				27E34D271EACCDBC0030099A /* Sony_TVLogin_bound@2x.png in Resources */,
-				271391A11ED03ED00031885C /* open_6.png in Resources */,
-				2713919A1ED03ED00031885C /* open_0.png in Resources */,
 				27229B001EA8B0A9002B242B /* LaunchScreen.storyboard in Resources */,
-				271391A31ED03ED00031885C /* open_8.png in Resources */,
 				27229AFD1EA8B0A9002B242B /* Assets.xcassets in Resources */,
-				271391A01ED03ED00031885C /* open_5.png in Resources */,
-				271391A41ED03ED00031885C /* open_9.png in Resources */,
-				2713919E1ED03ED00031885C /* open_3.png in Resources */,
 				271391A91ED03F030031885C /* HomeTableCell.xib in Resources */,
-				27F6115E1ED1D290008D9E9F /* home_button.png in Resources */,
-				2713919F1ED03ED00031885C /* open_4.png in Resources */,
-				2713919C1ED03ED00031885C /* open_10.png in Resources */,
-				27E34D261EACCDBC0030099A /* Sony_TV_Login_Line@2x.png in Resources */,
 				27229AFB1EA8B0A9002B242B /* Main.storyboard in Resources */,
 				27E34B2E1EAC5F1F0030099A /* DeviceTableViewCell.xib in Resources */,
-				2713919B1ED03ED00031885C /* open_1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

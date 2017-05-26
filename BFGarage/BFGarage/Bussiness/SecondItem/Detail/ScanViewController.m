@@ -39,7 +39,7 @@
     
     AVCaptureMetadataOutput *captureOutput = [[AVCaptureMetadataOutput alloc] init];
     [captureOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
-    [captureOutput setRectOfInterest:CGRectMake(0.2,0.2,0.5,0.6)];//扫码范围，右上角为原点
+    [captureOutput setRectOfInterest:CGRectMake(0.2,0.2,0.6,0.6)];//扫码范围，右上角为原点
     
     AVCaptureSession *captureSession = [[AVCaptureSession alloc] init];
     self.captureSession = captureSession;

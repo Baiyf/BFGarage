@@ -87,13 +87,15 @@
     }
 }
 
+#pragma mark - 连接结果通知
+//蓝牙连接成功
 - (void)connectSuccess {
-    [_animationView stopAnimating];//开始播放动画
+    [_animationView stopAnimating];//停止播放动画
     _animationView.hidden = YES;
 }
-
+//蓝牙连接失败
 - (void)connectFailed {
-    [_animationView stopAnimating];//开始播放动画
+    [_animationView stopAnimating];//停止播放动画
     _animationView.hidden = YES;
 }
 

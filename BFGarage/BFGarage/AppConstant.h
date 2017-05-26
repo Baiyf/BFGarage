@@ -16,7 +16,7 @@
 
 //在LogView中输入Log
 #if LOG_SWITCH
-#define BFLog(format, ...) [[AppContext sharedAppContext].logView setLog:format]
+#define BFLog(format, ...) [[AppContext sharedAppContext].logView setLog:[NSString stringWithFormat:format, ##__VA_ARGS__]]
 #endif
 
 //设备开锁成功通知

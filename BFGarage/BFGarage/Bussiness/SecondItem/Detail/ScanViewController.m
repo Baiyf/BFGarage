@@ -37,14 +37,6 @@
     
     AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:inputDevice error:&error];
     
-//    NSString *mediaType = AVMediaTypeVideo;
-//    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
-//    if(authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied){
-//        UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"提示" message:@"请在iPhone的“设置”-“隐私”-“相机”功能中" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//        [alert show];
-//        return;
-//    }
-    
     AVCaptureMetadataOutput *captureOutput = [[AVCaptureMetadataOutput alloc] init];
     [captureOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
     [captureOutput setRectOfInterest:CGRectMake(0.2,0.2,0.5,0.6)];//扫码范围，右上角为原点
@@ -147,7 +139,8 @@
                 model.isOwner = YES;
                 model.macStr = resultDic[@"macStr"];
                 model.name = resultDic[@"name"]?resultDic[@"name"]:resultDic[@"macStr"];
-                model.secretKey2 = resultDic[@"secretKey2"];
+                NSString *secretStr = resultDic[@"secretKey2"];
+                model.secretKey2 = [self hexStringToByte:secretStr];
                 [[AppContext sharedAppContext] addNewGarage:model];
                 //发送通知，刷新列表
                 [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
@@ -160,6 +153,46 @@
             BFALERT(@"设备信息错误");
         }
     }
+}
+
+-(NSData*)hexStringToByte:(NSString*)hexString
+{
+    hexString=[[hexString uppercaseString] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    hexString=[hexString stringByReplacingOccurrencesOfString:@"<" withString:@""];
+    hexString=[hexString stringByReplacingOccurrencesOfString:@">" withString:@""];
+    if ([hexString length]%2!=0)
+    {
+        return nil;
+    }
+    
+    Byte tmpByt[1]={0};
+    NSMutableData* bytes=[NSMutableData data];
+    for(int i = 0; i < [hexString length]; i++)
+    {
+        unichar hex_char1 = [hexString characterAtIndex:i]; //两位 16 进制数中的第一位（高位*16 ）
+        int int_ch1;
+        if(hex_char1 >= '0' && hex_char1 <='9')
+            int_ch1 = (hex_char1-48)*16; //0 的 Ascll - 48
+        else if(hex_char1 >= 'A' && hex_char1 <='F')
+            int_ch1 = (hex_char1-55)*16; //A 的 Ascll - 65
+        else
+            return nil;
+        
+        i++;
+        
+        unichar hex_char2 = [hexString characterAtIndex:i]; //两位 16 进制数中的第二位（低位）
+        int int_ch2;
+        if(hex_char2 >= '0' && hex_char2 <='9')
+            int_ch2 = (hex_char2-48); //0 的 Ascll - 48
+        else if(hex_char2 >= 'A' && hex_char2 <='F')
+            int_ch2 = hex_char2-55; //A 的 Ascll - 65 
+        else 
+            return nil; 
+        
+        tmpByt[0] = int_ch1+int_ch2; ///将转化后的数放入 Byte 数组里 
+        [bytes appendBytes:tmpByt length:1]; 
+    } 
+    return bytes; 
 }
 
 - (void)didReceiveMemoryWarning {

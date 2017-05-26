@@ -254,6 +254,8 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
         connectionState = BlueToothConnectionStateConnectionOff;
     }
 
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+    
     if (self.connectionStateBlock) {
         self.connectionStateBlock(connectionState);
     }

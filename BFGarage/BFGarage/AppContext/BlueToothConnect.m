@@ -95,7 +95,7 @@ static unsigned char HandShakeKey[16] = {
                 }
             }
         }else {
-            BFALERT(@"蓝牙状态异常");
+            BFALERT(@"Something Wrong with Bluetooth");
         }
         
         return;
@@ -112,7 +112,7 @@ static unsigned char HandShakeKey[16] = {
         [centralManager connectPeripheral:peripheral options:nil];
         [centralManager stopScan];
     }else {
-        BFALERT(@"未搜索到此设备");
+        BFALERT(@"Can not find the device");
         
         [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
     }
@@ -369,6 +369,15 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             [[AppContext sharedAppContext] addNewGarage:model];
             // 发送通知，刷新列表
             [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
+        }//开锁，设备发送16位随机数
+        else if ([self isActivity:macStr] && characteristic.value.length==16){
+            //获取设备生产的16位随机数
+            NSData *randomData = [self decryptData:[characteristic.value subdataWithRange:NSMakeRange(0, 16)] withKey:[NSData dataWithBytes:HandShakeKey length:16]];
+            BFLog(@"开锁获取随机数：%@",randomData);
+            [self sendTransparentData:[self encryptData:randomData withKey:connectModel.secretKey2]
+                                 type:CBCharacteristicWriteWithResponse
+                       characteristic:sendOpenCharateristic];
+            
         }
         else if ([self isActivity:macStr] && characteristic.value.length==2){
             BFLog(@"设备:%@ 开锁成功",macStr);
@@ -379,11 +388,9 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     if (error) {
-        NSString *errorString = [NSString stringWithFormat:@"特征%@写入出错:%@",[characteristic UUID],[error localizedDescription]];
-        BFLog(errorString);
+        BFLog(@"特征%@写入出错:%@",[characteristic UUID],[error localizedDescription]);
     }else {
-        NSString *errorString = [NSString stringWithFormat:@"特征%@写入成功",[characteristic UUID]];
-        BFLog(errorString);
+        BFLog(@"特征%@写入成功",[characteristic UUID]);
     }
 }
 
@@ -514,28 +521,38 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 //发送命令 10位随机数作头部加上6位MAC组成20bytes，使用密钥加密
 - (void)sendValueWithKey:(NSData *)key characteristic:(CBCharacteristic *)characteristic
 {
-    NSMutableData *sendData=[NSMutableData data];
+    NSMutableData *data=[NSMutableData data];
     for (int i=0; i<10; i++) {
         int x = arc4random() % 16;
         NSString *hexString = [self ToHex:x];
         NSData *hexData = [self hexToBytes:hexString];
-        [sendData appendData:hexData];
+        [data appendData:hexData];
     }
     if (macStr.length==12) {
-        [sendData appendData:[self hexToBytes:macStr]];
+        [data appendData:[self hexToBytes:macStr]];
     }
-    NSData *hexData2 = [self hexToBytes:@"00000000"];
-    [sendData appendData:hexData2];
-    Byte bytes[20];
-    for (int i = 0; i<[sendData length]; i++) {
+    
+    NSData *sendData = [self encryptData:data withKey:key];
+    
+    BFLog(@"特征:%@",characteristic);
+    BFLog(@"加密前:%@",sendData);
+    [self sendTransparentData:sendData
+                         type:CBCharacteristicWriteWithResponse
+               characteristic:characteristic];
+}
+
+//加密 加密数据长度需要为16位
+- (NSData *)encryptData:(NSData *)data withKey:(NSData *)key{
+    
+    Byte bytes[16];
+    for (int i = 0; i<[data length]; i++) {
         Byte buffer;
-        [sendData getBytes:&buffer range:NSMakeRange(i, 1)];
+        [data getBytes:&buffer range:NSMakeRange(i, 1)];
         bytes[i] = buffer;
     }
     
-    
-    unsigned char dat[20];
-    memcpy(dat, bytes, 20);
+    unsigned char dat[16];
+    memcpy(dat, bytes, 16);
     
     unsigned char chainCipherBlock[16];
     unsigned char *shakeKey = (unsigned char *)[key bytes];
@@ -549,13 +566,13 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     //加密后的数据
     aesEncInit();
     aesEncrypt(dat, chainCipherBlock);
-    aesEncrypt(dat+16, chainCipherBlock);
+//    aesEncrypt(dat+16, chainCipherBlock);
     
-    BFLog(@"特征:%@",characteristic);
-    BFLog(@"加密前:%@",[NSData dataWithBytes:bytes length:20]);
-    [self sendTransparentData:[NSData dataWithBytes:dat length:20]
-                         type:CBCharacteristicWriteWithResponse
-               characteristic:characteristic];
+    NSMutableData *sendData = [NSMutableData dataWithBytes:dat length:16];
+    NSData *hexData2 = [self hexToBytes:@"00000000"];
+    [sendData appendData:hexData2];
+    
+    return sendData;
 }
 
 //解密

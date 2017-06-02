@@ -3,7 +3,7 @@
 #define  GET_CACHE_DIR NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]
 
 //提示框
-#define BFALERT(msg) [[[UIAlertView alloc]initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
+#define BFALERT(msg) [[[UIAlertView alloc]initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"Confirm" otherButtonTitles:nil, nil] show];
 
 
 //上线配置项

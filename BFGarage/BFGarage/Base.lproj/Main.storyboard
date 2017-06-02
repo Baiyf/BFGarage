@@ -23,7 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Kq-dm-957">
-                                <rect key="frame" x="10" y="74" width="160" height="50"/>
+                                <rect key="frame" x="10" y="84" width="160" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="160" id="4un-Es-H8G"/>
                                     <constraint firstAttribute="height" constant="50" id="Lkj-qC-Wfh"/>
@@ -34,7 +34,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JdL-yr-ATA">
-                                <rect key="frame" x="205" y="74" width="160" height="50"/>
+                                <rect key="frame" x="205" y="84" width="160" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="160" id="GzH-mb-Efu"/>
                                     <constraint firstAttribute="height" constant="50" id="NmN-DF-wHE"/>
@@ -44,8 +44,8 @@
                                     <action selector="scanQRCode:" destination="FZ8-db-eJY" eventType="touchUpInside" id="Y95-7c-5EE"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="b3O-si-ZnZ">
-                                <rect key="frame" x="0.0" y="134" width="375" height="484"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="70" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="b3O-si-ZnZ">
+                                <rect key="frame" x="0.0" y="154" width="375" height="464"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="FZ8-db-eJY" id="ilm-Aa-mTp"/>
@@ -89,9 +89,9 @@
                             <constraint firstAttribute="trailing" secondItem="Kev-zX-QYN" secondAttribute="trailing" id="EmD-rt-AmO"/>
                             <constraint firstAttribute="trailing" secondItem="b3O-si-ZnZ" secondAttribute="trailing" id="FSG-pL-OZd"/>
                             <constraint firstItem="2Kq-dm-957" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" constant="10" id="Mez-1J-kFg"/>
-                            <constraint firstItem="b3O-si-ZnZ" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="70" id="XBN-AP-iC5"/>
-                            <constraint firstItem="JdL-yr-ATA" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="10" id="a7T-NU-QNL"/>
-                            <constraint firstItem="2Kq-dm-957" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="10" id="bKL-ct-bWg"/>
+                            <constraint firstItem="b3O-si-ZnZ" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="90" id="XBN-AP-iC5"/>
+                            <constraint firstItem="JdL-yr-ATA" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="20" id="a7T-NU-QNL"/>
+                            <constraint firstItem="2Kq-dm-957" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="20" id="bKL-ct-bWg"/>
                             <constraint firstItem="BdT-Gk-Ev3" firstAttribute="top" secondItem="Kev-zX-QYN" secondAttribute="bottom" id="jpo-lP-COn"/>
                             <constraint firstItem="b3O-si-ZnZ" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="wUB-Im-NEQ"/>
                             <constraint firstAttribute="trailing" secondItem="JdL-yr-ATA" secondAttribute="trailing" constant="10" id="zoG-aD-mub"/>
@@ -209,7 +209,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="130" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="I0S-Uz-03I">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="245" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="I0S-Uz-03I">
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>

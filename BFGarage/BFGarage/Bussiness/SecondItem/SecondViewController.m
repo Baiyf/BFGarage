@@ -113,7 +113,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Garage Name" message:@"" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Garage Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
     [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
     UITextField *txtName = [alert textFieldAtIndex:0];
     txtName.placeholder = @"Please enter name";
@@ -150,13 +150,13 @@
                              model.macStr, @"macStr",
                              secretString, @"secretKey2", nil];
     NSData *data =    [NSJSONSerialization dataWithJSONObject:infoDic options:NSJSONWritingPrettyPrinted error:nil];
-//    // 使用KVC的方式给filter赋值
+    // 3.使用KVC的方式给filter赋值
     [filter setValue:data forKeyPath:@"inputMessage"];
     
-    // 3. 生成二维码
+    // 4. 生成二维码
     CIImage *image = [filter outputImage];
     
-    // 4. 显示二维码
+    // 5. 显示二维码
     self.qrImageView.image = [self excludeFuzzyImageFromCIImage:image size:200];
     
     self.tipsView.hidden = NO;

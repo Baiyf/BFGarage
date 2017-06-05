@@ -18,8 +18,11 @@
 
 @property (nonatomic, weak) IBOutlet UITableView *rootTableView;
 
-@property (nonatomic, weak) IBOutlet UIView *tipsView;
+// 二维码页面
+@property (nonatomic, weak) IBOutlet UIView *qrTipsView;
 @property (nonatomic, weak) IBOutlet UIImageView *qrImageView;
+// 激活提示页面
+@property (nonatomic, weak) IBOutlet UIView *activityTipsView;
 
 @property(nonatomic, strong) NSIndexPath *selectIndex;
 
@@ -50,18 +53,23 @@
 //刷新设备列表
 - (void)reloadDevicelist{
     [self.rootTableView reloadData];
+    
+    self.activityTipsView.hidden = YES;
 }
 
 //激活失败
 - (void)connectFailed {
-//    [_animationView stopAnimating];//开始播放动画
-//    _animationView.hidden = YES;
+    self.activityTipsView.hidden = YES;
+    if (self.tabBarController.selectedIndex == 1 && self.navigationController.visibleViewController == self) {
+        BFALERT(@"Application could not find any new devices for pairing.\n Some devices may requirefactory reset before it can be activited.");
+    }
 }
 
 #pragma mark - button actions
 //激活操作
 - (IBAction)activityConnect:(id)sender {
     [[AppContext sharedAppContext] connectGarage:nil];
+    self.activityTipsView.hidden = NO;
 }
 
 //二维码扫描
@@ -73,7 +81,12 @@
 
 //点击取消QR页面
 - (IBAction)dismissQRView:(id)sender {
-    self.tipsView.hidden = YES;
+    self.qrTipsView.hidden = YES;
+}
+
+//点击取消激活提示页面
+- (IBAction)dismissActivityView:(id)sender {
+    self.activityTipsView.hidden = YES;
 }
 
 #pragma mark - UITableViewDelegate & UITableViewDatasource
@@ -96,7 +109,7 @@
     __weak typeof(self) weakSelf = self;
     [cell setQrBlock:^(NSIndexPath *cellIndex){
         weakSelf.selectIndex = cellIndex;
-        [weakSelf showQRView];
+        [weakSelf showQRAlertView];
     }];
     return cell;
 }
@@ -115,6 +128,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Garage Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
     [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    alert.tag = 80;
     UITextField *txtName = [alert textFieldAtIndex:0];
     txtName.placeholder = @"Please enter name";
     [alert show];
@@ -124,14 +138,27 @@
 
 #pragma mark - UIAlertView Delegate
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
-        UITextField *txt = [alertView textFieldAtIndex:0];
-        //获取txt内容即可
-        GarageModel *model = [AppContext sharedAppContext].garageArray[self.selectIndex.row];
-        model.name = txt.text;
-        [[AppContext sharedAppContext] addNewGarage:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
+    if (alertView.tag == 80) {
+        if (buttonIndex == 1) {
+            UITextField *txt = [alertView textFieldAtIndex:0];
+            //获取txt内容即可
+            GarageModel *model = [AppContext sharedAppContext].garageArray[self.selectIndex.row];
+            model.name = txt.text;
+            [[AppContext sharedAppContext] addNewGarage:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
+        }
     }
+    else {
+        if (buttonIndex == 1) {
+            [self showQRView];
+        }
+    }
+}
+
+- (void)showQRAlertView {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Please pay attention to the protection of the QR code in order to avoid the loss of your property." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
+    alert.tag = 81;
+    [alert show];
 }
 
 //显示二维码生成页面
@@ -159,7 +186,7 @@
     // 5. 显示二维码
     self.qrImageView.image = [self excludeFuzzyImageFromCIImage:image size:200];
     
-    self.tipsView.hidden = NO;
+    self.qrTipsView.hidden = NO;
 }
 
 #pragma mark -- 对图像进行清晰处理，很关键！

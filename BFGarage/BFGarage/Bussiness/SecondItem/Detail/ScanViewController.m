@@ -126,7 +126,7 @@
         [self stopScan];
         AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndex:0];
         stringValue = metadataObject.stringValue;//扫描出信息
-        BFLog(stringValue);
+        BFLog(@"%@",stringValue);
         
         //判断扫描出的信息是否正确
         if(![stringValue isEqualToString:@""])

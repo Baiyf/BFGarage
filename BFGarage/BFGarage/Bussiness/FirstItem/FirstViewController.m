@@ -97,6 +97,9 @@
 - (void)connectFailed {
     [_animationView stopAnimating];//停止播放动画
     _animationView.hidden = YES;
+    if (self.tabBarController.selectedIndex == 0 && self.navigationController.visibleViewController == self) {
+        BFALERT(@"Can not find the device");
+    }
 }
 
 

@@ -19,10 +19,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_button.png" translatesAutoresizingMaskIntoConstraints="NO" id="GfU-JR-YIW">
-                        <rect key="frame" x="65" y="15" width="190" height="190"/>
+                        <rect key="frame" x="60" y="25" width="200" height="172"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="190" id="Y6O-y0-6Oa"/>
-                            <constraint firstAttribute="width" constant="190" id="dqv-Hy-x8M"/>
+                            <constraint firstAttribute="height" constant="172" id="Y6O-y0-6Oa"/>
+                            <constraint firstAttribute="width" constant="200" id="dqv-Hy-x8M"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fdm-RQ-vxh">
@@ -40,7 +40,7 @@
                     <constraint firstItem="Fdm-RQ-vxh" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="0CR-05-CYr"/>
                     <constraint firstItem="GfU-JR-YIW" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="iRe-Qy-7m0"/>
                     <constraint firstAttribute="bottom" secondItem="Fdm-RQ-vxh" secondAttribute="bottom" constant="7.5" id="sDb-1u-SPy"/>
-                    <constraint firstItem="GfU-JR-YIW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="u1s-rw-9AM"/>
+                    <constraint firstItem="GfU-JR-YIW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="25" id="u1s-rw-9AM"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

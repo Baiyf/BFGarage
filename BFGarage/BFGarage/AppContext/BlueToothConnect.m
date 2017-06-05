@@ -40,10 +40,11 @@ static unsigned char HandShakeKey[16] = {
     
     GarageModel * connectModel;         //连接设备，非激活使用
 }
-
+@property (nonatomic, strong) GarageModel * connectModel;
 @end
 
 @implementation BlueToothConnect
+@synthesize connectModel;
 
 ///启动蓝牙管理
 - (void)startBlueToothWithBlueToothState:(BlueToothConnectionStateBlock)blueState
@@ -59,62 +60,64 @@ static unsigned char HandShakeKey[16] = {
 - (void)connectPeripheralWith:(GarageModel *)model
 {
     //1 如果之前有连接，取消掉，连接默认
-    if (scPeripheral) {
-        if (receiveCharateristic) {
-            [scPeripheral setNotifyValue:NO forCharacteristic:receiveCharateristic];
-        }
-        receiveCharateristic = nil;
-        sendOpenCharateristic = nil;
-        sendActivityCharateristic = nil;
-        scPeripheral.delegate = nil;
-        [centralManager cancelPeripheralConnection:scPeripheral];
-        scPeripheral = nil;
+    [self clearConnectInfo];
+    
+    //2. 判断蓝牙是否开启
+    if (centralManager.state == CBManagerStatePoweredOn) {
+        
     }
-    
-    
-    //2.如果传入的 mac 地址为空，说明走的是激活方式
+    else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+        BFALERT(@"Something Wrong with Bluetooth");
+        return;
+    }
+
+
+    //3.如果传入的 mac 地址为空，说明走的是激活方式
     if (!model) {
-        //2.1 判断蓝牙是否开启
-        if (centralManager.state == CBManagerStatePoweredOn) {
-            //2.2 判断是否开启扫描
-            if (!centralManager.isScanning) {
-                isJustScan = NO;
-                [self startScanning];
-            }else{
-                isJustScan = NO;
-                for (NSString *mac in deviceDic.allKeys) {
-                    if (![self isExist:mac]) {
-                        macStr = mac;
-                        CBPeripheral *peripheral = deviceDic[mac][0];
-                        scPeripheral = peripheral;
-                        scPeripheral.delegate = self;
-                        [centralManager connectPeripheral:peripheral options:nil];
-                        [centralManager stopScan];
-                        return;
-                    }
+        //3.1 开启连接计时
+        [self startConnectTimer];
+        
+        //3.2 判断是否开启扫描
+        if (!centralManager.isScanning) {
+            isJustScan = NO;
+            [self startScanning];
+        }else{
+            isJustScan = NO;
+            for (NSString *mac in deviceDic.allKeys) {
+                if (![self isExist:mac]) {
+                    macStr = mac;
+                    CBPeripheral *peripheral = deviceDic[mac][0];
+                    scPeripheral = peripheral;
+                    scPeripheral.delegate = self;
+                    [centralManager connectPeripheral:peripheral options:nil];
+                    [centralManager stopScan];
+                    return;
                 }
             }
-        }else {
-            BFALERT(@"Something Wrong with Bluetooth");
         }
-        
         return;
     }
     
-    connectModel = model;
-    //3.如果传入mac 地址不为空，说明走的是直接连接
+    self.connectModel = model;
+    
+    [self startConnectTimer]; //开启连接计时
+    
+    //4.如果传入mac 地址不为空，说明走的是直接连接
     if ([deviceDic.allKeys containsObject:model.macStr]) {
         CBPeripheral *peripheral = deviceDic[model.macStr][0];
         macStr = model.macStr;
         scPeripheral = peripheral;
         scPeripheral.delegate = self;
-        //3.1 调用连接设备代理方法
+        //4.1 调用连接设备代理方法
         [centralManager connectPeripheral:peripheral options:nil];
         [centralManager stopScan];
     }else {
-        BFALERT(@"Can not find the device");
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+        //4.2 在当前列表中没有找到需要连接的蓝牙，扫描对应蓝牙
+        if (!centralManager.isScanning) {
+            isJustScan = NO;
+            [self startScanning];
+        }
     }
 }
 
@@ -187,22 +190,28 @@ static unsigned char HandShakeKey[16] = {
             }
             //不是扫描，直接需要连接的
             else{
-                if (![self isExist:macString]) {
-                    //需要连接的设备
-                    scPeripheral = peripheral;
-                    scPeripheral.delegate = self;
-                    
-                    macStr = macString;
-                    BOOL isActivity;
-                    if ([activity isEqualToString:@"01"]) {
-                        isActivity = YES;//已激活
-                        //已激活的需要判断Mac地址
-                        
-                    }else {
+                //开锁用途
+                if (self.connectModel) {
+                    if ([macString isEqualToString:self.connectModel.macStr]) {
                         [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
+                        [centralManager stopScan];
                     }
-                    
-                    [centralManager stopScan];
+                }//激活用途
+                else {
+                    if (![self isExist:macString]) {
+                        //需要连接的设备
+                        scPeripheral = peripheral;
+                        scPeripheral.delegate = self;
+                        
+                        macStr = macString;
+                        if ([activity isEqualToString:@"01"]) {
+                            //已激活的需要判断Mac地址
+                            return;
+                        }else {
+                            [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
+                            [centralManager stopScan];
+                        }
+                    }
                 }
             }
         }
@@ -254,7 +263,10 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
         connectionState = BlueToothConnectionStateConnectionOff;
     }
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+    [self clearConnectInfo];
+    
+//    [connectTimer invalidate];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
     
     if (self.connectionStateBlock) {
         self.connectionStateBlock(connectionState);
@@ -274,7 +286,8 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 }
 
 //扫描到特征后
-- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service
+- (void)peripheral:(CBPeripheral *)peripheral
+didDiscoverCharacteristicsForService:(CBService *)service
              error:(NSError *)error
 {
     BFLog(@"-----------: 服务特征");
@@ -286,24 +299,6 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_AFFIRM]]) {
                 receiveCharateristic = characteristic;
                 [peripheral setNotifyValue:YES forCharacteristic:characteristic];
-                
-                //未激活
-                if (![self isActivity:macStr]) {
-                    //密钥一
-                    NSData *dataKey = [NSData dataWithBytes:HandShakeKey length:16];
-                    //发送激活
-                    [self sendValueWithKey:dataKey characteristic:sendActivityCharateristic];
-                }else {
-                    //发送开锁数据
-                    if (connectModel) {
-                        NSData *dataKey = connectModel.secretKey2;
-                        [self sendValueWithKey:dataKey characteristic:sendOpenCharateristic];
-                    }else {
-                        BFLog(@"连接设备已被激活");
-                        // 发送通知，激活失败
-                        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
-                    }
-                }
             }
             else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:UUID_ACTIVITY]])
             {
@@ -313,11 +308,30 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
                 sendOpenCharateristic = characteristic;
             }
         }
+        
+        // 1.未激活
+        if (![self isActivity:macStr]) {
+            //密钥一
+            NSData *dataKey = [NSData dataWithBytes:HandShakeKey length:16];
+            // 1.1发送激活
+            [self sendValueWithKey:dataKey characteristic:sendActivityCharateristic];
+        }else {
+            //
+            if (connectModel) {
+                
+            }else {
+                BFLog(@"连接设备已被激活");
+                // 发送通知，激活失败
+                [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+            }
+        }
     }
 }
 
-//
-- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
+//特征内容更新或者收到对应特征发送数据的代理函数
+- (void)peripheral:(CBPeripheral *)peripheral
+didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
+             error:(NSError *)error{
     BFLog(@"-----------: 对应特征操作");
     
     //激活
@@ -364,7 +378,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
             GarageModel *model = [[GarageModel alloc] init];
             model.isOwner = YES;
             model.macStr = macStr;
-            model.name = macStr;
+            model.name = [@"SC-" stringByAppendingFormat:@"%@",[macStr substringToIndex:2]];
             model.secretKey2 = handShakeKey2;
             [[AppContext sharedAppContext] addNewGarage:model];
             // 发送通知，刷新列表
@@ -386,7 +400,9 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     }
 }
 
-- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+//特征内容写入结果代理函数
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic
+             error:(NSError *)error {
     if (error) {
         BFLog(@"特征%@写入出错:%@",[characteristic UUID],[error localizedDescription]);
     }else {
@@ -412,12 +428,23 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
         connectionState = BlueToothConnectionStateConnectioning;
         self.connectionStateBlock(BlueToothConnectionStateConnectioning);
     }
-
-    //开一个定时器监控连接超时的情况
-//    connectTimer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(connectTimeout:) userInfo:nil repeats:NO];
 }
 
-//截取信息
+//连接启用计时器，超出时取消连接
+- (void)startConnectTimer{
+    if (connectTimer) {
+        [connectTimer invalidate];
+        connectTimer = nil;
+    }
+    //开一个定时器监控连接超时的情况
+    connectTimer = [NSTimer scheduledTimerWithTimeInterval:15.0f
+                                                    target:self
+                                                  selector:@selector(connectTimeout:)
+                                                  userInfo:nil
+                                                   repeats:NO];
+}
+
+//NSData 按照16进制内容直接截取信息，例如 <0F56EA> 截取 0F
 - (NSString *)transformDataToStr:(NSData *)macData withRange:(NSRange)range
 {
     NSString * str = [[[[NSString stringWithFormat:@"%@",macData]
@@ -455,12 +482,31 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
 - (void)connectTimeout:(NSTimer *)time
 {
     BFLog(@"-------------------: 扫描计时器显示连接超时");
-    
     if (self.connectionStateBlock) {
         connectionState = BlueToothConnectionStateConnectionTimeOut;
         self.connectionStateBlock(BlueToothConnectionStateConnectionTimeOut);
     }
     [self disconnectPeripheral];
+
+    //开锁或者激活失败
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+}
+
+- (void)clearConnectInfo {
+    //1 如果之前有连接，取消掉，连接默认
+    if (scPeripheral) {
+        if (receiveCharateristic) {
+            [scPeripheral setNotifyValue:NO forCharacteristic:receiveCharateristic];
+        }
+        scPeripheral.delegate = nil;
+        [centralManager cancelPeripheralConnection:scPeripheral];
+        scPeripheral = nil;
+    }
+    receiveCharateristic = nil;
+    sendOpenCharateristic = nil;
+    sendActivityCharateristic = nil;
+    
+    self.connectModel = nil;
 }
 
 //断开蓝牙
@@ -532,10 +578,10 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
         [data appendData:[self hexToBytes:macStr]];
     }
     
-    NSData *sendData = [self encryptData:data withKey:key];
-    
     BFLog(@"特征:%@",characteristic);
-    BFLog(@"加密前:%@",sendData);
+    BFLog(@"加密前:%@",data);
+    
+    NSData *sendData = [self encryptData:data withKey:key];
     [self sendTransparentData:sendData
                          type:CBCharacteristicWriteWithResponse
                characteristic:characteristic];

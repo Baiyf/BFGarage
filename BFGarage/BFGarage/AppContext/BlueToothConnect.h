@@ -34,12 +34,14 @@ typedef void (^BlueToothConnectionStateBlock) (BlueToothConnectionState state); 
 //启动蓝牙
 - (void)startBlueToothWithBlueToothState:(BlueToothConnectionStateBlock)blueState;
 
-//立即停止蓝牙 --- 在页面退出或者释放的时候调用，同时把所有的block赋空
-- (void)stopBlueTooth;
-
-//连接指定设备
+//连接指定设备 model有值说明是连接，nil说明是激活
 - (void)connectPeripheralWith:(GarageModel *)model;
 
+
+/*------------- 下面的方法目前没有用到 --------------*/
+
+//立即停止蓝牙 --- 在页面退出或者释放的时候调用，同时把所有的block赋空
+- (void)stopBlueTooth;
 //断开蓝牙
 - (void)disconnectPeripheral;
 

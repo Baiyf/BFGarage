@@ -32,30 +32,38 @@
 
 - (void)initCapture
 {
-    NSError *error = nil;
-    AVCaptureDevice* inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
-    AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:inputDevice error:&error];
-    
-    AVCaptureMetadataOutput *captureOutput = [[AVCaptureMetadataOutput alloc] init];
-    [captureOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
-    [captureOutput setRectOfInterest:CGRectMake(0.2,0.2,0.6,0.6)];//扫码范围，右上角为原点
-    
-    AVCaptureSession *captureSession = [[AVCaptureSession alloc] init];
-    self.captureSession = captureSession;
-    if ([self.captureSession canAddInput:captureInput]) {
-        [self.captureSession addInput:captureInput];
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    NSString *tips = NSLocalizedString(@"AVAuthorization", @"您没有权限访问相机");
+    if(status == AVAuthorizationStatusAuthorized) {
+        // authorized
+        NSError *error = nil;
+        AVCaptureDevice* inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        
+        AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:inputDevice error:&error];
+        
+        AVCaptureMetadataOutput *captureOutput = [[AVCaptureMetadataOutput alloc] init];
+        [captureOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+        [captureOutput setRectOfInterest:CGRectMake(0.2,0.2,0.6,0.6)];//扫码范围，右上角为原点
+        
+        AVCaptureSession *captureSession = [[AVCaptureSession alloc] init];
+        self.captureSession = captureSession;
+        if ([self.captureSession canAddInput:captureInput]) {
+            [self.captureSession addInput:captureInput];
+        }
+        if([self.captureSession canAddOutput:captureOutput]){
+            [self.captureSession addOutput:captureOutput];
+        }
+        captureOutput.metadataObjectTypes = @[AVMetadataObjectTypeQRCode];
+        self.captureSession.sessionPreset = AVCaptureSessionPresetHigh;//设置扫描的画质
+        
+        self.captureVideoPreviewLayer =[AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
+        self.captureVideoPreviewLayer.frame = self.view.layer.bounds;
+        self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        [self.view.layer addSublayer:self.captureVideoPreviewLayer];
+    } else {
+        BFALERT(tips);
     }
-    if([self.captureSession canAddOutput:captureOutput]){
-        [self.captureSession addOutput:captureOutput];
-    }
-    captureOutput.metadataObjectTypes = @[AVMetadataObjectTypeQRCode];
-    self.captureSession.sessionPreset = AVCaptureSessionPresetHigh;//设置扫描的画质
-    
-    self.captureVideoPreviewLayer =[AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
-    self.captureVideoPreviewLayer.frame = self.view.layer.bounds;
-    self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    [self.view.layer addSublayer:self.captureVideoPreviewLayer];
 }
 
 

@@ -72,53 +72,59 @@ static unsigned char HandShakeKey[16] = {
         return;
     }
 
-
-    //3.如果传入的 mac 地址为空，说明走的是激活方式
-    if (!model) {
-        //3.1 开启连接计时
-        [self startConnectTimer];
-        
-        //3.2 判断是否开启扫描
-        if (!centralManager.isScanning) {
-            isJustScan = NO;
-            [self startScanning];
-        }else{
-            isJustScan = NO;
-            for (NSString *mac in deviceDic.allKeys) {
-                if (![self isExist:mac]) {
-                    macStr = mac;
-                    CBPeripheral *peripheral = deviceDic[mac][0];
-                    scPeripheral = peripheral;
-                    scPeripheral.delegate = self;
-                    [centralManager connectPeripheral:peripheral options:nil];
-                    [centralManager stopScan];
-                    return;
-                }
-            }
-        }
-        return;
-    }
-    
     self.connectModel = model;
+    isJustScan = NO;
+    [self startConnectTimer];
+    [self startScanning];
     
-    [self startConnectTimer]; //开启连接计时
     
-    //4.如果传入mac 地址不为空，说明走的是直接连接
-    if ([deviceDic.allKeys containsObject:model.macStr]) {
-        CBPeripheral *peripheral = deviceDic[model.macStr][0];
-        macStr = model.macStr;
-        scPeripheral = peripheral;
-        scPeripheral.delegate = self;
-        //4.1 调用连接设备代理方法
-        [centralManager connectPeripheral:peripheral options:nil];
-        [centralManager stopScan];
-    }else {
-        //4.2 在当前列表中没有找到需要连接的蓝牙，扫描对应蓝牙
-        if (!centralManager.isScanning) {
-            isJustScan = NO;
-            [self startScanning];
-        }
-    }
+    //3.如果传入的 mac 地址为空，说明走的是激活方式
+//    if (!model) {
+//        //3.1 开启连接计时
+//        [self startConnectTimer];
+//    
+        //3.2 判断是否开启扫描
+//        if (!centralManager.isScanning) {
+//            isJustScan = NO;
+//            [self startScanning];
+//        }else{
+//            isJustScan = NO;
+//            for (NSString *mac in deviceDic.allKeys) {
+//                NSString *activity = deviceDic[mac][1];
+//                if (![self isExist:mac] && ) {
+//                    macStr = mac;
+//                    CBPeripheral *peripheral = deviceDic[mac][0];
+//                    scPeripheral = peripheral;
+//                    scPeripheral.delegate = self;
+//                    [centralManager connectPeripheral:peripheral options:nil];
+//                    [centralManager stopScan];
+//                    return;
+//                }
+//            }
+//        }
+//        return;
+//    }
+//    
+//    self.connectModel = model;
+//    
+//    [self startConnectTimer]; //开启连接计时
+    
+//    //4.如果传入mac 地址不为空，说明走的是直接连接
+//    if ([deviceDic.allKeys containsObject:model.macStr]) {
+//        CBPeripheral *peripheral = deviceDic[model.macStr][0];
+//        macStr = model.macStr;
+//        scPeripheral = peripheral;
+//        scPeripheral.delegate = self;
+//        //4.1 调用连接设备代理方法
+//        [centralManager connectPeripheral:peripheral options:nil];
+//        [centralManager stopScan];
+//    }else {
+//        //4.2 在当前列表中没有找到需要连接的蓝牙，扫描对应蓝牙
+//        if (!centralManager.isScanning) {
+//            isJustScan = NO;
+//            [self startScanning];
+//        }
+//    }
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -193,24 +199,32 @@ static unsigned char HandShakeKey[16] = {
                 //开锁用途
                 if (self.connectModel) {
                     if ([macString isEqualToString:self.connectModel.macStr]) {
-                        [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
-                        [centralManager stopScan];
+                        //判断是否已激活，防止旧记录去连接重置后的设备
+                        if ([activity isEqualToString:@"01"]) {
+                            //需要连接的设备
+                            scPeripheral = peripheral;
+                            scPeripheral.delegate = self;
+                            macStr = macString;
+                            
+                            [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
+                            [centralManager stopScan];
+                        }else {
+                            BFLog(@"设备被重置，删除记录重新激活");
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:@"设备被重置，删除记录重新激活"];
+                            [connectTimer invalidate];
+                        }
                     }
                 }//激活用途
                 else {
-                    if (![self isExist:macString]) {
+                    //如果不在本地列表，并且状态为未激活
+                    if (![self isExist:macString] && [activity isEqualToString:@"00"]) {
                         //需要连接的设备
                         scPeripheral = peripheral;
                         scPeripheral.delegate = self;
                         
                         macStr = macString;
-                        if ([activity isEqualToString:@"01"]) {
-                            //已激活的需要判断Mac地址
-                            return;
-                        }else {
-                            [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
-                            [centralManager stopScan];
-                        }
+                        [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
+                        [centralManager stopScan];
                     }
                 }
             }
@@ -264,9 +278,6 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
     }
 
     [self clearConnectInfo];
-    
-//    [connectTimer invalidate];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
     
     if (self.connectionStateBlock) {
         self.connectionStateBlock(connectionState);
@@ -366,7 +377,8 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
                 // 发送通知，激活失败
                 [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
             }
-        }//第二步验证成功
+        }
+        //第二步验证成功
         else if (![self isActivity:macStr] && characteristic.value.length==2){
             NSArray *deviceinfo = deviceDic[macStr];
             NSArray *newInfo = [NSArray arrayWithObjects:deviceinfo[0],@"01", nil];
@@ -383,16 +395,18 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
             [[AppContext sharedAppContext] addNewGarage:model];
             // 发送通知，刷新列表
             [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
-        }//开锁，设备发送16位随机数
+        }
+        //开锁，设备发送16位随机数
         else if ([self isActivity:macStr] && characteristic.value.length==16){
             //获取设备生产的16位随机数
             NSData *randomData = [self decryptData:[characteristic.value subdataWithRange:NSMakeRange(0, 16)] withKey:[NSData dataWithBytes:HandShakeKey length:16]];
-            BFLog(@"开锁获取随机数：%@",randomData);
+            BFLog(@"开锁获取随机数：%@ \n 加密密钥：%@",randomData,connectModel.secretKey2);
             [self sendTransparentData:[self encryptData:randomData withKey:connectModel.secretKey2]
                                  type:CBCharacteristicWriteWithResponse
                        characteristic:sendOpenCharateristic];
             
         }
+        //开锁确认
         else if ([self isActivity:macStr] && characteristic.value.length==2){
             BFLog(@"设备:%@ 开锁成功",macStr);
             [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTSUCCESS object:nil];
@@ -507,6 +521,10 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
     sendActivityCharateristic = nil;
     
     self.connectModel = nil;
+    macStr = nil;
+    handShakeKey2 = nil;
+    
+    [self stopBlueTooth];
 }
 
 //断开蓝牙
@@ -539,10 +557,12 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
 
 //立即停止蓝牙 --- 在页面退出或者释放的时候调用，同时把所有的block赋空
 - (void)stopBlueTooth {
-    BFLog(@"-------------------: 退出页面时停止蓝牙");
+    BFLog(@"-------------------: 停止蓝牙信息");
     if (centralManager != nil) {//如果扫描到设备，self.scPeripheral不为空
         [centralManager stopScan];
-        [centralManager cancelPeripheralConnection:scPeripheral];
+        if (scPeripheral) {
+            [centralManager cancelPeripheralConnection:scPeripheral];
+        }
     }
     
     if (connectTimer) {

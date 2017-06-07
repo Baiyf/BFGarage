@@ -33,7 +33,7 @@
                                                  name:NSNOTIFICATION_ACTIVITYSUCCESS
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(connectFailed)
+                                             selector:@selector(connectFailed:)
                                                  name:NSNOTIFICATION_CONNECTFAILED
                                                object:nil];
     
@@ -94,11 +94,16 @@
     _animationView.hidden = YES;
 }
 //蓝牙连接失败
-- (void)connectFailed {
+- (void)connectFailed:(NSNotification *)notification {
     [_animationView stopAnimating];//停止播放动画
     _animationView.hidden = YES;
     if (self.tabBarController.selectedIndex == 0 && self.navigationController.visibleViewController == self) {
-        BFALERT(@"Can not find the device");
+        if ([notification.object isKindOfClass:[NSString class]]) {
+            NSString *alert = notification.object;
+            BFALERT(alert);
+        }else {
+            BFALERT(@"Can not find the device");
+        }
     }
 }
 

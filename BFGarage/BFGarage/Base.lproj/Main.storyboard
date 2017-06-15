@@ -89,10 +89,10 @@
                                             <action selector="dismissActivityView:" destination="FZ8-db-eJY" eventType="touchUpInside" id="zDn-5C-yZr"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Looking for a new device... " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjv-kt-BPQ">
-                                        <rect key="frame" x="68" y="166.5" width="240" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Researching new device...please hold " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xjv-kt-BPQ">
+                                        <rect key="frame" x="43" y="166.5" width="290" height="21"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="240" id="IPW-w2-eIe"/>
+                                            <constraint firstAttribute="width" constant="290" id="IPW-w2-eIe"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
@@ -105,10 +105,10 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please hold open next to your" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fc0-1e-2Z3">
-                                        <rect key="frame" x="68" y="196.5" width="240" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="your mobile phone near by the device" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fc0-1e-2Z3">
+                                        <rect key="frame" x="43" y="206.5" width="290" height="21"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="240" id="Swu-Bn-g0w"/>
+                                            <constraint firstAttribute="width" constant="290" id="Swu-Bn-g0w"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
@@ -122,7 +122,7 @@
                                     <constraint firstItem="zfT-lv-jHH" firstAttribute="leading" secondItem="nMQ-0g-nIV" secondAttribute="leading" id="7RC-cV-E83"/>
                                     <constraint firstItem="Fc0-1e-2Z3" firstAttribute="centerX" secondItem="nMQ-0g-nIV" secondAttribute="centerX" id="Hwm-nC-6TX"/>
                                     <constraint firstItem="xjv-kt-BPQ" firstAttribute="centerX" secondItem="nMQ-0g-nIV" secondAttribute="centerX" id="J9b-Jr-X0T"/>
-                                    <constraint firstItem="Fc0-1e-2Z3" firstAttribute="centerY" secondItem="nMQ-0g-nIV" secondAttribute="centerY" constant="-70" id="dsz-aI-u68"/>
+                                    <constraint firstItem="Fc0-1e-2Z3" firstAttribute="centerY" secondItem="nMQ-0g-nIV" secondAttribute="centerY" constant="-60" id="dsz-aI-u68"/>
                                     <constraint firstAttribute="bottom" secondItem="zfT-lv-jHH" secondAttribute="bottom" id="jOw-b5-HjO"/>
                                     <constraint firstAttribute="trailing" secondItem="zfT-lv-jHH" secondAttribute="trailing" id="z0O-hu-xpO"/>
                                 </constraints>

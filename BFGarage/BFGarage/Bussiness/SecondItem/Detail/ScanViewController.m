@@ -34,8 +34,10 @@
 {
     
     AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    NSString *tips = NSLocalizedString(@"AVAuthorization", @"您没有权限访问相机");
-    if(status == AVAuthorizationStatusAuthorized) {
+    NSString *tips = NSLocalizedString(@"Please config in 'Setting->Privacy->Camera' to permit to visit your camera", @"请在iPhone的'设置-隐私-相机'中允许访问您的相机");
+    if (status == AVAuthorizationStatusRestricted || status ==AVAuthorizationStatusDenied) {
+         BFALERT(tips);
+    }else {
         // authorized
         NSError *error = nil;
         AVCaptureDevice* inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
@@ -61,8 +63,6 @@
         self.captureVideoPreviewLayer.frame = self.view.layer.bounds;
         self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         [self.view.layer addSublayer:self.captureVideoPreviewLayer];
-    } else {
-        BFALERT(tips);
     }
 }
 

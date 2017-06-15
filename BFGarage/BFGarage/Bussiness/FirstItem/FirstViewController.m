@@ -13,13 +13,19 @@
 
 @property (nonatomic, weak) IBOutlet UITableView *rootTableView;
 @property (nonatomic, weak) IBOutlet UIImageView *animationView;
+
+@property (nonatomic, strong) NSTimer *openTimer;
+@property (nonatomic, assign) BOOL enableOpen;
 @end
 
 @implementation FirstViewController
+@synthesize openTimer;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.enableOpen = YES;
     
     UINib *UserCenterLeftContentCellNib = [UINib nibWithNibName:@"HomeTableCell" bundle:nil];
     [self.rootTableView registerNib:UserCenterLeftContentCellNib forCellReuseIdentifier:@"HomeTableCellIdentifier"];
@@ -65,9 +71,9 @@
                             [UIImage imageNamed:@"open_2.png"],
                             [UIImage imageNamed:@"open_1.png"],
                             [UIImage imageNamed:@"open_0.png"],nil];
-    _animationView.animationImages = imagesArray;//将序列帧数组赋给UIImageView的animationImages属性
-    _animationView.animationDuration = 2.0;//设置动画时间
-    _animationView.animationRepeatCount = 0;//设置动画次数 0 表示无限
+    _animationView.animationImages = imagesArray;   //将序列帧数组赋给UIImageView的animationImages属性
+    _animationView.animationDuration = 2.0;         //设置动画时间
+    _animationView.animationRepeatCount = 0;        //设置动画次数 0 表示无限
 }
 
 - (void)didReceiveMemoryWarning {
@@ -105,6 +111,9 @@
             BFALERT(@"Can not find the device");
         }
     }
+    
+    //打开开关
+    [self openEnabled];
 }
 
 
@@ -129,11 +138,37 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (!self.enableOpen) {
+        return;
+    }
+    
     _animationView.hidden = NO;
     [_animationView startAnimating];//开始播放动画
     
     GarageModel *model = [AppContext sharedAppContext].garageArray[indexPath.row];
     [[AppContext sharedAppContext] connectGarage:model];
+    
+    [self startOpenTimer];
+}
+
+//开始计时，防止4秒内重复点击
+- (void)startOpenTimer {
+    self.enableOpen = NO;
+    if (openTimer) {
+        [openTimer invalidate];
+        openTimer = nil;
+    }
+    
+    //开一个定时器监控连接超时的情况
+    openTimer = [NSTimer scheduledTimerWithTimeInterval:4.0f
+                                                    target:self
+                                                  selector:@selector(openEnabled)
+                                                  userInfo:nil
+                                                   repeats:NO];
+}
+
+- (void)openEnabled {
+    self.enableOpen = YES;
 }
 
 - (void)dealloc {

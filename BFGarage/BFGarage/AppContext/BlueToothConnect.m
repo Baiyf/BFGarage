@@ -209,8 +209,8 @@ static unsigned char HandShakeKey[16] = {
                             [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
                             [centralManager stopScan];
                         }else {
-                            BFLog(@"设备被重置，删除记录重新激活");
-                            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:@"设备被重置，删除记录重新激活"];
+                            BFLog(@"Device is reset,please delete record and re-activate it.");
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:@"Device is reset,please delete record and re-activate it."];
                             [connectTimer invalidate];
                         }
                     }
@@ -237,7 +237,7 @@ static unsigned char HandShakeKey[16] = {
   didConnectPeripheral:(CBPeripheral *)peripheral
 {
     BFLog(@"-----------: 连接设备成功");
-    [connectTimer invalidate];
+//    [connectTimer invalidate];
     
     
     peripheral.delegate = self;
@@ -277,7 +277,7 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
         connectionState = BlueToothConnectionStateConnectionOff;
     }
 
-    [self clearConnectInfo];
+//    [self clearConnectInfo];
     
     if (self.connectionStateBlock) {
         self.connectionStateBlock(connectionState);
@@ -475,7 +475,6 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
                                             type:(CBCharacteristicWriteType)type
                                   characteristic:(CBCharacteristic *)characteristic{
     BFLog(@"加密后:%@",data);
-    
     if (characteristic == nil) {
         return CBCharacteristicWriteWithResponse;
     }
@@ -500,6 +499,7 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
         connectionState = BlueToothConnectionStateConnectionTimeOut;
         self.connectionStateBlock(BlueToothConnectionStateConnectionTimeOut);
     }
+    [self clearConnectInfo];
     [self disconnectPeripheral];
 
     //开锁或者激活失败

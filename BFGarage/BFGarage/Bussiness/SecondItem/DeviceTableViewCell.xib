@@ -20,10 +20,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIY-N4-XR5">
-                        <rect key="frame" x="18" y="3" width="140" height="30"/>
+                        <rect key="frame" x="18" y="6" width="140" height="25"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="140" id="0El-qS-O4y"/>
-                            <constraint firstAttribute="height" constant="30" id="u7R-Hu-PLR"/>
+                            <constraint firstAttribute="height" constant="25" id="u7R-Hu-PLR"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <state key="normal" title="Click to display QR code"/>
@@ -42,9 +42,9 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Swipe to delete)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pLu-ZN-tDH">
-                        <rect key="frame" x="183" y="8" width="129" height="21"/>
+                        <rect key="frame" x="187" y="8" width="125" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="129" id="0Zw-To-KBN"/>
+                            <constraint firstAttribute="width" constant="125" id="0Zw-To-KBN"/>
                             <constraint firstAttribute="height" constant="21" id="6HG-Jz-uok"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -67,12 +67,13 @@
                     <constraint firstItem="pLu-ZN-tDH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="Y4M-b4-kIN"/>
                     <constraint firstAttribute="bottomMargin" secondItem="L6q-oY-Esh" secondAttribute="bottom" constant="2" id="hif-0M-HWY"/>
                     <constraint firstItem="hK3-zL-MKl" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="n2o-KI-JYO"/>
-                    <constraint firstItem="dIY-N4-XR5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="3" id="s5j-xd-BYr"/>
+                    <constraint firstItem="dIY-N4-XR5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="6" id="s5j-xd-BYr"/>
                     <constraint firstItem="dIY-N4-XR5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="18" id="vqe-cu-bY2"/>
                     <constraint firstAttribute="bottomMargin" secondItem="hK3-zL-MKl" secondAttribute="bottom" constant="4.5" id="yFe-aE-oq6"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="QRbutton" destination="dIY-N4-XR5" id="1JV-nC-xb0"/>
                 <outlet property="titleLabel" destination="L6q-oY-Esh" id="BUe-4u-l8r"/>
             </connections>
             <point key="canvasLocation" x="170" y="54"/>

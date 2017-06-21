@@ -76,55 +76,6 @@ static unsigned char HandShakeKey[16] = {
     isJustScan = NO;
     [self startConnectTimer];
     [self startScanning];
-    
-    
-    //3.如果传入的 mac 地址为空，说明走的是激活方式
-//    if (!model) {
-//        //3.1 开启连接计时
-//        [self startConnectTimer];
-//    
-        //3.2 判断是否开启扫描
-//        if (!centralManager.isScanning) {
-//            isJustScan = NO;
-//            [self startScanning];
-//        }else{
-//            isJustScan = NO;
-//            for (NSString *mac in deviceDic.allKeys) {
-//                NSString *activity = deviceDic[mac][1];
-//                if (![self isExist:mac] && ) {
-//                    macStr = mac;
-//                    CBPeripheral *peripheral = deviceDic[mac][0];
-//                    scPeripheral = peripheral;
-//                    scPeripheral.delegate = self;
-//                    [centralManager connectPeripheral:peripheral options:nil];
-//                    [centralManager stopScan];
-//                    return;
-//                }
-//            }
-//        }
-//        return;
-//    }
-//    
-//    self.connectModel = model;
-//    
-//    [self startConnectTimer]; //开启连接计时
-    
-//    //4.如果传入mac 地址不为空，说明走的是直接连接
-//    if ([deviceDic.allKeys containsObject:model.macStr]) {
-//        CBPeripheral *peripheral = deviceDic[model.macStr][0];
-//        macStr = model.macStr;
-//        scPeripheral = peripheral;
-//        scPeripheral.delegate = self;
-//        //4.1 调用连接设备代理方法
-//        [centralManager connectPeripheral:peripheral options:nil];
-//        [centralManager stopScan];
-//    }else {
-//        //4.2 在当前列表中没有找到需要连接的蓝牙，扫描对应蓝牙
-//        if (!centralManager.isScanning) {
-//            isJustScan = NO;
-//            [self startScanning];
-//        }
-//    }
 }
 
 #pragma mark - CBCentralManagerDelegate
@@ -276,8 +227,6 @@ didDisconnectPeripheral:(CBPeripheral *)peripheral
         BFLog(@"-----------:蓝牙正常断开");
         connectionState = BlueToothConnectionStateConnectionOff;
     }
-
-//    [self clearConnectInfo];
     
     if (self.connectionStateBlock) {
         self.connectionStateBlock(connectionState);
@@ -334,6 +283,7 @@ didDiscoverCharacteristicsForService:(CBService *)service
                 BFLog(@"连接设备已被激活");
                 // 发送通知，激活失败
                 [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+                [connectTimer invalidate];
             }
         }
     }
@@ -376,6 +326,7 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
             }else {
                 // 发送通知，激活失败
                 [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+                [connectTimer invalidate];
             }
         }
         //第二步验证成功
@@ -410,6 +361,7 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
         else if ([self isActivity:macStr] && characteristic.value.length==2){
             BFLog(@"设备:%@ 开锁成功",macStr);
             [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTSUCCESS object:nil];
+            [connectTimer invalidate];
         }
     }
 }

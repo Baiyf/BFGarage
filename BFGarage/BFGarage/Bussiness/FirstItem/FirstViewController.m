@@ -11,6 +11,9 @@
 
 @interface FirstViewController ()<UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *nodeviceImageWidth;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *nodeviceImageHeight;
+
 @property (nonatomic, weak) IBOutlet UITableView *rootTableView;
 @property (nonatomic, weak) IBOutlet UIImageView *animationView;
 
@@ -74,6 +77,11 @@
     _animationView.animationImages = imagesArray;   //将序列帧数组赋给UIImageView的animationImages属性
     _animationView.animationDuration = 2.0;         //设置动画时间
     _animationView.animationRepeatCount = 0;        //设置动画次数 0 表示无限
+    
+    if ([UIScreen mainScreen].bounds.size.width == 320) {
+        self.nodeviceImageWidth.constant = 200;
+        self.nodeviceImageHeight.constant = 210;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

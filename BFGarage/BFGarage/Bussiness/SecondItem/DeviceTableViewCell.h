@@ -12,6 +12,7 @@ typedef void (^DisplayQRBlock) (NSIndexPath *indexPath);
 
 @interface DeviceTableViewCell : UITableViewCell
 @property (nonatomic, strong) NSIndexPath *cellIndex;
+@property (nonatomic, weak) IBOutlet UIButton *QRbutton;
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;
 @property (nonatomic, strong) DisplayQRBlock qrBlock;
 @end

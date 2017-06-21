@@ -14,7 +14,9 @@
 @interface SecondViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, weak) IBOutlet UIButton *linkButton;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *linkButtonWidth;
 @property (nonatomic, weak) IBOutlet UIButton *scanButton;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *scanButtonWidth;
 
 @property (nonatomic, weak) IBOutlet UITableView *rootTableView;
 
@@ -48,6 +50,11 @@
                                              selector:@selector(connectFailed)
                                                  name:NSNOTIFICATION_CONNECTFAILED
                                                object:nil];
+    
+    if ([UIScreen mainScreen].bounds.size.width == 320) {
+        self.linkButtonWidth.constant = 140;
+        self.scanButtonWidth.constant = 140;
+    }
 }
 
 //刷新设备列表

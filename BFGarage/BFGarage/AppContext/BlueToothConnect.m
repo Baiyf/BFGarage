@@ -341,11 +341,12 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
             GarageModel *model = [[GarageModel alloc] init];
             model.isOwner = YES;
             model.macStr = macStr;
-            model.name = [@"SC-" stringByAppendingFormat:@"%@",[macStr substringToIndex:2]];
+            model.name = [@"Digital Ant-" stringByAppendingFormat:@"%@",[macStr substringFromIndex:macStr.length-2]];
             model.secretKey2 = handShakeKey2;
             [[AppContext sharedAppContext] addNewGarage:model];
             // 发送通知，刷新列表
             [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
+            [connectTimer invalidate];
         }
         //开锁，设备发送16位随机数
         else if ([self isActivity:macStr] && characteristic.value.length==16){
@@ -536,7 +537,7 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
     }
 }
 
-//发送命令 10位随机数作头部加上6位MAC组成20bytes，使用密钥加密
+//发送命令 10位随机数作头部 + 6位MAC组成16bytes，使用密钥加密
 - (void)sendValueWithKey:(NSData *)key characteristic:(CBCharacteristic *)characteristic
 {
     NSMutableData *data=[NSMutableData data];

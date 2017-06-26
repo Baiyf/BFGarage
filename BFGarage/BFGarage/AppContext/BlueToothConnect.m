@@ -67,8 +67,7 @@ static unsigned char HandShakeKey[16] = {
         
     }
     else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
-        BFALERT(@"Something Wrong with Bluetooth");
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:@"Something Wrong with Bluetooth"];
         return;
     }
 
@@ -585,7 +584,6 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
     //加密后的数据
     aesEncInit();
     aesEncrypt(dat, chainCipherBlock);
-//    aesEncrypt(dat+16, chainCipherBlock);
     
     NSMutableData *sendData = [NSMutableData dataWithBytes:dat length:16];
     NSData *hexData2 = [self hexToBytes:@"00000000"];

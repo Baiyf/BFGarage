@@ -19,14 +19,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="99.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIY-N4-XR5">
-                        <rect key="frame" x="18" y="12" width="150" height="35"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dIY-N4-XR5">
+                        <rect key="frame" x="18" y="15" width="180" height="35"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="150" id="0El-qS-O4y"/>
+                            <constraint firstAttribute="width" constant="180" id="0El-qS-O4y"/>
                             <constraint firstAttribute="height" constant="35" id="u7R-Hu-PLR"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                        <state key="normal" title="Click to display QR code">
+                        <state key="normal" image="Setting-QRCode">
                             <color key="titleColor" red="0.20000000000000001" green="0.67450980392156867" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
                         <connections>
@@ -67,7 +66,7 @@
                     <constraint firstItem="Zpw-rw-Op4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="7" id="gAq-C9-lKy"/>
                     <constraint firstAttribute="bottomMargin" secondItem="L6q-oY-Esh" secondAttribute="bottom" constant="2" id="hif-0M-HWY"/>
                     <constraint firstItem="hK3-zL-MKl" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" constant="-6" id="n2o-KI-JYO"/>
-                    <constraint firstItem="dIY-N4-XR5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="s5j-xd-BYr"/>
+                    <constraint firstItem="dIY-N4-XR5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="s5j-xd-BYr"/>
                     <constraint firstItem="dIY-N4-XR5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="18" id="vqe-cu-bY2"/>
                     <constraint firstAttribute="bottomMargin" secondItem="hK3-zL-MKl" secondAttribute="bottom" constant="4.5" id="yFe-aE-oq6"/>
                 </constraints>
@@ -81,5 +80,6 @@
     </objects>
     <resources>
         <image name="Setting-Delete" width="64" height="40"/>
+        <image name="Setting-QRCode" width="180" height="35"/>
     </resources>
 </document>

@@ -47,7 +47,7 @@
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(connectFailed)
+                                             selector:@selector(connectFailed:)
                                                  name:NSNOTIFICATION_CONNECTFAILED
                                                object:nil];
     
@@ -65,18 +65,24 @@
 }
 
 //激活失败
-- (void)connectFailed {
+- (void)connectFailed:(NSNotification *)notification {
     self.activityTipsView.hidden = YES;
     if (self.tabBarController.selectedIndex == 1 && self.navigationController.visibleViewController == self) {
-        BFALERT(@"Application could not find any new devices for pairing.\n Some devices may requirefactory reset before it can be activited.");
+        if ([notification.object isKindOfClass:[NSString class]]) {
+            NSString *alert = notification.object;
+            BFALERT(alert);
+        }else {
+            BFALERT(@"Application could not find any new devices for pairing.\n Some devices may requirefactory reset before it can be activited.");
+        }
     }
 }
 
 #pragma mark - button actions
 //激活操作
 - (IBAction)activityConnect:(id)sender {
-    [[AppContext sharedAppContext] connectGarage:nil];
     self.activityTipsView.hidden = NO;
+    
+    [[AppContext sharedAppContext] connectGarage:nil];
 }
 
 //二维码扫描

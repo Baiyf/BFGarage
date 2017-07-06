@@ -52,8 +52,8 @@
                                                object:nil];
     
     if ([UIScreen mainScreen].bounds.size.width == 320) {
-        self.linkButtonWidth.constant = 140;
-        self.scanButtonWidth.constant = 140;
+        self.linkButtonWidth.constant = 138;
+        self.scanButtonWidth.constant = 138;
     }
 }
 
@@ -120,33 +120,25 @@
     cell.titleLabel.text = model.name ? model.name : model.macStr;
     cell.cellIndex = indexPath;
     __weak typeof(self) weakSelf = self;
+    //修改名称
+    [cell setEditBlock:^(NSIndexPath *cellIndex){
+        weakSelf.selectIndex = cellIndex;
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf showEditNameAlertView];
+    }];
+    //删除设备
+    [cell setDeleteBlock:^(NSIndexPath *cellIndex){
+        weakSelf.selectIndex = cellIndex;
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf deleteDevice];
+    }];
+    //显示二维码
     [cell setQrBlock:^(NSIndexPath *cellIndex){
         weakSelf.selectIndex = cellIndex;
-        [weakSelf showQRAlertView];
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf showQRAlertView];
     }];
     return cell;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle==UITableViewCellEditingStyleDelete)
-    {
-        // 删除数据的操作
-        [[AppContext sharedAppContext] deleteGarage:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Garage Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
-    [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
-    alert.tag = 80;
-    UITextField *txtName = [alert textFieldAtIndex:0];
-    txtName.placeholder = @"Please enter name";
-    [alert show];
-    
-    self.selectIndex = indexPath;
 }
 
 #pragma mark - UIAlertView Delegate
@@ -161,16 +153,42 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
         }
     }
-    else {
+    else if (alertView.tag == 81) {
         if (buttonIndex == 1) {
             [self showQRView];
         }
     }
+    else if (alertView.tag == 82) {
+        if (buttonIndex == 1) {
+            [[AppContext sharedAppContext] deleteGarage:self.selectIndex.row];
+            [self.rootTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:self.selectIndex] withRowAnimation:UITableViewRowAnimationNone];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
+        }
+    }
 }
 
+#pragma mark - 辅助方法
+//显示编辑名称内容
+- (void)showEditNameAlertView {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Garage Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
+    [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    alert.tag = 80;
+    UITextField *txtName = [alert textFieldAtIndex:0];
+    txtName.placeholder = @"Please enter name";
+    [alert show];
+}
+
+//显示QRCode提示内容
 - (void)showQRAlertView {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Please pay attention to the protection of the QR code in order to avoid the loss of your property." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
     alert.tag = 81;
+    [alert show];
+}
+
+//删除数据的操作
+- (void)deleteDevice {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You can't open your garage after deleting this device.\n Are you sure to delete this device?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
+    alert.tag = 82;
     [alert show];
 }
 
@@ -185,6 +203,9 @@
     
     // 2. 给滤镜添加数据
     NSString *secretString = [NSString stringWithFormat:@"%@",model.secretKey2];
+    secretString=[[secretString uppercaseString] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    secretString=[secretString stringByReplacingOccurrencesOfString:@"<" withString:@""];
+    secretString=[secretString stringByReplacingOccurrencesOfString:@">" withString:@""];
     NSDictionary *infoDic = [NSDictionary dictionaryWithObjectsAndKeys:
                              model.name, @"name",
                              model.macStr, @"macStr",
@@ -204,7 +225,6 @@
 
 #pragma mark -- 对图像进行清晰处理，很关键！
 - (UIImage *)excludeFuzzyImageFromCIImage:(CIImage *)image size:(CGFloat)size
-
 {
     CGRect extent = CGRectIntegral(image.extent);
     
@@ -241,7 +261,8 @@
     return [UIImage imageWithCGImage: scaledImage];
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

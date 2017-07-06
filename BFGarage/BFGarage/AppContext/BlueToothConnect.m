@@ -162,6 +162,7 @@ static unsigned char HandShakeKey[16] = {
                             BFLog(@"Device is reset,please delete record and re-activate it.");
                             [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:@"Device is reset,please delete record and re-activate it."];
                             [connectTimer invalidate];
+                            [centralManager stopScan];
                         }
                     }
                 }//激活用途
@@ -338,7 +339,6 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
             
             //加入本地缓存列表
             GarageModel *model = [[GarageModel alloc] init];
-            model.isOwner = YES;
             model.macStr = macStr;
             model.name = [@"Digital Ant-" stringByAppendingFormat:@"%@",[macStr substringFromIndex:macStr.length-2]];
             model.secretKey2 = handShakeKey2;

@@ -22,38 +22,34 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Common_background" translatesAutoresizingMaskIntoConstraints="NO" id="JQf-Xi-GH9">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Kq-dm-957">
-                                <rect key="frame" x="10" y="84" width="160" height="50"/>
+                                <rect key="frame" x="10" y="79" width="170" height="43"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="160" id="4un-Es-H8G"/>
-                                    <constraint firstAttribute="height" constant="50" id="Lkj-qC-Wfh"/>
+                                    <constraint firstAttribute="width" constant="170" id="4un-Es-H8G"/>
+                                    <constraint firstAttribute="height" constant="43" id="Lkj-qC-Wfh"/>
                                 </constraints>
-                                <state key="normal" image="Setting_Connect"/>
+                                <state key="normal" backgroundImage="Setting_Connect"/>
                                 <connections>
                                     <action selector="activityConnect:" destination="FZ8-db-eJY" eventType="touchUpInside" id="v9h-UO-y97"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JdL-yr-ATA">
-                                <rect key="frame" x="205" y="84" width="160" height="50"/>
+                                <rect key="frame" x="195" y="79" width="170" height="43"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="160" id="GzH-mb-Efu"/>
-                                    <constraint firstAttribute="height" constant="50" id="NmN-DF-wHE"/>
+                                    <constraint firstAttribute="width" constant="170" id="GzH-mb-Efu"/>
+                                    <constraint firstAttribute="height" constant="43" id="NmN-DF-wHE"/>
                                 </constraints>
-                                <state key="normal" image="Setting_ScanQRcode"/>
+                                <state key="normal" backgroundImage="Setting_ScanQRcode"/>
                                 <connections>
                                     <action selector="scanQRCode:" destination="FZ8-db-eJY" eventType="touchUpInside" id="Y95-7c-5EE"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PVS-rn-8Ug">
-                                <rect key="frame" x="0.0" y="152" width="375" height="1"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="NWc-z7-O2S"/>
-                                </constraints>
-                            </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="b3O-si-ZnZ">
-                                <rect key="frame" x="0.0" y="154" width="375" height="464"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="117" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="b3O-si-ZnZ">
+                                <rect key="frame" x="0.0" y="134" width="375" height="484"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <connections>
                                     <outlet property="dataSource" destination="FZ8-db-eJY" id="ilm-Aa-mTp"/>
@@ -140,20 +136,21 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="JQf-Xi-GH9" secondAttribute="bottom" id="0Eq-mG-c8u"/>
                             <constraint firstItem="Kev-zX-QYN" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="7y0-Ow-dbN"/>
                             <constraint firstItem="Kev-zX-QYN" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" id="B7F-1C-M4i"/>
                             <constraint firstAttribute="trailing" secondItem="Kev-zX-QYN" secondAttribute="trailing" id="EmD-rt-AmO"/>
+                            <constraint firstItem="JQf-Xi-GH9" firstAttribute="top" secondItem="Nwy-ar-WcI" secondAttribute="top" id="G0F-Ff-Pmb"/>
                             <constraint firstItem="BdT-Gk-Ev3" firstAttribute="top" secondItem="nMQ-0g-nIV" secondAttribute="bottom" id="Liv-Qg-IBf"/>
                             <constraint firstItem="2Kq-dm-957" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" constant="10" id="Mez-1J-kFg"/>
-                            <constraint firstItem="PVS-rn-8Ug" firstAttribute="top" secondItem="JdL-yr-ATA" secondAttribute="bottom" constant="18" id="QHA-VC-NWm"/>
                             <constraint firstItem="b3O-si-ZnZ" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="QMp-IA-cY3"/>
-                            <constraint firstItem="b3O-si-ZnZ" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="90" id="TJa-ri-6S3"/>
-                            <constraint firstAttribute="trailing" secondItem="PVS-rn-8Ug" secondAttribute="trailing" id="Wac-rN-uGA"/>
-                            <constraint firstItem="JdL-yr-ATA" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="20" id="a7T-NU-QNL"/>
-                            <constraint firstItem="2Kq-dm-957" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="20" id="bKL-ct-bWg"/>
+                            <constraint firstItem="b3O-si-ZnZ" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="70" id="TJa-ri-6S3"/>
+                            <constraint firstAttribute="trailing" secondItem="JQf-Xi-GH9" secondAttribute="trailing" id="VjB-Hq-B0j"/>
+                            <constraint firstItem="JdL-yr-ATA" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="15" id="a7T-NU-QNL"/>
+                            <constraint firstItem="2Kq-dm-957" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="15" id="bKL-ct-bWg"/>
                             <constraint firstItem="nMQ-0g-nIV" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" id="cf6-ft-OLc"/>
-                            <constraint firstItem="PVS-rn-8Ug" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="gYq-lA-rSa"/>
                             <constraint firstItem="BdT-Gk-Ev3" firstAttribute="top" secondItem="Kev-zX-QYN" secondAttribute="bottom" id="jpo-lP-COn"/>
+                            <constraint firstItem="JQf-Xi-GH9" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="kUi-r0-chh"/>
                             <constraint firstItem="nMQ-0g-nIV" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="pWF-z5-zJF"/>
                             <constraint firstAttribute="trailing" secondItem="nMQ-0g-nIV" secondAttribute="trailing" id="tro-Zx-P7K"/>
                             <constraint firstItem="BdT-Gk-Ev3" firstAttribute="top" secondItem="b3O-si-ZnZ" secondAttribute="bottom" id="uF9-L7-6ep"/>
@@ -356,14 +353,15 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Setting_Connect" width="320" height="100"/>
-        <image name="Setting_ScanQRcode" width="320" height="100"/>
+        <image name="Common_background" width="414" height="736"/>
+        <image name="Setting_Connect" width="138" height="43"/>
+        <image name="Setting_ScanQRcode" width="138" height="43"/>
         <image name="home_nodevice" width="345" height="364"/>
-        <image name="home_normal" width="30" height="30"/>
-        <image name="home_select" width="30" height="30"/>
-        <image name="setting_normal" width="30" height="30"/>
-        <image name="setting_select" width="30" height="30"/>
-        <image name="shopping_normal" width="30" height="30"/>
-        <image name="shopping_select" width="30" height="30"/>
+        <image name="home_normal" width="25" height="25"/>
+        <image name="home_select" width="25" height="25"/>
+        <image name="setting_normal" width="25" height="25"/>
+        <image name="setting_select" width="25" height="25"/>
+        <image name="shopping_normal" width="25" height="25"/>
+        <image name="shopping_select" width="25" height="25"/>
     </resources>
 </document>

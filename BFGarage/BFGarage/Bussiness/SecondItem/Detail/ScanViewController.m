@@ -144,7 +144,6 @@
             if (resultDic[@"macStr"] && resultDic[@"secretKey2"]) {
                 //加入本地缓存列表
                 GarageModel *model = [[GarageModel alloc] init];
-                model.isOwner = YES;
                 model.macStr = resultDic[@"macStr"];
                 model.name = resultDic[@"name"]?resultDic[@"name"]:resultDic[@"macStr"];
                 NSString *secretStr = resultDic[@"secretKey2"];

@@ -12,17 +12,31 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code  51 172 224
+    // Initialization code
     
-    self.QRbutton.layer.borderColor = [UIColor colorWithRed:51.0/255.0f green:172.0/255.0f blue:224.0/255.0f alpha:1.0].CGColor;
-    self.QRbutton.layer.borderWidth = 1.0f;
-    self.QRbutton.layer.cornerRadius = 3.0f;
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width-70;
+    self.deleteWidthConstraint.constant = self.qrWidthConstraint.constant = 1.0 * screenWidth / 2;
+    if ([UIScreen mainScreen].bounds.size.width == 320) {
+        [self.qrButton.titleLabel setFont:[UIFont systemFontOfSize:10.0]];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (IBAction)editNameButtonOnClicked:(id)sender {
+    if (self.editBlock) {
+        self.editBlock(self.cellIndex);
+    }
+}
+
+- (IBAction)deleteButtonOnClicked:(id)sender {
+    if (self.deleteBlock) {
+        self.deleteBlock(self.cellIndex);
+    }
 }
 
 - (IBAction)displayQrcode:(id)sender {

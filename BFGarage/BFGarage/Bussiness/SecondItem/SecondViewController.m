@@ -15,8 +15,10 @@
 
 @property (nonatomic, weak) IBOutlet UIButton *linkButton;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *linkButtonWidth;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *linkViewWidth;
 @property (nonatomic, weak) IBOutlet UIButton *scanButton;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *scanButtonWidth;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *scanViewWidth;
 
 @property (nonatomic, weak) IBOutlet UITableView *rootTableView;
 
@@ -54,6 +56,8 @@
     if ([UIScreen mainScreen].bounds.size.width == 320) {
         self.linkButtonWidth.constant = 138;
         self.scanButtonWidth.constant = 138;
+        self.linkViewWidth.constant = 138;
+        self.scanViewWidth.constant = 138;
     }
 }
 

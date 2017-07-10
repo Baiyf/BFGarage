@@ -25,24 +25,67 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Common_background" translatesAutoresizingMaskIntoConstraints="NO" id="JQf-Xi-GH9">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
+                            <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GP9-93-g6j">
+                                <rect key="frame" x="10" y="79" width="170" height="43"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="170" id="QFv-BT-fKc"/>
+                                    <constraint firstAttribute="height" constant="43" id="uKS-W7-ie5"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Kq-dm-957">
                                 <rect key="frame" x="10" y="79" width="170" height="43"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="170" id="4un-Es-H8G"/>
                                     <constraint firstAttribute="height" constant="43" id="Lkj-qC-Wfh"/>
                                 </constraints>
-                                <state key="normal" backgroundImage="Setting_Connect"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <state key="normal" title=" Connect device" image="Setting_Connect"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="activityConnect:" destination="FZ8-db-eJY" eventType="touchUpInside" id="v9h-UO-y97"/>
                                 </connections>
                             </button>
+                            <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j7t-nE-HyI">
+                                <rect key="frame" x="195" y="79" width="170" height="43"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="43" id="ULa-3R-Y51"/>
+                                    <constraint firstAttribute="width" constant="170" id="f0M-Nr-4Qw"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JdL-yr-ATA">
                                 <rect key="frame" x="195" y="79" width="170" height="43"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="170" id="GzH-mb-Efu"/>
                                     <constraint firstAttribute="height" constant="43" id="NmN-DF-wHE"/>
                                 </constraints>
-                                <state key="normal" backgroundImage="Setting_ScanQRcode"/>
+                                <state key="normal" title=" Scan QR code" image="Setting_ScanQRcode"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="scanQRCode:" destination="FZ8-db-eJY" eventType="touchUpInside" id="Y95-7c-5EE"/>
                                 </connections>
@@ -138,11 +181,14 @@
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="JQf-Xi-GH9" secondAttribute="bottom" id="0Eq-mG-c8u"/>
                             <constraint firstItem="Kev-zX-QYN" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="7y0-Ow-dbN"/>
+                            <constraint firstItem="GP9-93-g6j" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" constant="10" id="8or-8R-25R"/>
                             <constraint firstItem="Kev-zX-QYN" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" id="B7F-1C-M4i"/>
                             <constraint firstAttribute="trailing" secondItem="Kev-zX-QYN" secondAttribute="trailing" id="EmD-rt-AmO"/>
                             <constraint firstItem="JQf-Xi-GH9" firstAttribute="top" secondItem="Nwy-ar-WcI" secondAttribute="top" id="G0F-Ff-Pmb"/>
+                            <constraint firstItem="j7t-nE-HyI" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="15" id="Huy-9u-DwL"/>
                             <constraint firstItem="BdT-Gk-Ev3" firstAttribute="top" secondItem="nMQ-0g-nIV" secondAttribute="bottom" id="Liv-Qg-IBf"/>
                             <constraint firstItem="2Kq-dm-957" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" constant="10" id="Mez-1J-kFg"/>
+                            <constraint firstItem="GP9-93-g6j" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="15" id="PaH-eF-V7m"/>
                             <constraint firstItem="b3O-si-ZnZ" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="QMp-IA-cY3"/>
                             <constraint firstItem="b3O-si-ZnZ" firstAttribute="top" secondItem="o7i-Ij-EK6" secondAttribute="bottom" constant="70" id="TJa-ri-6S3"/>
                             <constraint firstAttribute="trailing" secondItem="JQf-Xi-GH9" secondAttribute="trailing" id="VjB-Hq-B0j"/>
@@ -154,6 +200,7 @@
                             <constraint firstItem="nMQ-0g-nIV" firstAttribute="leading" secondItem="Nwy-ar-WcI" secondAttribute="leading" id="pWF-z5-zJF"/>
                             <constraint firstAttribute="trailing" secondItem="nMQ-0g-nIV" secondAttribute="trailing" id="tro-Zx-P7K"/>
                             <constraint firstItem="BdT-Gk-Ev3" firstAttribute="top" secondItem="b3O-si-ZnZ" secondAttribute="bottom" id="uF9-L7-6ep"/>
+                            <constraint firstAttribute="trailing" secondItem="j7t-nE-HyI" secondAttribute="trailing" constant="10" id="umo-Z3-Cdp"/>
                             <constraint firstAttribute="trailing" secondItem="b3O-si-ZnZ" secondAttribute="trailing" id="xOA-3n-sSF"/>
                             <constraint firstAttribute="trailing" secondItem="JdL-yr-ATA" secondAttribute="trailing" constant="10" id="zoG-aD-mub"/>
                         </constraints>
@@ -162,12 +209,14 @@
                     <connections>
                         <outlet property="activityTipsView" destination="nMQ-0g-nIV" id="i0Y-KF-iN8"/>
                         <outlet property="linkButton" destination="2Kq-dm-957" id="jOe-Y9-xu2"/>
-                        <outlet property="linkButtonWidth" destination="4un-Es-H8G" id="7H5-GQ-0kq"/>
+                        <outlet property="linkButtonWidth" destination="4un-Es-H8G" id="Dvo-Ai-S4S"/>
+                        <outlet property="linkViewWidth" destination="QFv-BT-fKc" id="xqW-96-NJG"/>
                         <outlet property="qrImageView" destination="0AZ-Is-JkR" id="sXN-Wa-8jU"/>
                         <outlet property="qrTipsView" destination="Kev-zX-QYN" id="Ycz-eU-Qks"/>
                         <outlet property="rootTableView" destination="b3O-si-ZnZ" id="fL7-xt-1nN"/>
                         <outlet property="scanButton" destination="JdL-yr-ATA" id="VZY-QY-4X1"/>
                         <outlet property="scanButtonWidth" destination="GzH-mb-Efu" id="qLT-fw-jfk"/>
+                        <outlet property="scanViewWidth" destination="f0M-Nr-4Qw" id="fha-XI-W4O"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y58-h9-2r9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -354,8 +403,8 @@
     </scenes>
     <resources>
         <image name="Common_background" width="414" height="736"/>
-        <image name="Setting_Connect" width="138" height="43"/>
-        <image name="Setting_ScanQRcode" width="138" height="43"/>
+        <image name="Setting_Connect" width="16" height="16"/>
+        <image name="Setting_ScanQRcode" width="16" height="16"/>
         <image name="home_nodevice" width="345" height="364"/>
         <image name="home_normal" width="25" height="25"/>
         <image name="home_select" width="25" height="25"/>

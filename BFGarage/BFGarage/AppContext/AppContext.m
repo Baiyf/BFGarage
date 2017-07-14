@@ -74,7 +74,18 @@ static AppContext *shareAppContext = nil;
 - (void)addNewGarage:(GarageModel *)model
 {
     if (model) {
-        [self.garageArray addObject:model];
+        BOOL have = NO;
+        for (GarageModel *aModel in self.garageArray) {
+            if ([aModel.macStr isEqualToString:model.macStr]) {
+                aModel.secretKey2 = model.secretKey2;
+                have = YES;
+                break;
+            }
+        }
+        
+        if (!have) {
+            [self.garageArray addObject:model];
+        }
     }
     //数据持久化到本地
     [NSKeyedArchiver archiveRootObject:self.garageArray toFile:CACHEPATH];

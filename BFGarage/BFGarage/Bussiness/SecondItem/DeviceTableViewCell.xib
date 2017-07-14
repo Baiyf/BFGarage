@@ -56,13 +56,13 @@
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X4F-tl-WGn">
                         <rect key="frame" x="140" y="77" width="160" height="30"/>
-                        <color key="backgroundColor" red="0.99215686274509807" green="0.4823529411764706" blue="0.4823529411764706" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.2784313725" green="0.66666666669999997" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="160" id="BIS-ET-Iq9"/>
                             <constraint firstAttribute="height" constant="30" id="IXz-sx-RtJ"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <state key="normal" title="Delete">
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <state key="normal" title="Click to edit name">
                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </state>
                         <state key="selected">
@@ -75,33 +75,42 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>
-                            <action selector="deleteButtonOnClicked:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="5Yf-jK-r9S"/>
+                            <action selector="editNameButtonOnClicked:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="5Nn-3l-FgR"/>
                         </connections>
                     </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="89J-hJ-bQv">
-                        <rect key="frame" x="259" y="37" width="48" height="22"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Setting-Delete" translatesAutoresizingMaskIntoConstraints="NO" id="Nbp-dP-Sne">
+                        <rect key="frame" x="285" y="13" width="15" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="48" id="Ldy-EY-zcM"/>
+                            <constraint firstAttribute="width" constant="15" id="SGH-FZ-wxl"/>
+                            <constraint firstAttribute="height" constant="20" id="dhv-es-PIw"/>
+                        </constraints>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="89J-hJ-bQv">
+                        <rect key="frame" x="270" y="13" width="40" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="40" id="Ldy-EY-zcM"/>
                             <constraint firstAttribute="height" constant="22" id="TpV-gA-Ihf"/>
                         </constraints>
-                        <state key="normal" image="Setting_Edit">
+                        <state key="normal">
                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </state>
                         <connections>
-                            <action selector="editNameButtonOnClicked:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="VVR-sR-QPX"/>
+                            <action selector="deleteButtonOnClicked:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Vl3-zk-AzI"/>
                         </connections>
                     </button>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
-                    <constraint firstItem="X4F-tl-WGn" firstAttribute="top" secondItem="89J-hJ-bQv" secondAttribute="bottom" constant="18" id="5xs-jq-GVu"/>
+                    <constraint firstItem="X4F-tl-WGn" firstAttribute="top" secondItem="89J-hJ-bQv" secondAttribute="bottom" constant="42" id="5xs-jq-GVu"/>
                     <constraint firstItem="x6m-Zy-rYb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="2" id="93l-1A-KkE"/>
                     <constraint firstItem="dIY-N4-XR5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="BHc-pc-rKf"/>
+                    <constraint firstAttribute="trailing" secondItem="Nbp-dP-Sne" secondAttribute="trailing" constant="20" id="Bp4-aC-4pI"/>
                     <constraint firstItem="x6m-Zy-rYb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="P8b-55-X4W"/>
                     <constraint firstAttribute="bottom" secondItem="x6m-Zy-rYb" secondAttribute="bottom" constant="2" id="Pe8-nB-KfB"/>
+                    <constraint firstItem="Nbp-dP-Sne" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="13" id="SmU-kz-PGK"/>
                     <constraint firstItem="dIY-N4-XR5" firstAttribute="top" secondItem="6k4-mu-6wA" secondAttribute="bottom" constant="10" id="Wku-z7-EaC"/>
                     <constraint firstItem="X4F-tl-WGn" firstAttribute="centerY" secondItem="dIY-N4-XR5" secondAttribute="centerY" id="Z8t-PZ-1TL"/>
-                    <constraint firstAttribute="trailing" secondItem="89J-hJ-bQv" secondAttribute="trailing" constant="13" id="jWj-Rs-49f"/>
+                    <constraint firstAttribute="trailing" secondItem="89J-hJ-bQv" secondAttribute="trailing" constant="10" id="jWj-Rs-49f"/>
                     <constraint firstItem="6k4-mu-6wA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="jbG-0y-os8"/>
                     <constraint firstAttribute="trailing" secondItem="X4F-tl-WGn" secondAttribute="trailing" constant="20" id="oNy-lh-rTW"/>
                     <constraint firstAttribute="trailing" secondItem="x6m-Zy-rYb" secondAttribute="trailing" constant="10" id="p3W-Pl-r1E"/>
@@ -110,6 +119,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
+                <outlet property="deleteButton" destination="X4F-tl-WGn" id="JMX-ka-ByO"/>
                 <outlet property="deleteWidthConstraint" destination="BIS-ET-Iq9" id="He9-gB-dLy"/>
                 <outlet property="qrButton" destination="dIY-N4-XR5" id="RK1-od-9ai"/>
                 <outlet property="qrWidthConstraint" destination="VDv-YE-RSB" id="zPs-4H-oO9"/>
@@ -119,8 +129,8 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="Setting-Delete" width="20" height="22"/>
         <image name="Setting-logo" width="55" height="55"/>
-        <image name="Setting_Edit" width="20" height="20"/>
         <image name="Setting_background" width="294" height="100"/>
     </resources>
 </document>

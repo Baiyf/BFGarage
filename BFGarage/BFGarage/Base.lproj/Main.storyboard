@@ -130,8 +130,9 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nMQ-0g-nIV">
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zfT-lv-jHH">
+                                    <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zfT-lv-jHH">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <action selector="dismissActivityView:" destination="FZ8-db-eJY" eventType="touchUpInside" id="zDn-5C-yZr"/>
                                         </connections>
@@ -161,7 +162,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="zfT-lv-jHH" firstAttribute="top" secondItem="nMQ-0g-nIV" secondAttribute="top" id="4t4-rH-CAv"/>
                                     <constraint firstItem="9Pu-Le-xjE" firstAttribute="centerY" secondItem="nMQ-0g-nIV" secondAttribute="centerY" constant="40" id="4zV-Ge-VPa"/>

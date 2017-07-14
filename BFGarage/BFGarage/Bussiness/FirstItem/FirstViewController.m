@@ -116,7 +116,7 @@
             NSString *alert = notification.object;
             BFALERT(alert);
         }else {
-            BFALERT(@"Can not find the device");
+            BFALERT(OPEN_NoDevice);
         }
     }
     

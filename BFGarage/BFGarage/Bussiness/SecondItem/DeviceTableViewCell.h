@@ -17,6 +17,7 @@ typedef void (^DisplayQRBlock) (NSIndexPath *indexPath);
 
 @property (nonatomic, weak) IBOutlet UIButton *qrButton;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *qrWidthConstraint;
+@property (nonatomic, weak) IBOutlet UIButton *deleteButton;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *deleteWidthConstraint;
 
 @property (nonatomic, weak) IBOutlet UILabel *titleLabel;

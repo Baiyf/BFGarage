@@ -44,7 +44,7 @@
     self.navigationItem.title = @"Setting";
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reloadDevicelist)
+                                             selector:@selector(reloadDevicelist:)
                                                  name:NSNOTIFICATION_ACTIVITYSUCCESS
                                                object:nil];
     
@@ -62,10 +62,15 @@
 }
 
 //刷新设备列表
-- (void)reloadDevicelist{
+- (void)reloadDevicelist:(NSNotification *)notification{
     [self.rootTableView reloadData];
     
     self.activityTipsView.hidden = YES;
+    
+    if ([notification.object isKindOfClass:[NSString class]]) {
+        NSString *alert = notification.object;
+        BFALERT(alert);
+    }
 }
 
 //激活失败
@@ -76,7 +81,7 @@
             NSString *alert = notification.object;
             BFALERT(alert);
         }else {
-            BFALERT(@"Application could not find any new devices for pairing.\n Some devices may requirefactory reset before it can be activited.");
+            BFALERT(ACTIVITY_NoDevice);
         }
     }
 }
@@ -145,6 +150,20 @@
     return cell;
 }
 
+/*
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle==UITableViewCellEditingStyleDelete)
+    {
+        // 删除数据的操作
+        [[AppContext sharedAppContext] deleteGarage:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
+    }
+}
+ */
+
+
 #pragma mark - UIAlertView Delegate
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (alertView.tag == 80) {
@@ -184,14 +203,14 @@
 
 //显示QRCode提示内容
 - (void)showQRAlertView {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"Please pay attention to the protection of the QR code in order to avoid the loss of your property." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:SETTING_ShowQR delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
     alert.tag = 81;
     [alert show];
 }
 
 //删除数据的操作
 - (void)deleteDevice {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"You can't open your garage after deleting this device.\n Are you sure to delete this device?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Warning" message:SETTING_Delete delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Confirm", nil];
     alert.tag = 82;
     [alert show];
 }

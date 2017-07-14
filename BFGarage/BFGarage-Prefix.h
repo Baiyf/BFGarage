@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import "AppConstant.h"
 #import "AppContext.h"
+#import "AlertMessageConstant.h"
 
 
 #endif /* BFGarage_h */

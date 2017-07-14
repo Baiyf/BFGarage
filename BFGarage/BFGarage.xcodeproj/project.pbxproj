@@ -47,6 +47,7 @@
 		27229B011EA8B0A9002B242B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2725ED3B1EAF62A600641362 /* GarageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GarageModel.h; sourceTree = "<group>"; };
 		2725ED3C1EAF62A600641362 /* GarageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GarageModel.m; sourceTree = "<group>"; };
+		275854AA1F16380D00985918 /* AlertMessageConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlertMessageConstant.h; sourceTree = "<group>"; };
 		27D345041EB6F795006C1E95 /* NSData+BFCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+BFCrypto.h"; sourceTree = "<group>"; };
 		27D345051EB6F795006C1E95 /* NSData+BFCrypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+BFCrypto.m"; sourceTree = "<group>"; };
 		27E0EEF41ECD3F240077D008 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -140,6 +141,7 @@
 				27229B011EA8B0A9002B242B /* Info.plist */,
 				27229AF01EA8B0A9002B242B /* Supporting Files */,
 				27E34B3B1EAC6B9E0030099A /* AppConstant.h */,
+				275854AA1F16380D00985918 /* AlertMessageConstant.h */,
 			);
 			path = BFGarage;
 			sourceTree = "<group>";

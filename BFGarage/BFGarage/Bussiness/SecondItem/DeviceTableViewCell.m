@@ -18,6 +18,7 @@
     self.deleteWidthConstraint.constant = self.qrWidthConstraint.constant = 1.0 * screenWidth / 2;
     if ([UIScreen mainScreen].bounds.size.width == 320) {
         [self.qrButton.titleLabel setFont:[UIFont systemFontOfSize:10.0]];
+        [self.deleteButton.titleLabel setFont:[UIFont systemFontOfSize:10.0]];
     }
 }
 

@@ -159,8 +159,8 @@ static unsigned char HandShakeKey[16] = {
                             [centralManager connectPeripheral:peripheral options:nil];//调用连接设备代理方法
                             [centralManager stopScan];
                         }else {
-                            BFLog(@"Device is reset,please delete record and re-activate it.");
-                            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:@"Device is reset,please delete record and re-activate it."];
+                            BFLog(OPEN_HasReset);
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:OPEN_HasReset];
                             [connectTimer invalidate];
                             [centralManager stopScan];
                         }
@@ -168,7 +168,8 @@ static unsigned char HandShakeKey[16] = {
                 }//激活用途
                 else {
                     //如果不在本地列表，并且状态为未激活
-                    if (![self isExist:macString] && [activity isEqualToString:@"00"]) {
+                    if ([activity isEqualToString:@"00"]) {
+                        
                         //需要连接的设备
                         scPeripheral = peripheral;
                         scPeripheral.delegate = self;
@@ -337,15 +338,23 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
             
             BFLog(@"设备:%@ 激活成功",macStr);
             
+            //存在
+            BOOL isExist = [self isExist:macStr];
             //加入本地缓存列表
             GarageModel *model = [[GarageModel alloc] init];
             model.macStr = macStr;
             model.name = [@"Digital Ant-" stringByAppendingFormat:@"%@",[macStr substringFromIndex:macStr.length-2]];
             model.secretKey2 = handShakeKey2;
             [[AppContext sharedAppContext] addNewGarage:model];
-            // 发送通知，刷新列表
-            [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
             [connectTimer invalidate];
+            
+            if (isExist) {
+                // 发送通知，刷新列表
+                [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:ACTIVITY_ResetDevice];
+            }else {
+                // 发送通知，刷新列表
+                [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_ACTIVITYSUCCESS object:nil];
+            }
         }
         //开锁，设备发送16位随机数
         else if ([self isActivity:macStr] && characteristic.value.length==16){

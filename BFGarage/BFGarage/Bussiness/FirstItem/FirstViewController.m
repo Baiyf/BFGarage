@@ -9,7 +9,7 @@
 #import "FirstViewController.h"
 #import "HomeTableCell.h"
 
-@interface FirstViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface FirstViewController ()<UITableViewDelegate,UITableViewDataSource,UIAlertViewDelegate>
 
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *nodeviceImageWidth;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *nodeviceImageHeight;
@@ -104,9 +104,16 @@
 #pragma mark - 连接结果通知
 //蓝牙连接成功
 - (void)connectSuccess {
+    [self performSelector:@selector(removeAnimation) withObject:nil afterDelay:2.0];
+}
+
+-(void)removeAnimation {
+    BFLog(@"------- 🍎🍎 --------");
     [_animationView stopAnimating];//停止播放动画
     _animationView.hidden = YES;
+    BFALERT(@"Garage has been opened successfully.");
 }
+
 //蓝牙连接失败
 - (void)connectFailed:(NSNotification *)notification {
     [_animationView stopAnimating];//停止播放动画
@@ -114,7 +121,12 @@
     if (self.tabBarController.selectedIndex == 0 && self.navigationController.visibleViewController == self) {
         if ([notification.object isKindOfClass:[NSString class]]) {
             NSString *alert = notification.object;
-            BFALERT(alert);
+            if ([alert isEqualToString:BLUETOOTH_Unopen]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:BLUETOOTH_Unopen delegate:self cancelButtonTitle:@"Settings" otherButtonTitles:@"OK", nil];
+                alert.tag = 60;
+                [alert show];
+            }else
+                BFALERT(alert);
         }else {
             BFALERT(OPEN_NoDevice);
         }
@@ -122,6 +134,23 @@
     
     //打开开关
     [self openEnabled];
+}
+
+#pragma mark - UIAlertView Delegate
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag == 60) {
+        if (buttonIndex == 0) {
+            NSURL *url;
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10) {
+                url = [NSURL URLWithString:@"App-Prefs:root=Bluetooth"];
+            }else {
+                url = [NSURL URLWithString:@"prefs:root=Bluetooth"];
+            }
+            if ([[UIApplication sharedApplication]canOpenURL:url]) {
+                [[UIApplication sharedApplication]openURL:url];
+            }
+        }
+    }
 }
 
 

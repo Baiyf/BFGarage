@@ -67,7 +67,7 @@ static unsigned char HandShakeKey[16] = {
         
     }
     else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:@"Something Wrong with Bluetooth"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:BLUETOOTH_Unopen];
         return;
     }
 
@@ -460,11 +460,21 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
         connectionState = BlueToothConnectionStateConnectionTimeOut;
         self.connectionStateBlock(BlueToothConnectionStateConnectionTimeOut);
     }
+    
+    BOOL haveDevice = NO;
+    if (scPeripheral && self.connectModel) {
+        haveDevice = YES;
+    }
+    
     [self clearConnectInfo];
     [self disconnectPeripheral];
 
     //开锁或者激活失败
-    [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+    if (haveDevice) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:OPEN_Failed];
+    }else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NSNOTIFICATION_CONNECTFAILED object:nil];
+    }
 }
 
 - (void)clearConnectInfo {

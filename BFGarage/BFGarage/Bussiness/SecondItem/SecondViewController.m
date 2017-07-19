@@ -79,7 +79,12 @@
     if (self.tabBarController.selectedIndex == 1 && self.navigationController.visibleViewController == self) {
         if ([notification.object isKindOfClass:[NSString class]]) {
             NSString *alert = notification.object;
-            BFALERT(alert);
+            if ([alert isEqualToString:BLUETOOTH_Unopen]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:BLUETOOTH_Unopen delegate:self cancelButtonTitle:@"Settings" otherButtonTitles:@"OK", nil];
+                alert.tag = 60;
+                [alert show];
+            }else
+                BFALERT(alert);
         }else {
             BFALERT(ACTIVITY_NoDevice);
         }
@@ -166,7 +171,19 @@
 
 #pragma mark - UIAlertView Delegate
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == 80) {
+    if (alertView.tag == 60) {
+        if (buttonIndex == 0) {
+            NSURL *url;
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10) {
+                url = [NSURL URLWithString:@"App-Prefs:root=Bluetooth"];
+            }else {
+                url = [NSURL URLWithString:@"prefs:root=Bluetooth"];
+            }
+            if ([[UIApplication sharedApplication]canOpenURL:url]) {
+                [[UIApplication sharedApplication]openURL:url];
+            }
+        }
+    }else if (alertView.tag == 80) {
         if (buttonIndex == 1) {
             UITextField *txt = [alertView textFieldAtIndex:0];
             //获取txt内容即可

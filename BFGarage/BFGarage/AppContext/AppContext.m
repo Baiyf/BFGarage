@@ -32,7 +32,10 @@ static AppContext *shareAppContext = nil;
     self = [super init];
     if (self)
     {
-        self.logView = [[BFLogView alloc] init];
+        //测试环境打开日志
+        if (ALL_SWITCH == 0) {
+            self.logView = [[BFLogView alloc] init];
+        }
         
         self.garageArray = [[NSMutableArray alloc] init];
         self.blueConnet = [[BlueToothConnect alloc] init];

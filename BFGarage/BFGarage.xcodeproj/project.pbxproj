@@ -27,6 +27,7 @@
 		27E34B361EAC668D0030099A /* ScanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B351EAC668D0030099A /* ScanViewController.m */; };
 		27E34B3A1EAC69C40030099A /* AppContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B391EAC69C40030099A /* AppContext.m */; };
 		27E34B3E1EAC726F0030099A /* BlueToothConnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E34B3D1EAC726F0030099A /* BlueToothConnect.m */; };
+		27E6B4CA1F1F50D30031E368 /* PromptView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27E6B4C91F1F502E0031E368 /* PromptView.m */; };
 		27F88E171EC7641D00180D9D /* BFLogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F88E161EC7641D00180D9D /* BFLogView.m */; };
 		27FCDEC31F0E7BFB005D8280 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27FCDEC11F0E7BFB005D8280 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -69,6 +70,8 @@
 		27E34B3C1EAC726F0030099A /* BlueToothConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueToothConnect.h; sourceTree = "<group>"; };
 		27E34B3D1EAC726F0030099A /* BlueToothConnect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueToothConnect.m; sourceTree = "<group>"; };
 		27E34D211EAC9FC10030099A /* BFGarage-Prefix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BFGarage-Prefix.h"; sourceTree = SOURCE_ROOT; };
+		27E6B4C81F1F502E0031E368 /* PromptView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PromptView.h; sourceTree = "<group>"; };
+		27E6B4C91F1F502E0031E368 /* PromptView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PromptView.m; sourceTree = "<group>"; };
 		27F88E001EC70CCE00180D9D /* AESCrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESCrypto.h; sourceTree = "<group>"; };
 		27F88E151EC7641D00180D9D /* BFLogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFLogView.h; sourceTree = "<group>"; };
 		27F88E161EC7641D00180D9D /* BFLogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFLogView.m; sourceTree = "<group>"; };
@@ -266,6 +269,8 @@
 		27F88E141EC763EE00180D9D /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				27E6B4C81F1F502E0031E368 /* PromptView.h */,
+				27E6B4C91F1F502E0031E368 /* PromptView.m */,
 				27F88E151EC7641D00180D9D /* BFLogView.h */,
 				27F88E161EC7641D00180D9D /* BFLogView.m */,
 			);
@@ -304,7 +309,7 @@
 				TargetAttributes = {
 					27229AEC1EA8B0A9002B242B = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 4JPU9286A5;
+						DevelopmentTeam = BL78357M43;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -363,6 +368,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27E6B4CA1F1F50D30031E368 /* PromptView.m in Sources */,
 				27E34B291EAC5C6B0030099A /* SecondViewController.m in Sources */,
 				27229AF81EA8B0A9002B242B /* ViewController.m in Sources */,
 				27E34B3A1EAC69C40030099A /* AppContext.m in Sources */,
@@ -498,8 +504,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Chen Shen (YSKQB75KU5)";
-				DEVELOPMENT_TEAM = 4JPU9286A5;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Xinglei Pang (BL78357M43)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xinglei Pang (BL78357M43)";
+				DEVELOPMENT_TEAM = BL78357M43;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -508,10 +515,10 @@
 				INFOPLIST_FILE = BFGarage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhouqinghua;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xingleipang.smartgarage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "106fb8c7-393a-4722-9458-0d25816e37ca";
-				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaProvide;
+				PROVISIONING_PROFILE = "b6898e41-7827-41f8-933b-4f83a07f528f";
+				PROVISIONING_PROFILE_SPECIFIER = com.xingleipang.smartgarage;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -521,8 +528,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: PICOOC Technologies Co., Ltd.";
-				DEVELOPMENT_TEAM = 4JPU9286A5;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Xinglei Pang (BL78357M43)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Xinglei Pang (BL78357M43)";
+				DEVELOPMENT_TEAM = BL78357M43;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -531,10 +539,10 @@
 				INFOPLIST_FILE = BFGarage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zhouqinghua;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xingleipang.smartgarage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3441ee98-7422-4920-bca4-0bce611b8409";
-				PROVISIONING_PROFILE_SPECIFIER = zhouqinghuaDistributionProvide;
+				PROVISIONING_PROFILE = "b6898e41-7827-41f8-933b-4f83a07f528f";
+				PROVISIONING_PROFILE_SPECIFIER = com.xingleipang.smartgarage;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

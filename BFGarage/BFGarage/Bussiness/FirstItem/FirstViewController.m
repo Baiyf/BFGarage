@@ -111,7 +111,7 @@
     BFLog(@"------- 🍎🍎 --------");
     [_animationView stopAnimating];//停止播放动画
     _animationView.hidden = YES;
-    BFALERT(@"Garage has been opened successfully.");
+    [[PromptView shared] showPromtView:@"Garage has been opened successfully." dissmissAfterDelay:2.0 andView:self.view];
 }
 
 //蓝牙连接失败
@@ -126,9 +126,9 @@
                 alert.tag = 60;
                 [alert show];
             }else
-                BFALERT(alert);
+                [[PromptView shared] showPromtView:alert dissmissAfterDelay:2.0 andView:self.view];
         }else {
-            BFALERT(OPEN_NoDevice);
+            [[PromptView shared] showPromtView:OPEN_NoDevice dissmissAfterDelay:2.0 andView:self.view];
         }
     }
     

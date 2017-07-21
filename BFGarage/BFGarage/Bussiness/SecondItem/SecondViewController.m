@@ -84,9 +84,9 @@
                 alert.tag = 60;
                 [alert show];
             }else
-                BFALERT(alert);
+                [[PromptView shared] showPromtView:alert dissmissAfterDelay:2.0 andView:self.view];
         }else {
-            BFALERT(ACTIVITY_NoDevice);
+            [[PromptView shared] showPromtView:ACTIVITY_NoDevice dissmissAfterDelay:4.0 andView:self.view];
         }
     }
 }

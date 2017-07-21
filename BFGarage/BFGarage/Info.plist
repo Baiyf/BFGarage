@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Smart-Garage</string>
+	<string>Digital Ant</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.1</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -47,8 +47,12 @@
 	</dict>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>I need your authority to access your bluetooth</string>
 	<key>NSCameraUsageDescription</key>
 	<string>I need your authority to access your camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>I need your authority to access your photo library</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

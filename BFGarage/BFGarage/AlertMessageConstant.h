@@ -2,7 +2,7 @@
 //开锁部分
 #define OPEN_HasReset @"Device is reset , please delete record and re-activate it."
 #define OPEN_NoDevice @"Can not find the device"
-#define OPEN_Success  @"Garage has been opened successfully."
+#define OPEN_Success  @"Your garage door has been controlled successfully."
 #define OPEN_Failed   @"Failed to open garage."
 
 //激活部分

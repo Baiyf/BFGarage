@@ -111,7 +111,7 @@
     BFLog(@"------- 🍎🍎 --------");
     [_animationView stopAnimating];//停止播放动画
     _animationView.hidden = YES;
-    [[PromptView shared] showPromtView:@"Garage has been opened successfully." dissmissAfterDelay:2.0 andView:self.view];
+    [[PromptView shared] showPromtView:OPEN_Success dissmissAfterDelay:2.0 andView:self.view];
 }
 
 //蓝牙连接失败

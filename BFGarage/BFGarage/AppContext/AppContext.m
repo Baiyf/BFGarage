@@ -121,11 +121,13 @@ static AppContext *shareAppContext = nil;
     GarageModel *model1 = [[GarageModel alloc] init];
     model1.macStr = @"AABBCCDDEEFF";
     model1.name = @"设备1";
+    model1.isowner = YES;
     model1.secretKey2 = [@"123456789" dataUsingEncoding:NSUTF8StringEncoding];
     
     GarageModel *model2 = [[GarageModel alloc] init];
     model2.macStr = @"AABBCCDD00FF";
     model2.name = @"设备2";
+    model2.isowner = NO;
     model2.secretKey2 = [@"123456789" dataUsingEncoding:NSUTF8StringEncoding];
     
     [self.garageArray addObject:model1];

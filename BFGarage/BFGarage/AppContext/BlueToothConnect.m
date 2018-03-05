@@ -345,6 +345,7 @@ didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic
             model.macStr = macStr;
             model.name = [@"Digital Ant-" stringByAppendingFormat:@"%@",[macStr substringFromIndex:macStr.length-2]];
             model.secretKey2 = handShakeKey2;
+            model.isowner = YES;
             [[AppContext sharedAppContext] addNewGarage:model];
             [connectTimer invalidate];
             

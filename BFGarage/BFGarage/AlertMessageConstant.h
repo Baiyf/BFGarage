@@ -2,8 +2,8 @@
 //开锁部分
 #define OPEN_HasReset @"Device is reset , please delete record and re-activate it."
 #define OPEN_NoDevice @"Can not find the device"
-#define OPEN_Success  @"Your garage door has been controlled successfully."
-#define OPEN_Failed   @"Failed to open garage."
+#define OPEN_Success  @"Your garage has been triggered successfully."
+#define OPEN_Failed   @"Failed to trigger your garage due to synchronization issue. Please try again."
 
 //激活部分
 #define ACTIVITY_NoDevice @"Application could not find any new devices for pairing. Some devices may requirefactory reset before it can be activited."

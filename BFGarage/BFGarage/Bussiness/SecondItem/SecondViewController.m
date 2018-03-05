@@ -152,6 +152,13 @@
         __strong typeof(self) strongSelf = weakSelf;
         [strongSelf showQRAlertView];
     }];
+    
+    if (model.isowner) {
+        cell.qrButton.hidden = NO;
+    }else {
+        cell.qrButton.hidden = YES;
+    }
+    
     return cell;
 }
 

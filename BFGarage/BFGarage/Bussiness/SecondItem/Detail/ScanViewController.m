@@ -146,6 +146,7 @@
                 GarageModel *model = [[GarageModel alloc] init];
                 model.macStr = resultDic[@"macStr"];
                 model.name = resultDic[@"name"]?resultDic[@"name"]:resultDic[@"macStr"];
+                model.isowner = NO;
                 NSString *secretStr = resultDic[@"secretKey2"];
                 model.secretKey2 = [self hexStringToByte:secretStr];
                 [[AppContext sharedAppContext] addNewGarage:model];

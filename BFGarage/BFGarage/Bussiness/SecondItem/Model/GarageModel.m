@@ -17,6 +17,7 @@
     [coder encodeObject:self.macStr forKey:@"macStr"];
     [coder encodeObject:self.name forKey:@"name"];
     [coder encodeObject:self.secretKey2 forKey:@"secretKey2"];
+    [coder encodeBool:self.isowner forKey:@"isowner"];
     //... ... other instance variables
 }
 //对变量解码
@@ -29,6 +30,11 @@
         self.macStr = [coder decodeObjectForKey:@"macStr"];
         self.name = [coder decodeObjectForKey:@"name"];
         self.secretKey2 = [coder decodeObjectForKey:@"secretKey2"];
+        if ([coder containsValueForKey:@"isowner"]) {
+            self.isowner = [coder decodeBoolForKey:@"isowner"];
+        }else {
+            self.isowner = YES;
+        }
     }
     
     return self;
